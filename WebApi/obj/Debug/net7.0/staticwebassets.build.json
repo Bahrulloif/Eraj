@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "Fk59eaG6TdmiF8WIDAJeXubG/buw3eMNEL4WIz4Oq6w=",
+  "Source": "WebApi",
+  "BasePath": "_content/WebApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "WebApi/wwwroot",
+      "Source": "WebApi",
+      "ContentRoot": "/home/admin/workspace/C#/Eraj/WebApi/wwwroot/",
+      "BasePath": "_content/WebApi",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}
