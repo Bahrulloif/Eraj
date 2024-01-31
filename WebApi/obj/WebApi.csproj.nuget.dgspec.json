@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/WebApi.csproj": {}
+    "/Users/admin/workspace/C#/Eraj/WebApi/WebApi.csproj": {}
   },
   "projects": {
-    "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/Domain.csproj": {
+    "/Users/admin/workspace/C#/Eraj/Domain/Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/Domain.csproj",
+        "projectUniqueName": "/Users/admin/workspace/C#/Eraj/Domain/Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/Domain.csproj",
-        "packagesPath": "/home/admin/.nuget/packages/",
-        "outputPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/obj/",
+        "projectPath": "/Users/admin/workspace/C#/Eraj/Domain/Domain.csproj",
+        "packagesPath": "/Users/admin/.nuget/packages/",
+        "outputPath": "/Users/admin/workspace/C#/Eraj/Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/admin/.nuget/NuGet/NuGet.Config"
+          "/Users/admin/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -87,21 +87,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/7.0.115/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.304/RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/admin/workspace/C#/MaxShopEraj/Eraj/Infrastructure/Infrastructure.csproj": {
+    "/Users/admin/workspace/C#/Eraj/Infrastructure/Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Infrastructure/Infrastructure.csproj",
+        "projectUniqueName": "/Users/admin/workspace/C#/Eraj/Infrastructure/Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Infrastructure/Infrastructure.csproj",
-        "packagesPath": "/home/admin/.nuget/packages/",
-        "outputPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Infrastructure/obj/",
+        "projectPath": "/Users/admin/workspace/C#/Eraj/Infrastructure/Infrastructure.csproj",
+        "packagesPath": "/Users/admin/.nuget/packages/",
+        "outputPath": "/Users/admin/workspace/C#/Eraj/Infrastructure/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/admin/.nuget/NuGet/NuGet.Config"
+          "/Users/admin/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -113,8 +113,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/Domain.csproj": {
-                "projectPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/Domain.csproj"
+              "/Users/admin/workspace/C#/Eraj/Domain/Domain.csproj": {
+                "projectPath": "/Users/admin/workspace/C#/Eraj/Domain/Domain.csproj"
               }
             }
           }
@@ -178,37 +178,38 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/7.0.115/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.304/RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/WebApi.csproj": {
+    "/Users/admin/workspace/C#/Eraj/WebApi/WebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/WebApi.csproj",
+        "projectUniqueName": "/Users/admin/workspace/C#/Eraj/WebApi/WebApi.csproj",
         "projectName": "WebApi",
-        "projectPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/WebApi.csproj",
-        "packagesPath": "/home/admin/.nuget/packages/",
-        "outputPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/obj/",
+        "projectPath": "/Users/admin/workspace/C#/Eraj/WebApi/WebApi.csproj",
+        "packagesPath": "/Users/admin/.nuget/packages/",
+        "outputPath": "/Users/admin/workspace/C#/Eraj/WebApi/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/admin/.nuget/NuGet/NuGet.Config"
+          "/Users/admin/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
+          "/usr/local/share/dotnet/sdk/7.0.304/Sdks/Microsoft.NET.Sdk.Web/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/Domain.csproj": {
-                "projectPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/Domain.csproj"
+              "/Users/admin/workspace/C#/Eraj/Domain/Domain.csproj": {
+                "projectPath": "/Users/admin/workspace/C#/Eraj/Domain/Domain.csproj"
               },
-              "/home/admin/workspace/C#/MaxShopEraj/Eraj/Infrastructure/Infrastructure.csproj": {
-                "projectPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Infrastructure/Infrastructure.csproj"
+              "/Users/admin/workspace/C#/Eraj/Infrastructure/Infrastructure.csproj": {
+                "projectPath": "/Users/admin/workspace/C#/Eraj/Infrastructure/Infrastructure.csproj"
               }
             }
           }
@@ -283,7 +284,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/7.0.115/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.304/RuntimeIdentifierGraph.json"
         }
       }
     }
