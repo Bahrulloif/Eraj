@@ -5,6 +5,7 @@ namespace Domain.DTOs.KomTechDTOs.NoteBookDTOs;
 public class NoteBookDTO
 {
     public int Id { get; set; }
+    public int SubCategoryId { get; set; }
     public string Model { get; set; } = null!;
     public string Core { get; set; } = null!;
     public int RAM { get; set; }

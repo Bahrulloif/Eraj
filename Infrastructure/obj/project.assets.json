@@ -1689,19 +1689,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/admin/.nuget/packages/": {}
+    "/home/admin/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/admin/workspace/C#/Eraj/Infrastructure/Infrastructure.csproj",
+      "projectUniqueName": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Infrastructure/Infrastructure.csproj",
       "projectName": "Infrastructure",
-      "projectPath": "/Users/admin/workspace/C#/Eraj/Infrastructure/Infrastructure.csproj",
-      "packagesPath": "/Users/admin/.nuget/packages/",
-      "outputPath": "/Users/admin/workspace/C#/Eraj/Infrastructure/obj/",
+      "projectPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Infrastructure/Infrastructure.csproj",
+      "packagesPath": "/home/admin/.nuget/packages/",
+      "outputPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Infrastructure/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/admin/.nuget/NuGet/NuGet.Config"
+        "/home/admin/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -1713,8 +1713,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "/Users/admin/workspace/C#/Eraj/Domain/Domain.csproj": {
-              "projectPath": "/Users/admin/workspace/C#/Eraj/Domain/Domain.csproj"
+            "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/Domain.csproj": {
+              "projectPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/Domain.csproj"
             }
           }
         }
@@ -1778,7 +1778,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.304/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/7.0.115/RuntimeIdentifierGraph.json"
       }
     }
   }

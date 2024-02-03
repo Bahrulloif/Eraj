@@ -6,7 +6,7 @@ namespace Infrastructure.Services.KompTechService.NoteBookService;
 
 public interface INoteBookService
 {
-    public Task<Response<List<GetNoteBookDTO>>> GetNoteBook(GetNoteBookFilter filter);
+    public Task<PagedResponse<List<GetNoteBookDTO>>> GetNoteBook(GetNoteBookFilter filter);
     public Task<Response<GetNoteBookDTO>> GetNoteBookById(int noteBookId);
     public Task<Response<GetNoteBookDTO>> AddNoteBook(AddNoteBookDTO noteBook);
     public Task<Response<GetNoteBookDTO>> UpdateNoteBook(AddNoteBookDTO noteBook);

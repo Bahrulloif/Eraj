@@ -41,7 +41,7 @@ public class NoteBookController : BaseController
     }
 
     [HttpPost("post/notebook")]
-    public async Task<IActionResult> AddNoteBook([FromQuery] AddNoteBookDTO noteBook)
+    public async Task<IActionResult> AddNoteBook([FromForm] AddNoteBookDTO noteBook)
     {
         if (ModelState.IsValid)
         {
@@ -53,7 +53,7 @@ public class NoteBookController : BaseController
     }
 
     [HttpPut("put/notebook")]
-    public async Task<IActionResult> UpdateNoteBook(AddNoteBookDTO noteBook)
+    public async Task<IActionResult> UpdateNoteBook([FromForm]AddNoteBookDTO noteBook)
     {
         if (ModelState.IsValid)
         {

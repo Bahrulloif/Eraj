@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Fk59eaG6TdmiF8WIDAJeXubG/buw3eMNEL4WIz4Oq6w=",
+  "Hash": "LJcOCBxKDLRr8Bibt8V248+4NbQJVpE6uGIDYkv9kIk=",
   "Source": "WebApi",
   "BasePath": "_content/WebApi",
   "Mode": "Default",
@@ -10,10 +10,28 @@
     {
       "Name": "WebApi/wwwroot",
       "Source": "WebApi",
-      "ContentRoot": "/home/admin/workspace/C#/Eraj/WebApi/wwwroot/",
+      "ContentRoot": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/",
       "BasePath": "_content/WebApi",
       "Pattern": "**"
     }
   ],
-  "Assets": []
+  "Assets": [
+    {
+      "Identity": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/Images/63d46735-9ad4-4a9f-8b54-1c8780ed0aa9.png",
+      "SourceId": "WebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/",
+      "BasePath": "_content/WebApi",
+      "RelativePath": "Images/63d46735-9ad4-4a9f-8b54-1c8780ed0aa9.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/Images/63d46735-9ad4-4a9f-8b54-1c8780ed0aa9.png"
+    }
+  ]
 }

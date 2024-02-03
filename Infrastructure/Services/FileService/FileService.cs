@@ -24,8 +24,8 @@ public class FileService : IFileService
 
             var fileName =
                 string.Format($"{Guid.NewGuid()+Path.GetExtension(file.FileName)}");
-            var fullpath= Path.Combine(_hostEnvironment.WebRootPath,"Images",fileName);
-            using (var stream = new FileStream(fullpath, FileMode.Create))
+            var fullPath= Path.Combine(_hostEnvironment.WebRootPath,"Images",fileName);
+            using (var stream = new FileStream(fullPath, FileMode.Create))
             {
                 file.CopyTo(stream);
             }

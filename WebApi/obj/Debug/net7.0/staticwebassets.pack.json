@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/Images/63d46735-9ad4-4a9f-8b54-1c8780ed0aa9.png",
+      "PackagePath": "staticwebassets/Images/63d46735-9ad4-4a9f-8b54-1c8780ed0aa9.png"
+    },
+    {
+      "Id": "obj/Debug/net7.0/staticwebassets/msbuild.WebApi.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net7.0/staticwebassets/msbuild.build.WebApi.props",
+      "PackagePath": "build\\WebApi.props"
+    },
+    {
+      "Id": "obj/Debug/net7.0/staticwebassets/msbuild.buildMultiTargeting.WebApi.props",
+      "PackagePath": "buildMultiTargeting\\WebApi.props"
+    },
+    {
+      "Id": "obj/Debug/net7.0/staticwebassets/msbuild.buildTransitive.WebApi.props",
+      "PackagePath": "buildTransitive\\WebApi.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

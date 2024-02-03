@@ -23,42 +23,62 @@ public class NoteBookService : INoteBookService
         _mapper = mapper;
         _fileService = fileService;
     }
-    public async Task<Response<List<GetNoteBookDTO>>> GetNoteBook(GetNoteBookFilter filter)
+    public async Task<PagedResponse<List<GetNoteBookDTO>>> GetNoteBook(GetNoteBookFilter filter)
     {
+        var query = _context.NoteBooks.AsQueryable();
         if (filter.Name != null)
         {
-            // var find = await _context.NoteBooks.Where(n => n.Model == filter.Name).AsNoTracking().ToListAsync();
-            var mapped = await (from n in _context.NoteBooks
-                                join p in _context.Pictures on n.Id equals p.ProductId
-                                select new GetNoteBookDTO
-                                {
-                                    Id = n.Id,
-                                    Color = n.Color,
-                                    Diagonal = n.Diagonal,
-                                    Model = n.Model,
-                                    Core = n.Core,
-                                    RAM = n.RAM,
-                                    ROM = n.ROM,
-                                    Price = n.Price,
-                                    DiscountPrice = n.DiscountPrice,
-                                    Images = _context.Pictures.Where(p => p.ProductId == n.Id).Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName }).ToList()
-                                }).ToListAsync();
-            // var Picture =
-            // var mapped = _mapper.Map<List<GetNoteBookDTO>>(find);
-            return new Response<List<GetNoteBookDTO>>(mapped);
-        }
-        var noteBooks = await _context.NoteBooks.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).AsNoTracking().ToListAsync();
-        var result = _mapper.Map<List<GetNoteBookDTO>>(noteBooks);
-        return new Response<List<GetNoteBookDTO>>(result);
+            query = query.Where(x => x.Model.ToLower().Contains(filter.Name.ToLower()));
+        };
+        var mapped = await (from n in query
+                            select new GetNoteBookDTO
+                            {
+                                Id = n.Id,
+                                Color = n.Color,
+                                Diagonal = n.Diagonal,
+                                Model = n.Model,
+                                Core = n.Core,
+                                RAM = n.RAM,
+                                ROM = n.ROM,
+                                Price = n.Price,
+                                DiscountPrice = n.DiscountPrice,
+                                Images = _context.Pictures
+                                    .Where(p => p.ProductId == n.Id && p.SubCategoryId == n.SubCategoryId)
+                                    .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
+                                    .ToList()
+                            }).Skip((filter.PageNumber - 1) * filter.PageSize)
+                            .Take(filter.PageSize).ToListAsync();
+        var totalCount = await query.CountAsync();
+
+        return new PagedResponse<List<GetNoteBookDTO>>(mapped, filter.PageNumber, filter.PageSize, totalCount);
     }
+
     public async Task<Response<GetNoteBookDTO>> GetNoteBookById(int noteBookId)
     {
-        var find = await _context.NoteBooks.FirstOrDefaultAsync(n => n.Id == noteBookId);
-        if (find == null)
+        var query = _context.NoteBooks.AsQueryable();
+        query = query.Where(n => n.Id == noteBookId);
+        if (query == null)
         {
             return new Response<GetNoteBookDTO>(HttpStatusCode.NotFound, "NoteBook not found");
         }
-        var mapped = _mapper.Map<GetNoteBookDTO>(find);
+        //     var mapped = _mapper.Map<GetNoteBookDTO>(find);
+        var mapped = await (from n in query
+                            select new GetNoteBookDTO
+                            {
+                                Id = n.Id,
+                                Color = n.Color,
+                                Diagonal = n.Diagonal,
+                                Model = n.Model,
+                                Core = n.Core,
+                                RAM = n.RAM,
+                                ROM = n.ROM,
+                                Price = n.Price,
+                                DiscountPrice = n.DiscountPrice,
+                                Images = _context.Pictures
+                                    .Where(p => p.ProductId == n.Id && p.SubCategoryId == n.SubCategoryId)
+                                    .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
+                                    .ToList()
+                            }).FirstOrDefaultAsync();
         return new Response<GetNoteBookDTO>(mapped);
     }
     public async Task<Response<GetNoteBookDTO>> AddNoteBook(AddNoteBookDTO noteBook)
@@ -80,7 +100,8 @@ public class NoteBookService : INoteBookService
                 ProductId = mapped.Id,
                 SubCategoryId = mapped.SubCategoryId
             };
-
+            await _context.Pictures.AddAsync(image);
+            await _context.SaveChangesAsync();
         }
         return new Response<GetNoteBookDTO>(HttpStatusCode.OK, "NoteBook added successfully");
     }
@@ -95,7 +116,32 @@ public class NoteBookService : INoteBookService
         {
             var mapped = _mapper.Map<NoteBook>(noteBook);
             _context.NoteBooks.Update(mapped);
-            await _context.SaveChangesAsync();
+            if (noteBook.Images != null)
+            {
+                var images = await _context.Pictures.Where(n => n.ProductId == noteBook.Id
+                             && n.SubCategoryId == noteBook.SubCategoryId).
+                             //  Select(x => x.ImageName).
+                             ToListAsync();
+                foreach (var item in images)
+                {
+                    _fileService.DeleteFile(item.ImageName);
+                    await _context.SaveChangesAsync();
+                }
+                _context.Pictures.RemoveRange(images);
+                await _context.SaveChangesAsync();
+                foreach (var item in noteBook.Images)
+                {
+                    var imageName = _fileService.CreateFile(item);
+                    var image = new Picture
+                    {
+                        ImageName = imageName.Data!,
+                        ProductId = mapped.Id,
+                        SubCategoryId = mapped.SubCategoryId
+                    };
+                    await _context.Pictures.AddAsync(image);
+                    await _context.SaveChangesAsync();
+                }
+            }
             return new Response<GetNoteBookDTO>(HttpStatusCode.OK, "The notebook is updated successfully");
         }
         return new Response<GetNoteBookDTO>(HttpStatusCode.NotFound, "NoteBook not found");
@@ -107,8 +153,16 @@ public class NoteBookService : INoteBookService
         {
             return new Response<GetNoteBookDTO>(HttpStatusCode.NotFound, "The NoteBook is not found");
         }
+        var images = await _context.Pictures.Where(p => p.ProductId == find.Id &&
+                            p.SubCategoryId == find.SubCategoryId).
+                            ToListAsync();
+        foreach (var item in images)
+        {
+            _fileService.DeleteFile(item.ImageName);
+        }
+        _context.Pictures.RemoveRange(images);
         _context.NoteBooks.Remove(find);
         await _context.SaveChangesAsync();
-        return new Response<GetNoteBookDTO>(HttpStatusCode.OK, "NoteBook deleted successfuly");
+        return new Response<GetNoteBookDTO>(HttpStatusCode.OK, "NoteBook deleted successfully");
     }
 }
