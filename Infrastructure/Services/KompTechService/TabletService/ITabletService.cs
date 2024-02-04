@@ -6,9 +6,9 @@ namespace Infrastructure.Services.KompTechService.TabletService;
 
 public interface ITabletService
 {
-    public Task<Response<List<GetTabletDTO>>> GetTablet(GetTabletFilter filter);
+    public Task<PagedResponse<List<GetTabletDTO>>> GetTablet(GetTabletFilter filter);
     public Task<Response<GetTabletDTO>> GetTabletById(int tabletId);
-    public Task<Response<GetTabletDTO>> AddTablet(AddTabletDTO tablet);
-    public Task<Response<GetTabletDTO>> UpdateTablet(AddTabletDTO tablet);
-    public Task<Response<GetTabletDTO>> DeleteTablet(int tabletId);
+    public Task<Response<string>> AddTablet(AddTabletDTO tablet);
+    public Task<Response<string>> UpdateTablet(AddTabletDTO tablet);
+    public Task<Response<string>> DeleteTablet(int tabletId);
 }

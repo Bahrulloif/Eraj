@@ -12,6 +12,4 @@ public class NoteBook
     public decimal Price { get; set; }
     public decimal DiscountPrice { get; set; }
     public string Color { get; set; } = null!;
-    // public string? Image { get; set; }
-
 }

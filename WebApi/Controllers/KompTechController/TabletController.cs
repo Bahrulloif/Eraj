@@ -43,7 +43,7 @@ public class TabletController : BaseController
     }
 
     [HttpPost("post/tablet")]
-    public async Task<IActionResult> AddTablet(AddTabletDTO tablet)
+    public async Task<IActionResult> AddTablet([FromForm] AddTabletDTO tablet)
     {
         if (ModelState.IsValid)
         {
@@ -55,7 +55,7 @@ public class TabletController : BaseController
     }
 
     [HttpPut("put/tablet")]
-    public async Task<IActionResult> UpdateTablet(AddTabletDTO tablet)
+    public async Task<IActionResult> UpdateTablet([FromForm] AddTabletDTO tablet)
     {
         if (ModelState.IsValid)
         {

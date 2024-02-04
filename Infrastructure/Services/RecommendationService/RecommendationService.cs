@@ -40,7 +40,7 @@ public class RecommendationService : IRecommendationService
             Color = y.Color,
             Price = y.Price,
             DiscountPrice = y.DiscountPrice,
-            Picture = y.Picture
+            // Picture = y.Picture
         }).AsNoTracking().ToListAsync();
         recommendationList.AddRange(smartPhone);
 
@@ -52,7 +52,7 @@ public class RecommendationService : IRecommendationService
             Color = z.Color,
             Price = z.Price,
             DiscountPrice = z.DiscountPrice,
-            Picture = z.Picture
+            // Picture = z.Picture
         }).AsNoTracking().ToListAsync();
         recommendationList.AddRange(tablet);
 

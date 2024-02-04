@@ -42,7 +42,7 @@ public class SmartPhoneController : BaseController
     }
 
     [HttpPost("post/smartphone")]
-    public async Task<IActionResult> AddSmartPhone(AddSmartPhoneDTO smartPhone)
+    public async Task<IActionResult> AddSmartPhone([FromForm] AddSmartPhoneDTO smartPhone)
     {
         if (ModelState.IsValid)
         {
@@ -54,7 +54,7 @@ public class SmartPhoneController : BaseController
     }
 
     [HttpPut("put/smartphone")]
-    public async Task<IActionResult> UpdateSmartPhone(AddSmartPhoneDTO smartPhone)
+    public async Task<IActionResult> UpdateSmartPhone([FromForm]AddSmartPhoneDTO smartPhone)
     {
         if (ModelState.IsValid)
         {
