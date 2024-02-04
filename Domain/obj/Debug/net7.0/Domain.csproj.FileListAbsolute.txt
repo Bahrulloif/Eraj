@@ -26,3 +26,17 @@
 /home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/obj/Debug/net7.0/Domain.pdb
 /home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/obj/Debug/net7.0/Domain.genruntimeconfig.cache
 /home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/obj/Debug/net7.0/ref/Domain.dll
+/Users/admin/workspace/C#/Eraj/Domain/bin/Debug/net7.0/Domain.deps.json
+/Users/admin/workspace/C#/Eraj/Domain/bin/Debug/net7.0/Domain.runtimeconfig.json
+/Users/admin/workspace/C#/Eraj/Domain/bin/Debug/net7.0/Domain.dll
+/Users/admin/workspace/C#/Eraj/Domain/bin/Debug/net7.0/Domain.pdb
+/Users/admin/workspace/C#/Eraj/Domain/obj/Debug/net7.0/Domain.csproj.AssemblyReference.cache
+/Users/admin/workspace/C#/Eraj/Domain/obj/Debug/net7.0/Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/admin/workspace/C#/Eraj/Domain/obj/Debug/net7.0/Domain.AssemblyInfoInputs.cache
+/Users/admin/workspace/C#/Eraj/Domain/obj/Debug/net7.0/Domain.AssemblyInfo.cs
+/Users/admin/workspace/C#/Eraj/Domain/obj/Debug/net7.0/Domain.csproj.CoreCompileInputs.cache
+/Users/admin/workspace/C#/Eraj/Domain/obj/Debug/net7.0/Domain.dll
+/Users/admin/workspace/C#/Eraj/Domain/obj/Debug/net7.0/refint/Domain.dll
+/Users/admin/workspace/C#/Eraj/Domain/obj/Debug/net7.0/Domain.pdb
+/Users/admin/workspace/C#/Eraj/Domain/obj/Debug/net7.0/Domain.genruntimeconfig.cache
+/Users/admin/workspace/C#/Eraj/Domain/obj/Debug/net7.0/ref/Domain.dll

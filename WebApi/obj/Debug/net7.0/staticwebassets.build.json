@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "pZUNajj6Ns4Y95Vjlqvbx37e9D5X9YZm/IMTXiABm+g=",
+  "Hash": "Ih6WuhQG2IyO9r3YmwZBun1QJLrdcswp/faDMuEq1I0=",
   "Source": "WebApi",
   "BasePath": "_content/WebApi",
   "Mode": "Default",
@@ -10,17 +10,34 @@
     {
       "Name": "WebApi/wwwroot",
       "Source": "WebApi",
-      "ContentRoot": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/",
+      "ContentRoot": "/Users/admin/workspace/C#/Eraj/WebApi/wwwroot/",
       "BasePath": "_content/WebApi",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/Images/0eb5d5b1-2792-4711-b470-336606c63ca4.png",
+      "Identity": "/Users/admin/workspace/C#/Eraj/WebApi/wwwroot/Images/0806a38d-4730-480c-bf58-fac0aea83d91.png",
       "SourceId": "WebApi",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/",
+      "ContentRoot": "/Users/admin/workspace/C#/Eraj/WebApi/wwwroot/",
+      "BasePath": "_content/WebApi",
+      "RelativePath": "Images/0806a38d-4730-480c-bf58-fac0aea83d91.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/Images/0806a38d-4730-480c-bf58-fac0aea83d91.png"
+    },
+    {
+      "Identity": "/Users/admin/workspace/C#/Eraj/WebApi/wwwroot/Images/0eb5d5b1-2792-4711-b470-336606c63ca4.png",
+      "SourceId": "WebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/admin/workspace/C#/Eraj/WebApi/wwwroot/",
       "BasePath": "_content/WebApi",
       "RelativePath": "Images/0eb5d5b1-2792-4711-b470-336606c63ca4.png",
       "AssetKind": "All",
@@ -34,12 +51,12 @@
       "OriginalItemSpec": "wwwroot/Images/0eb5d5b1-2792-4711-b470-336606c63ca4.png"
     },
     {
-      "Identity": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/Images/15e928cc-edd4-43fd-a327-c728b8330a5b.png",
+      "Identity": "/Users/admin/workspace/C#/Eraj/WebApi/wwwroot/Images/a4d11d01-6143-495e-aac0-1b42b543e1b6.jpg",
       "SourceId": "WebApi",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/",
+      "ContentRoot": "/Users/admin/workspace/C#/Eraj/WebApi/wwwroot/",
       "BasePath": "_content/WebApi",
-      "RelativePath": "Images/15e928cc-edd4-43fd-a327-c728b8330a5b.png",
+      "RelativePath": "Images/a4d11d01-6143-495e-aac0-1b42b543e1b6.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -48,15 +65,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Images/15e928cc-edd4-43fd-a327-c728b8330a5b.png"
+      "OriginalItemSpec": "wwwroot/Images/a4d11d01-6143-495e-aac0-1b42b543e1b6.jpg"
     },
     {
-      "Identity": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/Images/78c3aeff-c9a0-4289-8749-990acd03a2fb.png",
+      "Identity": "/Users/admin/workspace/C#/Eraj/WebApi/wwwroot/Images/e8db2d84-7831-4d9d-8f86-95fdb6916341.jpg",
       "SourceId": "WebApi",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/",
+      "ContentRoot": "/Users/admin/workspace/C#/Eraj/WebApi/wwwroot/",
       "BasePath": "_content/WebApi",
-      "RelativePath": "Images/78c3aeff-c9a0-4289-8749-990acd03a2fb.png",
+      "RelativePath": "Images/e8db2d84-7831-4d9d-8f86-95fdb6916341.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -65,41 +82,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Images/78c3aeff-c9a0-4289-8749-990acd03a2fb.png"
-    },
-    {
-      "Identity": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/Images/d5a7df47-73b0-4374-8cce-1f817131632e.png",
-      "SourceId": "WebApi",
-      "SourceType": "Discovered",
-      "ContentRoot": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/",
-      "BasePath": "_content/WebApi",
-      "RelativePath": "Images/d5a7df47-73b0-4374-8cce-1f817131632e.png",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Images/d5a7df47-73b0-4374-8cce-1f817131632e.png"
-    },
-    {
-      "Identity": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/Images/ef9ba2e8-2ef6-4b26-bc45-7de5d096ad2d.png",
-      "SourceId": "WebApi",
-      "SourceType": "Discovered",
-      "ContentRoot": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/wwwroot/",
-      "BasePath": "_content/WebApi",
-      "RelativePath": "Images/ef9ba2e8-2ef6-4b26-bc45-7de5d096ad2d.png",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Images/ef9ba2e8-2ef6-4b26-bc45-7de5d096ad2d.png"
+      "OriginalItemSpec": "wwwroot/Images/e8db2d84-7831-4d9d-8f86-95fdb6916341.jpg"
     }
   ]
 }
