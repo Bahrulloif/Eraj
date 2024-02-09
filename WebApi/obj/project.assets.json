@@ -2171,36 +2171,35 @@
     ]
   },
   "packageFolders": {
-    "/Users/admin/.nuget/packages/": {}
+    "/home/admin/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/admin/workspace/C#/Eraj/WebApi/WebApi.csproj",
+      "projectUniqueName": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/WebApi.csproj",
       "projectName": "WebApi",
-      "projectPath": "/Users/admin/workspace/C#/Eraj/WebApi/WebApi.csproj",
-      "packagesPath": "/Users/admin/.nuget/packages/",
-      "outputPath": "/Users/admin/workspace/C#/Eraj/WebApi/obj/",
+      "projectPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/WebApi.csproj",
+      "packagesPath": "/home/admin/.nuget/packages/",
+      "outputPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/WebApi/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/admin/.nuget/NuGet/NuGet.Config"
+        "/home/admin/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
-        "/usr/local/share/dotnet/sdk/7.0.304/Sdks/Microsoft.NET.Sdk.Web/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "/Users/admin/workspace/C#/Eraj/Domain/Domain.csproj": {
-              "projectPath": "/Users/admin/workspace/C#/Eraj/Domain/Domain.csproj"
+            "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/Domain.csproj": {
+              "projectPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/Domain.csproj"
             },
-            "/Users/admin/workspace/C#/Eraj/Infrastructure/Infrastructure.csproj": {
-              "projectPath": "/Users/admin/workspace/C#/Eraj/Infrastructure/Infrastructure.csproj"
+            "/home/admin/workspace/C#/MaxShopEraj/Eraj/Infrastructure/Infrastructure.csproj": {
+              "projectPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Infrastructure/Infrastructure.csproj"
             }
           }
         }
@@ -2275,7 +2274,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.304/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/7.0.115/RuntimeIdentifierGraph.json"
       }
     }
   }

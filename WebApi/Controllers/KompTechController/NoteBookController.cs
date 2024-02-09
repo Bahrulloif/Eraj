@@ -2,6 +2,7 @@ using Domain.DTOs.KomTechDTOs.NoteBookDTOs;
 using Domain.Filters.KompTechFilters.NoteBookFilters;
 using Domain.Responses;
 using Infrastructure.Services.KompTechService.NoteBookService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.KompTechController;
@@ -16,7 +17,7 @@ public class NoteBookController : BaseController
         _noteBookService = noteBookService;
     }
 
-    [HttpGet("get/notebook")]
+    [HttpGet("get/notebook"), AllowAnonymous]
     public async Task<IActionResult> GetNoteBook([FromQuery] GetNoteBookFilter filter)
     {
         if (ModelState.IsValid)
@@ -28,7 +29,7 @@ public class NoteBookController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpGet("get/notebookById")]
+    [HttpGet("get/notebookById"), AllowAnonymous]
     public async Task<IActionResult> GetNoteBookById(int noteBookId)
     {
         if (ModelState.IsValid)
@@ -41,6 +42,7 @@ public class NoteBookController : BaseController
     }
 
     [HttpPost("post/notebook")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<IActionResult> AddNoteBook([FromForm] AddNoteBookDTO noteBook)
     {
         if (ModelState.IsValid)
@@ -53,7 +55,8 @@ public class NoteBookController : BaseController
     }
 
     [HttpPut("put/notebook")]
-    public async Task<IActionResult> UpdateNoteBook([FromForm]AddNoteBookDTO noteBook)
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
+    public async Task<IActionResult> UpdateNoteBook([FromForm] AddNoteBookDTO noteBook)
     {
         if (ModelState.IsValid)
         {
@@ -65,6 +68,7 @@ public class NoteBookController : BaseController
     }
 
     [HttpDelete("delete/notebook")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<IActionResult> DeleteNoteBook(int noteBookId)
     {
         if (ModelState.IsValid)

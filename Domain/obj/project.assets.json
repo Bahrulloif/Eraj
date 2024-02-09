@@ -1666,19 +1666,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/admin/.nuget/packages/": {}
+    "/home/admin/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/admin/workspace/C#/Eraj/Domain/Domain.csproj",
+      "projectUniqueName": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/Domain.csproj",
       "projectName": "Domain",
-      "projectPath": "/Users/admin/workspace/C#/Eraj/Domain/Domain.csproj",
-      "packagesPath": "/Users/admin/.nuget/packages/",
-      "outputPath": "/Users/admin/workspace/C#/Eraj/Domain/obj/",
+      "projectPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/Domain.csproj",
+      "packagesPath": "/home/admin/.nuget/packages/",
+      "outputPath": "/home/admin/workspace/C#/MaxShopEraj/Eraj/Domain/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/admin/.nuget/NuGet/NuGet.Config"
+        "/home/admin/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -1751,7 +1751,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.304/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/7.0.115/RuntimeIdentifierGraph.json"
       }
     }
   }

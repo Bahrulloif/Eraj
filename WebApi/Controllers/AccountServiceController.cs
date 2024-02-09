@@ -2,6 +2,7 @@ using Domain.DTOs.LoginDTOs;
 using Domain.DTOs.RegisterDTO;
 using Domain.Responses;
 using Infrastructure.AccountService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
@@ -15,7 +16,7 @@ public class AccountServiceController : BaseController
     {
         _accountService = accountService;
     }
-    [HttpPost("post/login")]
+    [HttpPost("post/login"), AllowAnonymous]
     public async Task<IActionResult> Login(LoginDTO login)
     {
         if (ModelState.IsValid)
@@ -26,7 +27,7 @@ public class AccountServiceController : BaseController
         var response = new Response<string>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
         return StatusCode(response.StatusCode, response);
     }
-    [HttpPost("post/register")]
+    [HttpPost("post/register"), AllowAnonymous]
     public async Task<IActionResult> Register(RegisterDTO user)
     {
         if (ModelState.IsValid)
