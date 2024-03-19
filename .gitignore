@@ -476,4 +476,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-./Infrastructure/Seed/
+Infrastructure/Seed/*
