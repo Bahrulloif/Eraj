@@ -6,6 +6,7 @@ using Domain.DTOs.RegisterDTO;
 using Domain.Entities;
 using Domain.Responses;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -15,17 +16,21 @@ namespace Infrastructure.AccountService;
 public class AccountService : IAccountService
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    // private readonly RoleManager<ApplicationUser> _roleManager;
     private readonly DataContext _context;
     private readonly IConfiguration _configuration;
 
     public AccountService(
         UserManager<ApplicationUser> userManager,
         DataContext context,
-        IConfiguration configuration)
+        IConfiguration configuration
+        // RoleManager<ApplicationUser> roleManager
+        )
     {
         _userManager = userManager;
         _context = context;
         _configuration = configuration;
+        // _roleManager = roleManager;
     }
     public async Task<Response<string>> Login(LoginDTO login)
     {
@@ -36,6 +41,9 @@ public class AccountService : IAccountService
             {
                 return new Response<string>(System.Net.HttpStatusCode.BadRequest, "Username or Password is incorrect");
             }
+            // var role = await _roleManager.FindByIdAsync("");
+            // if (role == null) return new Response<string>(System.Net.HttpStatusCode.NotFound, "Role not found.");
+            await _userManager.AddToRoleAsync(findUser, UserRoles.Admin);
             var checkPassword = await _userManager.CheckPasswordAsync(findUser, login.Password);
             if (checkPassword)
             {
@@ -90,7 +98,7 @@ public class AccountService : IAccountService
         var key = Encoding.ASCII.GetBytes(_configuration["Jwt:key"]!);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim("id", user.UserName!) }),
+            Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id!) }),
             Expires = DateTime.UtcNow.AddHours(1),
             Issuer = _configuration["Jwt:Issuer"],
             Audience = _configuration["Jwt:Audience"],

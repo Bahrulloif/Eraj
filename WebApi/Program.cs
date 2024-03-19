@@ -1,4 +1,5 @@
 using Infrastructure.AutoMapper;
+using Infrastructure.Seed;
 using WebApi.ExtensionMethods.SwaggerConfiguration;
 using WebApi.ExtentionsMethods.AddAuthConfiguraion;
 using WebApi.ExtentionsMethods.AddServices;
@@ -19,6 +20,18 @@ builder.Services.AddAutoMapper(typeof(ServiceProfile));
 
 var app = builder.Build();
 
+try
+{
+    var serviceProvider = app.Services.CreateScope().ServiceProvider;
+    var seed = serviceProvider.GetRequiredService<Seeds>();
+    seed.SeedRoles();
+}
+catch (System.Exception)
+{
+
+
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -28,9 +41,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

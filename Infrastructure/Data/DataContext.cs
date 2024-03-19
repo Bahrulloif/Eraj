@@ -22,4 +22,5 @@ public class DataContext : IdentityDbContext<ApplicationUser>
     //   public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     public DbSet<Picture> Pictures { get; set; }
 
+    public DbSet<Roles> Roles { get; set; }
 }

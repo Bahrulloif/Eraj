@@ -12,7 +12,7 @@ using System.Net;
 
 namespace Infrastructure.Services.KompTechService.SmartPhoneService;
 
-public class SmartPhoneService : ISmartPhoneService
+public class SmartPhoneService : ISmartPhoneService 
 {
     private readonly DataContext _context;
     private readonly IMapper _mapper;

@@ -2,6 +2,7 @@ using AutoMapper;
 using Domain.Entities;
 using Infrastructure.AccountService;
 using Infrastructure.Data;
+using Infrastructure.Seed;
 using Infrastructure.Services.AddressService;
 using Infrastructure.Services.CartService;
 using Infrastructure.Services.CatalogService;
@@ -40,8 +41,10 @@ public static class AddServices
         services.AddScoped<IDeliveryAddressService, DeliveryAddressService>();
         services.AddScoped<IProfileService, ProfileService>();
         services.AddScoped<IFileService, FileService>();
+        services.AddScoped<Seeds>();
+        // services.AddScoped<UserManager
 
-        services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+        services.AddIdentity<ApplicationUser, Roles>(config =>
             {
                 config.Password.RequiredLength = 4;
                 config.Password.RequireDigit = false; // must have at least one digit

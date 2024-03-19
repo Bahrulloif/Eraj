@@ -2,6 +2,7 @@ using Domain.DTOs.AddressDTO;
 using Domain.Filters.AddressFilter;
 using Domain.Responses;
 using Infrastructure.Services.AddressService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
@@ -16,6 +17,7 @@ public class AddressController : BaseController
         _addressService = addressService;
     }
     [HttpGet("get/address")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAddress([FromQuery]AddressFilter filter)
     {
         if (ModelState.IsValid)
