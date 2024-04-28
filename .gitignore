@@ -209,6 +209,7 @@ PublishScripts/
 *.nuget.props
 *.nuget.targets
 
+
 # Microsoft Azure Build Output
 csx/
 *.build.csdef
@@ -477,3 +478,9 @@ $RECYCLE.BIN/
 *.lnk
 
 Infrastructure/Seed/*
+Infrastructure/bin/*
+Infrastructure/obj/*
+Domain/bin/*
+Domain/obj/*
+WebApi/bin/*
+WebApi/obj/*
