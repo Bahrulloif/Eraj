@@ -15,7 +15,10 @@ using Infrastructure.Services.KompTechService.TabletService;
 using Infrastructure.Services.OrderService;
 using Infrastructure.Services.ProfileService;
 using Infrastructure.Services.RecommendationService;
+using Infrastructure.Services.RoleService;
 using Infrastructure.Services.SubCategoryService;
+using Infrastructure.Services.TransportService.CarService;
+using Infrastructure.Services.TransportService.MotorbikeService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -42,7 +45,10 @@ public static class AddServices
         services.AddScoped<IProfileService, ProfileService>();
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<Seeds>();
-        // services.AddScoped<UserManager
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<ICarService, CarService>();
+        services.AddScoped<IMotorbikeService, MotorbikeService>();
+
 
         services.AddIdentity<ApplicationUser, Roles>(config =>
             {

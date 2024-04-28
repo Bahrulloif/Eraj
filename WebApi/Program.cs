@@ -24,7 +24,8 @@ try
 {
     var serviceProvider = app.Services.CreateScope().ServiceProvider;
     var seed = serviceProvider.GetRequiredService<Seeds>();
-    seed.SeedRoles();
+    await seed.SeedRoles();
+    await seed.CreateSuperAdmin();
 }
 catch (System.Exception)
 {

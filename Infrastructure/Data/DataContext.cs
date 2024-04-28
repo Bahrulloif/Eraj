@@ -1,5 +1,6 @@
 using Domain.Entities;
 using Domain.Entities.KompTech;
+using Domain.Entities.Transport;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,4 +24,8 @@ public class DataContext : IdentityDbContext<ApplicationUser>
     public DbSet<Picture> Pictures { get; set; }
 
     public DbSet<Roles> Roles { get; set; }
+    public DbSet<Car> Cars { get; set; }
+    public DbSet<Motorbike> Motorbikes { get; set; }
+    public DbSet<Truck> Trucks { get; set; }
+    public DbSet<SpareAccessorTransp> SpareAccessorTransps { get; set; }
 }

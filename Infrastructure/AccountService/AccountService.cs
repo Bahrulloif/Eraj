@@ -6,7 +6,6 @@ using Domain.DTOs.RegisterDTO;
 using Domain.Entities;
 using Domain.Responses;
 using Infrastructure.Data;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -41,13 +40,10 @@ public class AccountService : IAccountService
             {
                 return new Response<string>(System.Net.HttpStatusCode.BadRequest, "Username or Password is incorrect");
             }
-            // var role = await _roleManager.FindByIdAsync("");
-            // if (role == null) return new Response<string>(System.Net.HttpStatusCode.NotFound, "Role not found.");
-            await _userManager.AddToRoleAsync(findUser, UserRoles.Admin);
             var checkPassword = await _userManager.CheckPasswordAsync(findUser, login.Password);
             if (checkPassword)
             {
-                return new Response<string>(GenerateJwtToken(findUser));
+                return new Response<string>(await GenerateJwtTokenAsync(findUser));
             }
             else
             {
@@ -92,20 +88,46 @@ public class AccountService : IAccountService
 
 
 
-    private string GenerateJwtToken(ApplicationUser user)
+    private async Task<string> GenerateJwtTokenAsync(ApplicationUser user)
     {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:key"]!);
-        var tokenDescriptor = new SecurityTokenDescriptor
+        // var tokenHandler = new JwtSecurityTokenHandler();
+        // var key = Encoding.ASCII.GetBytes(_configuration["Jwt:key"]!);
+        // var roles = await _userManager.GetRolesAsync(user);
+        // var claim = roles.Select(role => new Claim(ClaimTypes.Role, role));
+        // var tokenDescriptor = new SecurityTokenDescriptor
+        // {
+        //     Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id!) }),
+        //     Expires = DateTime.UtcNow.AddHours(1),
+        //     Issuer = _configuration["Jwt:Issuer"],
+        //     Audience = _configuration["Jwt:Audience"],
+
+        //     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        // };
+        // var token = tokenHandler.CreateToken(tokenDescriptor);
+        // return tokenHandler.WriteToken(token);
+        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
+        var securityKey = new SymmetricSecurityKey(key);
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        var claims = new List<Claim>()
         {
-            Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id!) }),
-            Expires = DateTime.UtcNow.AddHours(1),
-            Issuer = _configuration["Jwt:Issuer"],
-            Audience = _configuration["Jwt:Audience"],
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            new(JwtRegisteredClaimNames.Sid, user.Id),
+            new(JwtRegisteredClaimNames.Name, user.UserName!),
         };
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
+        //add roles
+        var roles = await _userManager.GetRolesAsync(user);
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+        var token = new JwtSecurityToken(
+            issuer: _configuration["Jwt:Issuer"],
+            audience: _configuration["Jwt:Audience"],
+            claims: claims,
+            expires: DateTime.UtcNow.AddHours(24),
+            signingCredentials: credentials
+        );
+
+        var securityTokenHandler = new JwtSecurityTokenHandler();
+        var tokenString = securityTokenHandler.WriteToken(token);
+        return tokenString;
     }
 }
 
