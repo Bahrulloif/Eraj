@@ -16,8 +16,8 @@ public class MotorbikeController : BaseController
     {
         _motorbikeService = motorbikeService;
     }
-    [HttpGet("get/GetMotorbike"), AllowAnonymous]
-    public async Task<ActionResult> GetMotorbike(GetMotorbikeFilter filter)
+    [HttpGet("get/getMotorbike"), AllowAnonymous]
+    public async Task<ActionResult> GetMotorbike([FromQuery] GetMotorbikeFilter filter)
     {
         if (ModelState.IsValid)
         {
@@ -27,7 +27,7 @@ public class MotorbikeController : BaseController
         var response = new Response<GetMotorbikeDTO>(System.Net.HttpStatusCode.BadGateway, ModelStateErrors());
         return StatusCode(response.StatusCode, response);
     }
-    [HttpGet("get/GetMotorbikeById"), AllowAnonymous]
+    [HttpGet("get/getMotorbikeById"), AllowAnonymous]
     public async Task<ActionResult> GetMotorbikeById(int motorbikeId)
     {
         if (ModelState.IsValid)
@@ -39,8 +39,8 @@ public class MotorbikeController : BaseController
         return StatusCode(response.StatusCode, response);
 
     }
-    [HttpPost("post/AddMotorbike")]
-    public async Task<ActionResult> AddMotorbike(AddMotorbikeDTO motorbike)
+    [HttpPost("post/addMotorbike")]
+    public async Task<ActionResult> AddMotorbike([FromForm] AddMotorbikeDTO motorbike)
     {
         if (ModelState.IsValid)
         {
@@ -51,8 +51,8 @@ public class MotorbikeController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpPut("put/UpdateMotorbike")]
-    public async Task<ActionResult> UpdateMotorbike(AddMotorbikeDTO motorbike)
+    [HttpPut("put/updateMotorbike")]
+    public async Task<ActionResult> UpdateMotorbike([FromForm] AddMotorbikeDTO motorbike)
     {
         if (ModelState.IsValid)
         {
@@ -63,7 +63,7 @@ public class MotorbikeController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpDelete("delete/DeleteMotorbike")]
+    [HttpDelete("delete/deleteMotorbike")]
     public async Task<ActionResult> DeleteMotorbike(int motorbikeId)
     {
         if (ModelState.IsValid)

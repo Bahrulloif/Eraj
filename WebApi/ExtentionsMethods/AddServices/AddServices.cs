@@ -22,6 +22,7 @@ using Infrastructure.Services.TransportService.MotorbikeService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Infrastructure.Services.RatingAndTopService;
 
 namespace WebApi.ExtentionsMethods.AddServices;
 
@@ -48,6 +49,7 @@ public static class AddServices
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<ICarService, CarService>();
         services.AddScoped<IMotorbikeService, MotorbikeService>();
+        services.AddScoped<IRatingAndTopService, RatingAndTopService>();
 
 
         services.AddIdentity<ApplicationUser, Roles>(config =>

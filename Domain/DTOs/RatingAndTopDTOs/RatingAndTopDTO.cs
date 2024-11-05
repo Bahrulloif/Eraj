@@ -1,10 +1,11 @@
 using Domain.DTOs.PictureDTO;
 
-namespace Domain.DTOs.RatingAndTop;
+namespace Domain.DTOs.RatingAndTopDTO;
 
 public class RatingAndTopDTO
 {
-    public int Id { get; set; }
+    public int ProductId { get; set; }
+    public int SubCategoryId { get; set; }
     public string Model { get; set; } = null!;
     public decimal Price { get; set; }
     public decimal DiscountPrice { get; set; }

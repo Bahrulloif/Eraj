@@ -93,13 +93,55 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
 
     public async Task<Response<string>> UpdateSpareAccessorTransp(AddSpareAccessorTranspDTO spareAccessorTransp)
     {
-        var find = await _context.SpareAccessorTransps.FirstOrDefaultAsync()
+        var find = await _context.SpareAccessorTransps.FirstOrDefaultAsync(x => x.Id == spareAccessorTransp.Id);
+        if (find != null)
+        {
+            var mapped = _mapper.Map<SpareAccessorTransp>(spareAccessorTransp);
+            await _context.SpareAccessorTransps.AddAsync(mapped);
+            await _context.SaveChangesAsync();
+            if (spareAccessorTransp.Images != null)
+            {
+                var images = await _context.Pictures.Where(x => x.ProductId == spareAccessorTransp.Id && x.SubCategoryId == spareAccessorTransp.SubCategoryId).ToListAsync();
+                foreach (var item in images)
+                {
+                    _fileService.DeleteFile(item.ImageName);
+                }
+                _context.Pictures.RemoveRange(images);
+                await _context.SaveChangesAsync();
+                foreach (var item in spareAccessorTransp.Images)
+                {
+                    var imageName = _fileService.CreateFile(item);
+                    var image = new Picture
+                    {
+                        ImageName = imageName.Data!,
+                        ProductId = spareAccessorTransp.Id,
+                        SubCategoryId = spareAccessorTransp.SubCategoryId
+                    };
+                    await _context.Pictures.AddAsync(image);
+                    await _context.SaveChangesAsync();
+
+                }
+            }
+            return new Response<string>(System.Net.HttpStatusCode.OK, $"{spareAccessorTransp.Model} was updated successfully");
+        }
+        return new Response<string>(System.Net.HttpStatusCode.NotFound, $"{spareAccessorTransp.Model} not found");
     }
 
-    public Task<Response<string>> DeleteSpareAccessorTransp(int SpareAccessorTranspId)
+    public async Task<Response<string>> DeleteSpareAccessorTransp(int spareAccessorTranspId)
     {
-        throw new NotImplementedException();
+        var find = await _context.SpareAccessorTransps.FirstOrDefaultAsync(x => x.Id == spareAccessorTranspId);
+        if (find != null)
+        {
+            var images = await _context.Pictures.Where(x => x.ProductId == spareAccessorTranspId && x.SubCategoryId == spareAccessorTranspId).ToListAsync();
+            foreach (var item in images)
+            {
+                _fileService.DeleteFile(item.ImageName);
+            }
+            _context.Pictures.RemoveRange(images);
+            _context.SpareAccessorTransps.Remove(find);
+            await _context.SaveChangesAsync();
+            return new Response<string>(System.Net.HttpStatusCode.OK, $"{find.Model} deleted successfully");
+        }
+        return new Response<string>(System.Net.HttpStatusCode.NotFound, "Spare or Accessor not found");
     }
-
-
 }

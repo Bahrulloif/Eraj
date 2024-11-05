@@ -16,8 +16,8 @@ public class CarController : BaseController
     {
         _carService = carService;
     }
-    [HttpGet("Get/Car"), AllowAnonymous]
-    public async Task<IActionResult> GetCar(GetCarFilter filter)
+    [HttpGet("get/car"), AllowAnonymous]
+    public async Task<IActionResult> GetCar([FromQuery] GetCarFilter filter)
     {
         if (ModelState.IsValid)
         {
@@ -28,7 +28,7 @@ public class CarController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpGet("get/CarById"), AllowAnonymous]
+    [HttpGet("get/carById"), AllowAnonymous]
     public async Task<ActionResult> GetCarById(int carId)
     {
         if (ModelState.IsValid)
@@ -40,8 +40,8 @@ public class CarController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpPost("post/AddCar")]
-    public async Task<ActionResult> AddCar(AddCarDTO car)
+    [HttpPost("post/addCar")]
+    public async Task<ActionResult> AddCar([FromForm] AddCarDTO car)
     {
         if (ModelState.IsValid)
         {
@@ -52,8 +52,8 @@ public class CarController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpPost("post/UpdateCar")]
-    public async Task<ActionResult> UpdateCar(AddCarDTO car)
+    [HttpPost("post/updateCar")]
+    public async Task<ActionResult> UpdateCar([FromForm] AddCarDTO car)
     {
         if (ModelState.IsValid)
         {
@@ -64,7 +64,7 @@ public class CarController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpDelete("delete/DeleteCar")]
+    [HttpDelete("delete/deleteCar")]
     public async Task<ActionResult> DeleteCar(int carId)
     {
         if (ModelState.IsValid)

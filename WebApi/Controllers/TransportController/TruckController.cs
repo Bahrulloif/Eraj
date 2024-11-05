@@ -19,7 +19,7 @@ public class TruckController : BaseController
     }
 
     [HttpGet("get/GetTruck"), AllowAnonymous]
-    public async Task<ActionResult> GetTruck(TruckFilter filter)
+    public async Task<ActionResult> GetTruck([FromQuery] TruckFilter filter)
     {
         if (ModelState.IsValid)
         {
@@ -43,7 +43,7 @@ public class TruckController : BaseController
     }
 
     [HttpPost("post/AddTruck"), AllowAnonymous]
-    public async Task<ActionResult> AddTruck(AddTruckDTO truck)
+    public async Task<ActionResult> AddTruck([FromForm] AddTruckDTO truck)
     {
         if (ModelState.IsValid)
         {
@@ -55,7 +55,7 @@ public class TruckController : BaseController
     }
 
     [HttpPut("put/UpdateTruck"), AllowAnonymous]
-    public async Task<ActionResult> UpdateTruck(AddTruckDTO truck)
+    public async Task<ActionResult> UpdateTruck([FromForm] AddTruckDTO truck)
     {
         if (ModelState.IsValid)
         {
@@ -65,6 +65,7 @@ public class TruckController : BaseController
         var response = new Response<GetTruckDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
         return StatusCode(response.StatusCode, response);
     }
+    [HttpDelete("delete/DeleteTruck")]
     public async Task<ActionResult> DeleteTruck(int truckId)
     {
         if (ModelState.IsValid)

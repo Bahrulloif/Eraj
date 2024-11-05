@@ -28,4 +28,5 @@ public class DataContext : IdentityDbContext<ApplicationUser>
     public DbSet<Motorbike> Motorbikes { get; set; }
     public DbSet<Truck> Trucks { get; set; }
     public DbSet<SpareAccessorTransp> SpareAccessorTransps { get; set; }
+    public DbSet<SpareAccessorKomp> SpareAccessorKomps { get; set; }
 }
