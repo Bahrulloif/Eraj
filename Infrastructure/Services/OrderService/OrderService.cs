@@ -59,7 +59,7 @@ public class OrderService : IOrderService
 
     public async Task<Response<GetOrderDTO>> UpdateOrder(AddOrderDTO order)
     {
-        var find = _context.Orders.FirstOrDefaultAsync(o => o.Id == order.Id);
+        var find = await _context.Orders.FirstOrDefaultAsync(o => o.Id == order.Id);
         if (find != null)
         {
             var mapped = _mapper.Map<Order>(find);
