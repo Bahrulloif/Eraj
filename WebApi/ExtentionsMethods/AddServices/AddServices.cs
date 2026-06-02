@@ -50,6 +50,7 @@ public static class AddServices
         services.AddScoped<ICarService, CarService>();
         services.AddScoped<IMotorbikeService, MotorbikeService>();
         services.AddScoped<IRatingAndTopService, RatingAndTopService>();
+        services.AddScoped<ITruckService, TruckService>();
 
 
         services.AddIdentity<ApplicationUser, Roles>(config =>
