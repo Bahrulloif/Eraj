@@ -31,7 +31,9 @@ public class CategoryService : ICategoryService
     }
     public async Task<Response<GetCategoryDTO>> GetCategoryById(int categoryId)
     {
-        var category = await _context.Categories.FirstAsync(c => c.CategoryId == categoryId);
+        var category = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == categoryId);
+        if (category == null)
+            return new Response<GetCategoryDTO>(HttpStatusCode.NotFound, "Category not found");
         var result = _mapper.Map<GetCategoryDTO>(category);
         return new Response<GetCategoryDTO>(result);
     }
@@ -45,13 +47,13 @@ public class CategoryService : ICategoryService
             return new Response<GetCategoryDTO>(HttpStatusCode.OK, "Category added successfully");
         }
 
-        return new Response<GetCategoryDTO>(HttpStatusCode.NotFound, "Please fill the category");
+        return new Response<GetCategoryDTO>(HttpStatusCode.BadRequest, "Please fill the category");
     }
     public async Task<Response<GetCategoryDTO>> UpdateCategory(AddCategoryDTO category)
     {
         if (category == null)
         {
-            return new Response<GetCategoryDTO>(HttpStatusCode.NotFound, "Please fill the category");
+            return new Response<GetCategoryDTO>(HttpStatusCode.BadRequest, "Please fill the category");
         }
         var query = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(c => c.CategoryId == category.CategoryId);
         if (query == null)

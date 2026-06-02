@@ -35,6 +35,8 @@ public class CatalogService : ICatalogService
     public async Task<Response<GetCatalogDTO>> GetCatalogById(int catalogId)
     {
         var catalog = await _context.Catalogs.FindAsync(catalogId);
+        if (catalog == null)
+            return new Response<GetCatalogDTO>(HttpStatusCode.NotFound, "Catalog not found");
         var mapper = _mapper.Map<GetCatalogDTO>(catalog);
         return new Response<GetCatalogDTO>(mapper);
     }
@@ -52,7 +54,7 @@ public class CatalogService : ICatalogService
     {
         if (catalog == null)
         {
-            return new Response<string>(HttpStatusCode.NotFound, "Please fill out the catalog");
+            return new Response<string>(HttpStatusCode.BadRequest, "Please fill out the catalog");
         }
         var find = await _context.Catalogs.AsNoTracking().FirstOrDefaultAsync(c => c.CatalogId == catalog.CatalogId);
         if (find != null)

@@ -39,7 +39,7 @@ public class DeliveryAddressService : IDeliveryAddressService
             var mapped = _mapper.Map<GetDeliveryAddressDTO>(find);
             return new Response<GetDeliveryAddressDTO>(mapped);
         }
-        return new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.BadRequest, "DeliveryAddress not Found");
+        return new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.NotFound, "DeliveryAddress not Found");
     }
     public async Task<Response<string>> AddDeliveryAddress(AddDeliveryAddressDTO deliveryAddress)
     {
@@ -51,7 +51,7 @@ public class DeliveryAddressService : IDeliveryAddressService
             await _context.SaveChangesAsync();
             return new Response<string>("DeliveryAddress added successfully");
         }
-        return new Response<string>(System.Net.HttpStatusCode.BadRequest, "DeliveryAddress already exist");
+        return new Response<string>(System.Net.HttpStatusCode.Conflict, "DeliveryAddress already exist");
     }
     public async Task<Response<GetDeliveryAddressDTO>> UpdateDeliveryAddress(AddDeliveryAddressDTO deliveryAddress)
     {
@@ -63,7 +63,7 @@ public class DeliveryAddressService : IDeliveryAddressService
             await _context.SaveChangesAsync();
             return new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.OK, "DeliveryAddress updated successfully");
         }
-        return new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.BadRequest, "DeliveryAddress Not Found");
+        return new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.NotFound, "DeliveryAddress Not Found");
     }
 
     public async Task<Response<string>> DeleteDeliveryAddress(int deliveryAddressId)

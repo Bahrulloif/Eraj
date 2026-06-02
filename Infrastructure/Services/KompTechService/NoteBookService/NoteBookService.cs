@@ -84,7 +84,7 @@ public class NoteBookService : INoteBookService
     {
         if (noteBook == null)
         {
-            return new Response<string>(HttpStatusCode.NotFound, "Please fill the parameters");
+            return new Response<string>(HttpStatusCode.BadRequest, "Please fill the parameters");
         }
         var mapped = _mapper.Map<NoteBook>(noteBook);
         await _context.NoteBooks.AddAsync(mapped);
@@ -107,7 +107,7 @@ public class NoteBookService : INoteBookService
     {
         if (noteBook == null)
         {
-            return new Response<string>(HttpStatusCode.NotFound, "Please fill the parameters");
+            return new Response<string>(HttpStatusCode.BadRequest, "Please fill the parameters");
         }
         var find = await _context.NoteBooks.Where(n => n.Id == noteBook.Id).AsNoTracking().FirstOrDefaultAsync();
         if (find != null)
@@ -122,7 +122,6 @@ public class NoteBookService : INoteBookService
                 foreach (var item in images)
                 {
                     _fileService.DeleteFile(item.ImageName);
-                    await _context.SaveChangesAsync();               // нужен ли это?
                 }
                 _context.Pictures.RemoveRange(images);
                 await _context.SaveChangesAsync();
