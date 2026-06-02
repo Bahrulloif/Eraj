@@ -19,6 +19,9 @@ using Infrastructure.Services.RoleService;
 using Infrastructure.Services.SubCategoryService;
 using Infrastructure.Services.TransportService.CarService;
 using Infrastructure.Services.TransportService.MotorbikeService;
+using Infrastructure.Services.TransportService.TruckService;
+using Infrastructure.Services.KompTechService.SpareAccessorKompService;
+using Infrastructure.Services.TransportService.SpareAccessorTranspService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -51,6 +54,9 @@ public static class AddServices
         services.AddScoped<IMotorbikeService, MotorbikeService>();
         services.AddScoped<IRatingAndTopService, RatingAndTopService>();
         services.AddScoped<ITruckService, TruckService>();
+        services.AddScoped<ISpareAccessorKompService, SpareAccessorKompService>();
+        services.AddScoped<ISpareAccessorTransportService, SpareAccessorTransportService>();
+
 
 
         services.AddIdentity<ApplicationUser, Roles>(config =>
