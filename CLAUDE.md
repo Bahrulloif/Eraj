@@ -59,11 +59,14 @@ Swagger UI доступен по `/swagger` в режиме Development.
 - Remote: `git@github.com:Bahrulloif/Eraj.git`
 - Ветка: `main`
 
-## Что осталось сделать
+## Роли пользователей
+- Публичная регистрация даёт роль `User`
+- Роли назначает `SuperAdmin` через `RoleService`
+- `SuperAdmin` создаётся автоматически при старте: логин `SuperAdmin`, пароль `Maxshop123`
+- Доступные роли: `SuperAdmin`, `Admin`, `Marketing`, `User`, `Businessman`, `Courier`
 
-### Баги в OrderService.cs
-Файл: `Infrastructure/Services/OrderService/OrderService.cs`
-
-1. **`GetOrder`** — `FirstOrDefaultAsync` возвращает один объект, но маппится в `List<GetOrderDTO>` — упадёт в рантайме.
-2. **`UpdateOrder`** — маппинг из неверного объекта; вместо `Update` вызывается `AddAsync` (создаст дубликат); при успехе возвращает "Not Found" (логика перевёрнута).
-3. **`AddOrder`** — статус `BadGateway` (502) вместо `Conflict` (409).
+## Статус багов
+Все известные баги исправлены в коммитах на ветке `main` (2026-06-02). Сервисы проверены:
+`OrderService`, `CartService`, `AccountService`, `TruckService`, `TabletService`,
+`MotorbikeService`, `CarService`, `SmartPhoneService`, `ProfileService`,
+`SubCategoryService`, `DeliveryAddressService`, `CategoryService`, `CatalogService`, `NoteBookService`.
