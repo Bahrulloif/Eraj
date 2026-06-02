@@ -23,7 +23,7 @@ public class OrderService : IOrderService
     {
         if (filter.Id != null)
         {
-            var orders = await _context.Orders.FirstOrDefaultAsync(o => o.Id == filter.Id);
+            var orders = await _context.Orders.Where(o => o.Id == filter.Id).ToListAsync();
             var mapped = _mapper.Map<List<GetOrderDTO>>(orders);
             return new Response<List<GetOrderDTO>>(mapped);
         }
@@ -53,7 +53,7 @@ public class OrderService : IOrderService
             await _context.SaveChangesAsync();
             return new Response<GetOrderDTO>(System.Net.HttpStatusCode.OK, "Order added successfully");
         }
-        return new Response<GetOrderDTO>(System.Net.HttpStatusCode.BadGateway, "Order already exist");
+        return new Response<GetOrderDTO>(System.Net.HttpStatusCode.Conflict, "Order already exist");
 
     }
 
@@ -62,9 +62,10 @@ public class OrderService : IOrderService
         var find = await _context.Orders.FirstOrDefaultAsync(o => o.Id == order.Id);
         if (find != null)
         {
-            var mapped = _mapper.Map<Order>(find);
-            await _context.Orders.AddAsync(mapped);
+            var mapped = _mapper.Map<Order>(order);
+            _context.Orders.Update(mapped);
             await _context.SaveChangesAsync();
+            return new Response<GetOrderDTO>(System.Net.HttpStatusCode.OK, "Order updated successfully");
         }
         return new Response<GetOrderDTO>(System.Net.HttpStatusCode.NotFound, "Order Not Found");
     }
