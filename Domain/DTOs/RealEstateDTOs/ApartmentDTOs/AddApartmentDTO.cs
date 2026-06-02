@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace Domain.DTOs.RealEstateDTOs.ApartmentDTOs;
 
 public class AddApartmentDTO : ApartmentDTO

@@ -1,4 +1,6 @@
-namespace Domain.DTOs.RealEstateDTOs.ApartmentDTODTOs;
+using Domain.Enum.Apartment;
+
+namespace Domain.DTOs.RealEstateDTOs.ApartmentDTOs;
 
 public class ApartmentDTO
 {
@@ -8,7 +10,7 @@ public class ApartmentDTO
     public decimal PricePerM2 { get; set; }
     public float TotalArea { get; set; }
     public int Floor { get; set; }
-    public RenovationType Renovation { get; set; }
+    public RenovationTypeEnum Renovation { get; set; }
     public float CeilingHeight { get; set; }
     public int YearOfHouseBuild { get; set; }
     public int FloorsInTheHouse { get; set; }

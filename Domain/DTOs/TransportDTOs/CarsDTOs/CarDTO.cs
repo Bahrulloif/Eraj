@@ -12,7 +12,7 @@ public class CarDTO
     public string Brand { get; set; } = null!;
     public string Engine { get; set; } = null!;
     public string Body { get; set; } = null!;
-    public string Gearbox { get; set; } = null!;
+    public GearboxType Gearbox { get; set; }
     public string DriverUnit { get; set; } = null!;
     public string EngineCapacity { get; set; } = null!;
     public string Mileage { get; set; } = null!;

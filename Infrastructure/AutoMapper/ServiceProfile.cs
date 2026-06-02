@@ -7,12 +7,18 @@ using Domain.DTOs.KomTechDTOs.NoteBookDTOs;
 using Domain.DTOs.KomTechDTOs.SmartPhoneDTOs;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Domain.DTOs.KomTechDTOs.TabletDTOs;
+using Domain.DTOs.KomTechDTOs.SpareAccessorKompDTOs;
 using Domain.DTOs.CategoryDTOs;
 using Domain.DTOs.ProfileDTO;
 using Domain.DTOs.OrderDTO;
 using Domain.DTOs.CartDTO;
 using Domain.DTOs.AddressDTO;
 using Domain.DTOs.DeliveryAddressDTO;
+using Domain.DTOs.TransportDTOs.CarsDTOs;
+using Domain.DTOs.TransportDTOs.MotorbikeDTOs;
+using Domain.DTOs.TransportDTOs.TruckDTOs;
+using Domain.DTOs.TransportDTOs.SpareAccessorTranspDTOs;
+using Domain.Entities.Transport;
 
 namespace Infrastructure.AutoMapper;
 
@@ -54,6 +60,21 @@ public class ServiceProfile : Profile
 
         CreateMap<DeliveryAddress, GetDeliveryAddressDTO>().ReverseMap();
         CreateMap<DeliveryAddress, AddDeliveryAddressDTO>().ReverseMap();
+
+        CreateMap<Car, GetCarDTO>().ReverseMap();
+        CreateMap<Car, AddCarDTO>().ReverseMap();
+
+        CreateMap<Motorbike, GetMotorbikeDTO>().ReverseMap();
+        CreateMap<Motorbike, AddMotorbikeDTO>().ReverseMap();
+
+        CreateMap<Truck, GetTruckDTO>().ReverseMap();
+        CreateMap<Truck, AddTruckDTO>().ReverseMap();
+
+        CreateMap<SpareAccessorKomp, GetSpareAccessorKompDTO>().ReverseMap();
+        CreateMap<SpareAccessorKomp, AddSpareAccessorKompDTO>().ReverseMap();
+
+        CreateMap<SpareAccessorTransp, GetSpareAccessorTranspDTO>().ReverseMap();
+        CreateMap<SpareAccessorTransp, AddSpareAccessorTranspDTO>().ReverseMap();
 
     }
 }
