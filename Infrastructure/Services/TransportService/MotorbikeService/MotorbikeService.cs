@@ -125,8 +125,9 @@ public class MotorbikeService : IMotorbikeService
         {
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "Motorbike not found");
         }
-        var mapped = _mapper.Map<Motorbike>(motorbike);
-        await _context.Motorbikes.AddAsync(mapped);
+        _mapper.Map(motorbike, find);
+        _context.Motorbikes.Update(find);
+        await _context.SaveChangesAsync();
         if (motorbike.Images != null)
         {
             var images = await _context.Pictures.

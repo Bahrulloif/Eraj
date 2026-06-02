@@ -74,7 +74,7 @@ public class SmartPhoneService : ISmartPhoneService
                                 RAM = s.RAM,
                                 ROM = s.ROM,
                                 Images = _context.Pictures.
-                                Where(p => p.Id == s.Id && p.SubCategoryId == s.SubCategoryId).
+                                Where(p => p.ProductId == s.Id && p.SubCategoryId == s.SubCategoryId).
                                 Select(x => new PictureDto { Id = x.Id, ImageName = x.ImageName }).
                                 ToList()
                             }).

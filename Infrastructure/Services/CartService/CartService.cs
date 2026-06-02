@@ -19,8 +19,8 @@ public class CartService : ICartService
     }
     public async Task<Response<List<GetCartDTO>>> GetCart(CartFilter filter)
     {
-        var find = await _context.Carts.FirstOrDefaultAsync(c => c.Id == filter.Id);
-        if (find != null)
+        var find = await _context.Carts.Where(c => c.Id == filter.Id).ToListAsync();
+        if (find.Any())
         {
             var mapped = _mapper.Map<List<GetCartDTO>>(find);
             return new Response<List<GetCartDTO>>(mapped);

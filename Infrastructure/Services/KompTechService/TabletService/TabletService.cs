@@ -135,7 +135,7 @@ public class TabletService : ITabletService
                     await _context.SaveChangesAsync();
                 }
             }
-            var mapped = _mapper.Map<Tablet>(find);
+            var mapped = _mapper.Map<Tablet>(tablet);
             _context.Tablets.Update(mapped);
             await _context.SaveChangesAsync();
             return new Response<string>("Tablet updated successfully");

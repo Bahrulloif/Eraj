@@ -53,11 +53,12 @@ public class ProfileService : IProfileService
         var find = await _context.Profiles.FirstOrDefaultAsync(p => p.ApplicationUserId == profile.Id);
         if (find != null)
         {
-            var result = _mapper.Map<ProfileUser>(profile);
-            _context.Profiles.Update(result);
+            _mapper.Map(profile, find);
+            _context.Profiles.Update(find);
             await _context.SaveChangesAsync();
+            return new Response<GetProfileDTO>(System.Net.HttpStatusCode.OK, "Profile updated successfully");
         }
-        return new Response<GetProfileDTO>(System.Net.HttpStatusCode.BadRequest, "Profile not found");
+        return new Response<GetProfileDTO>(System.Net.HttpStatusCode.NotFound, "Profile not found");
     }
     public async Task<Response<GetProfileDTO>> DeleteProfile(string profileId)
     {

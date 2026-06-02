@@ -57,7 +57,7 @@ public class SubCategoryService : ISubCategoryService
         {
             return new Response<GetSubCategoryDTO>(HttpStatusCode.NotFound, "Please fill parameter");
         }
-        var find =await _context.SubCategories.AsNoTracking().FirstOrDefaultAsync(s => s.CategoryId == subCategory.CategoryId);
+        var find = await _context.SubCategories.AsNoTracking().FirstOrDefaultAsync(s => s.SubCategoryId == subCategory.SubCategoryId);
         if (find != null)
         {
             var mapped = _mapper.Map<SubCategory>(subCategory);

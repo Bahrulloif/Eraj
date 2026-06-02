@@ -167,8 +167,8 @@ public class CarService : ICarService
         var find = await _context.Cars.FirstOrDefaultAsync(x => x.Id == car.Id);
         if (find != null)
         {
-            var mapped = _mapper.Map<Car>(car);
-            await _context.Cars.AddAsync(mapped);
+            _mapper.Map(car, find);
+            _context.Cars.Update(find);
             await _context.SaveChangesAsync();
             if (car.Images != null)
             {
