@@ -102,6 +102,7 @@ public class MotorbikeService : IMotorbikeService
     {
         var mapped = _mapper.Map<Motorbike>(motorbike);
         await _context.Motorbikes.AddAsync(mapped);
+        await _context.SaveChangesAsync();
         foreach (var item in motorbike.Images)
         {
             var imageName = _fileService.CreateFile(item);

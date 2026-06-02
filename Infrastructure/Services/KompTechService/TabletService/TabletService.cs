@@ -86,6 +86,7 @@ public class TabletService : ITabletService
         }
         var mapped = _mapper.Map<Tablet>(tablet);
         await _context.Tablets.AddAsync(mapped);
+        await _context.SaveChangesAsync();
         foreach (var item in tablet.Images)
         {
             var imageName = _fileService.CreateFile(item);

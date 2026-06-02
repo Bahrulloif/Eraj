@@ -70,9 +70,13 @@ public class AccountService : IAccountService
             PhoneNumber = user.TelephoneNumber,
             UserName = user.UserName
         };
-        await _userManager.CreateAsync(newUser, user.Password);
-        await _userManager.AddToRoleAsync(newUser, UserRoles.Admin);
-
+        var result = await _userManager.CreateAsync(newUser, user.Password);
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            return new Response<string>(System.Net.HttpStatusCode.BadRequest, errors);
+        }
+        await _userManager.AddToRoleAsync(newUser, UserRoles.User);
 
         var newProfile = new ProfileUser()
         {
@@ -81,6 +85,7 @@ public class AccountService : IAccountService
             Surname = user.Surname
         };
         await _context.Profiles.AddAsync(newProfile);
+        await _context.SaveChangesAsync();
 
         return new Response<string>(System.Net.HttpStatusCode.OK, $"{user.Name} registered successfully");
     }

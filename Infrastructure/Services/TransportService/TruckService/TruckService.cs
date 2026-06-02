@@ -166,6 +166,8 @@ public class TruckService : ITruckService
             _fileService.DeleteFile(item.ImageName);
         }
         _context.Pictures.RemoveRange(images);
+        _context.Trucks.Remove(find);
+        await _context.SaveChangesAsync();
         return new Response<string>(System.Net.HttpStatusCode.OK, $"{find.Model} deleted successfully");
     }
 }
