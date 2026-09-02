@@ -102,8 +102,8 @@ public class SpareAccessorKompService : ISpareAccessorKompService
         var find = await _context.SpareAccessorKomps.FirstOrDefaultAsync(x => x.Id == spareAccessorKomp.Id);
         if (find != null)
         {
-            var mapped = _mapper.Map<SpareAccessorKomp>(spareAccessorKomp);
-            await _context.SpareAccessorKomps.AddAsync(mapped);
+            _mapper.Map(spareAccessorKomp, find);
+            _context.SpareAccessorKomps.Update(find);
             await _context.SaveChangesAsync();
             if (spareAccessorKomp.Images != null)
             {
@@ -141,7 +141,7 @@ public class SpareAccessorKompService : ISpareAccessorKompService
         if (find != null)
         {
             var images = await _context.Pictures
-            .Where(x => x.ProductId == spareAccessorKompId && x.SubCategoryId == spareAccessorKompId)
+            .Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId)
             .ToListAsync();
             foreach (var item in images)
             {

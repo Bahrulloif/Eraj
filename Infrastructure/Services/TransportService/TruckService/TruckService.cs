@@ -120,8 +120,13 @@ public class TruckService : ITruckService
 
     public async Task<Response<string>> UpdateTruck(AddTruckDTO truck)
     {
-        var mapped = _mapper.Map<Truck>(truck);
-        await _context.Trucks.AddAsync(mapped);
+        var find = await _context.Trucks.FirstOrDefaultAsync(x => x.Id == truck.Id);
+        if (find == null)
+        {
+            return new Response<string>(System.Net.HttpStatusCode.NotFound, "Truck not found");
+        }
+        _mapper.Map(truck, find);
+        _context.Trucks.Update(find);
         await _context.SaveChangesAsync();
         if (truck.Images != null)
         {
@@ -141,8 +146,8 @@ public class TruckService : ITruckService
                 var image = new Picture
                 {
                     ImageName = imageName.Data!,
-                    ProductId = mapped.Id,
-                    SubCategoryId = mapped.SubCategoryId
+                    ProductId = find.Id,
+                    SubCategoryId = find.SubCategoryId
                 };
                 await _context.Pictures.AddAsync(image);
                 await _context.SaveChangesAsync();

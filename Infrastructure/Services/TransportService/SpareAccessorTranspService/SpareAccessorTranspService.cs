@@ -98,8 +98,8 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
         var find = await _context.SpareAccessorTransps.FirstOrDefaultAsync(x => x.Id == spareAccessorTransp.Id);
         if (find != null)
         {
-            var mapped = _mapper.Map<SpareAccessorTransp>(spareAccessorTransp);
-            await _context.SpareAccessorTransps.AddAsync(mapped);
+            _mapper.Map(spareAccessorTransp, find);
+            _context.SpareAccessorTransps.Update(find);
             await _context.SaveChangesAsync();
             if (spareAccessorTransp.Images != null)
             {
@@ -134,7 +134,7 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
         var find = await _context.SpareAccessorTransps.FirstOrDefaultAsync(x => x.Id == spareAccessorTranspId);
         if (find != null)
         {
-            var images = await _context.Pictures.Where(x => x.ProductId == spareAccessorTranspId && x.SubCategoryId == spareAccessorTranspId).ToListAsync();
+            var images = await _context.Pictures.Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).ToListAsync();
             foreach (var item in images)
             {
                 _fileService.DeleteFile(item.ImageName);
