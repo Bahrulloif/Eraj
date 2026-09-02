@@ -70,6 +70,10 @@ public class SpareAccessorKompService : ISpareAccessorKompService
                                 .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                 .ToList()
                             }).FirstOrDefaultAsync();
+        if (mapped == null)
+        {
+            return new Response<GetSpareAccessorKompDTO>(System.Net.HttpStatusCode.NotFound, "SpareAccessorKomp not found");
+        }
         return new Response<GetSpareAccessorKompDTO>(mapped);
     }
 

@@ -81,6 +81,10 @@ public class SmartPhoneService : ISmartPhoneService
                                 ToList()
                             }).
                             FirstOrDefaultAsync();
+        if (mapped == null)
+        {
+            return new Response<GetSmartPhoneDTO>(System.Net.HttpStatusCode.NotFound, "SmartPhone not found");
+        }
         return new Response<GetSmartPhoneDTO>(mapped);
     }
     public async Task<Response<string>> AddSmartPhone(AddSmartPhoneDTO smartPhone, string currentUserId)

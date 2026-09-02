@@ -78,6 +78,10 @@ public class TabletService : ITabletService
                                 Images = _context.Pictures.Where(p => p.ProductId == t.Id && p.SubCategoryId == t.SubCategoryId).
                              Select(x => new PictureDto { ImageName = x.ImageName, Id = x.Id }).ToList()
                             }).FirstOrDefaultAsync();
+        if (mapped == null)
+        {
+            return new Response<GetTabletDTO>(System.Net.HttpStatusCode.NotFound, "Tablet not found");
+        }
         return new Response<GetTabletDTO>(mapped);
     }
     public async Task<Response<string>> AddTablet(AddTabletDTO tablet, string currentUserId)

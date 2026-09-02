@@ -95,6 +95,10 @@ public class TruckService : ITruckService
                                 Select(c => new PictureDto { Id = c.Id, ImageName = c.ImageName }).
                                 ToList()
                             }).FirstOrDefaultAsync();
+        if (mapped == null)
+        {
+            return new Response<GetTruckDTO>(System.Net.HttpStatusCode.NotFound, "Truck not found");
+        }
         return new Response<GetTruckDTO>(mapped);
     }
 

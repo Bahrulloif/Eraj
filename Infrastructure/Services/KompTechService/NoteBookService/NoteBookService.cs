@@ -80,6 +80,10 @@ public class NoteBookService : INoteBookService
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                     .ToList()
                             }).FirstOrDefaultAsync();
+        if (mapped == null)
+        {
+            return new Response<GetNoteBookDTO>(System.Net.HttpStatusCode.NotFound, "NoteBook not found");
+        }
         return new Response<GetNoteBookDTO>(mapped);
     }
     public async Task<Response<string>> AddNoteBook(AddNoteBookDTO noteBook, string currentUserId)

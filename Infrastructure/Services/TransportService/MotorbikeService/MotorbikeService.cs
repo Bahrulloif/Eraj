@@ -66,11 +66,8 @@ public class MotorbikeService : IMotorbikeService
 
     public async Task<Response<GetMotorbikeDTO>> GetMotorbikeById(int motorbikeId)
     {
-        var query = _context.Motorbikes.AsQueryable();
-        var find = query.Where(x => x.Id == motorbikeId).FirstOrDefaultAsync();
-        if (find != null)
-        {
-            var mapped = await (from m in query
+        var query = _context.Motorbikes.Where(x => x.Id == motorbikeId);
+        var mapped = await (from m in query
                                 select new GetMotorbikeDTO
                                 {
                                     Id = m.Id,
@@ -95,9 +92,11 @@ public class MotorbikeService : IMotorbikeService
                                                               .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                                               .ToList()
                                 }).FirstOrDefaultAsync();
-            return new Response<GetMotorbikeDTO>(mapped);
+        if (mapped == null)
+        {
+            return new Response<GetMotorbikeDTO>(System.Net.HttpStatusCode.NotFound, "Motorbike not found");
         }
-        return new Response<GetMotorbikeDTO>(System.Net.HttpStatusCode.NotFound, "Motorbike not found");
+        return new Response<GetMotorbikeDTO>(mapped);
     }
 
     public async Task<Response<string>> AddMotorbike(AddMotorbikeDTO motorbike, string currentUserId)

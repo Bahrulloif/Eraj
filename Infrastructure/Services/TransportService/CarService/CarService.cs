@@ -137,6 +137,10 @@ public class CarService : ICarService
                                                         .ToList()
 
                             }).FirstOrDefaultAsync();
+        if (mapped == null)
+        {
+            return new Response<GetCarDTO>(System.Net.HttpStatusCode.NotFound, "Car not found");
+        }
         return new Response<GetCarDTO>(mapped);
     }
 

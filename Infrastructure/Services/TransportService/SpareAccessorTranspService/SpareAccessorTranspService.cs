@@ -67,6 +67,10 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                     .ToList()
                             }).FirstOrDefaultAsync();
+        if (mapped == null)
+        {
+            return new Response<GetSpareAccessorTranspDTO>(System.Net.HttpStatusCode.NotFound, "SpareAccessorTransp not found");
+        }
         return new Response<GetSpareAccessorTranspDTO>(mapped);
     }
 
