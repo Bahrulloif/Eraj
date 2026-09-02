@@ -49,6 +49,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// FileService.CreateFile writes uploaded product images to wwwroot/Images and returns
+// just the file name; without this, that folder was never served and every uploaded
+// image was a 404 for clients.
+app.UseStaticFiles();
+
 app.UseAuthentication();
 
 app.UseAuthorization();
