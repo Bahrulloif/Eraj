@@ -36,6 +36,7 @@ public class SpareAccessorKompService : ISpareAccessorKompService
                             select new GetSpareAccessorKompDTO
                             {
                                 Id = a.Id,
+                                SubCategoryId = a.SubCategoryId,
                                 Model = a.Model,
                                 Description = a.Description,
                                 DiscountPrice = a.DiscountPrice,

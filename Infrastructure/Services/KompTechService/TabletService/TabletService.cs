@@ -34,6 +34,7 @@ public class TabletService : ITabletService
                             select new GetTabletDTO
                             {
                                 Id = t.Id,
+                                SubCategoryId = t.SubCategoryId,
                                 Color = t.Color,
                                 Core = t.Core,
                                 Diagonal = t.Diagonal,
@@ -65,6 +66,7 @@ public class TabletService : ITabletService
                             select new GetTabletDTO
                             {
                                 Id = t.Id,
+                                SubCategoryId = t.SubCategoryId,
                                 Color = t.Color,
                                 Core = t.Core,
                                 Diagonal = t.Diagonal,

@@ -37,6 +37,7 @@ public class MotorbikeService : IMotorbikeService
                             select new GetMotorbikeDTO
                             {
                                 Id = m.Id,
+                                SubCategoryId = m.SubCategoryId,
                                 Model = m.Model,
                                 Region = m.Region,
                                 Price = m.Price,
@@ -73,6 +74,7 @@ public class MotorbikeService : IMotorbikeService
                                 select new GetMotorbikeDTO
                                 {
                                     Id = m.Id,
+                                    SubCategoryId = m.SubCategoryId,
                                     Model = m.Model,
                                     Region = m.Region,
                                     Price = m.Price,

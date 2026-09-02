@@ -34,6 +34,7 @@ public class NoteBookService : INoteBookService
                             select new GetNoteBookDTO
                             {
                                 Id = n.Id,
+                                SubCategoryId = n.SubCategoryId,
                                 Color = n.Color,
                                 Diagonal = n.Diagonal,
                                 Model = n.Model,
@@ -65,6 +66,7 @@ public class NoteBookService : INoteBookService
                             select new GetNoteBookDTO
                             {
                                 Id = n.Id,
+                                SubCategoryId = n.SubCategoryId,
                                 Color = n.Color,
                                 Diagonal = n.Diagonal,
                                 Model = n.Model,

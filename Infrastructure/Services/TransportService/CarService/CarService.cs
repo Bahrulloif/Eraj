@@ -37,6 +37,7 @@ public class CarService : ICarService
                             select new GetCarDTO
                             {
                                 Id = c.Id,
+                                SubCategoryId = c.SubCategoryId,
                                 Price = c.Price,
                                 DiscountPrice = c.DiscountPrice,
                                 YearOfIssue = c.YearOfIssue,
@@ -94,6 +95,7 @@ public class CarService : ICarService
                             select new GetCarDTO
                             {
                                 Id = c.Id,
+                                SubCategoryId = c.SubCategoryId,
                                 Price = c.Price,
                                 DiscountPrice = c.DiscountPrice,
                                 YearOfIssue = c.YearOfIssue,

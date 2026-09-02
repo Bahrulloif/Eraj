@@ -34,6 +34,7 @@ public class SmartPhoneService : ISmartPhoneService
                             select new GetSmartPhoneDTO
                             {
                                 Id = s.Id,
+                                SubCategoryId = s.SubCategoryId,
                                 Color = s.Color,
                                 Core = s.Core,
                                 Diagonal = s.Diagonal,
@@ -65,6 +66,7 @@ public class SmartPhoneService : ISmartPhoneService
                             select new GetSmartPhoneDTO
                             {
                                 Id = s.Id,
+                                SubCategoryId = s.SubCategoryId,
                                 Color = s.Color,
                                 Core = s.Core,
                                 Diagonal = s.Diagonal,

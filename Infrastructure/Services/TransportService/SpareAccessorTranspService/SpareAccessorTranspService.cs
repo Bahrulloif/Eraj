@@ -34,6 +34,7 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
                             select new GetSpareAccessorTranspDTO
                             {
                                 Id = a.Id,
+                                SubCategoryId = a.SubCategoryId,
                                 Model = a.Model,
                                 Description = a.Description,
                                 Price = a.Price,
@@ -56,6 +57,7 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
                             select new GetSpareAccessorTranspDTO
                             {
                                 Id = a.Id,
+                                SubCategoryId = a.SubCategoryId,
                                 Model = a.Model,
                                 Description = a.Description,
                                 Price = a.Price,
