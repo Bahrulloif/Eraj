@@ -1,7 +1,6 @@
 using AutoMapper;
 using Domain.DTOs.KomTechDTOs.SpareAccessorKompDTOs;
 using Domain.DTOs.PictureDTO;
-using Domain.DTOs.TransportDTOs.SpareAccessorKompDTOs;
 using Domain.Entities;
 using Domain.Entities.KompTech;
 using Domain.Filters.KompTechFilters.SpareAccessorKompFilter;

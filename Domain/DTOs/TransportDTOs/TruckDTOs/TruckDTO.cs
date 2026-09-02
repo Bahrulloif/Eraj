@@ -1,3 +1,5 @@
+using Domain.Enum.TruckEnum;
+
 namespace Domain.DTOs.TransportDTOs.TruckDTOs;
 
 public class TruckDTO
@@ -8,15 +10,15 @@ public class TruckDTO
     public decimal PriceDiscount { get; set; }
     public string Brand { get; set; } = null!;
     public string Model { get; set; } = null!;
-    public DateTime YearOfIssue { get; set; }
-    public string? BodyType { get; set; }
-    public string Power { get; set; } = null!;
-    public string EngineType { get; set; } = null!;
-    public string EngineCapacity { get; set; } = null!;
+    public int YearOfIssue { get; set; }
+    public BodyType? BodyType { get; set; }
+    public int Power { get; set; }
+    public EngineType EngineType { get; set; }
+    public decimal EngineCapacity { get; set; }
     public string? EnvironmentalClass { get; set; }
-    public string Transmission { get; set; } = null!;
+    public TransmissionType Transmission { get; set; }
     public string? WheelFormula { get; set; }
-    public string LoadCapacity { get; set; } = null!;
-    public string PermittedMaximumWeight { get; set; } = null!;
-    public string Mileage { get; set; } = null!;
+    public decimal LoadCapacity { get; set; }
+    public decimal PermittedMaximumWeight { get; set; }
+    public int Mileage { get; set; }
 }

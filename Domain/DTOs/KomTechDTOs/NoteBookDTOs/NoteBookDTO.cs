@@ -1,3 +1,4 @@
+using Domain.Enum.NoteBookEnum;
 using Microsoft.AspNetCore.Http;
 
 namespace Domain.DTOs.KomTechDTOs.NoteBookDTOs;
@@ -7,7 +8,7 @@ public class NoteBookDTO
     public int Id { get; set; }
     public int SubCategoryId { get; set; }
     public string Model { get; set; } = null!;
-    public string Core { get; set; } = null!;
+    public CpuBrand Core { get; set; }
     public int RAM { get; set; }
     public double Diagonal { get; set; }
     public int ROM { get; set; }

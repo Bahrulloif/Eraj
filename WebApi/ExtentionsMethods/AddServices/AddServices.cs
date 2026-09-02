@@ -55,7 +55,7 @@ public static class AddServices
         services.AddScoped<IRatingAndTopService, RatingAndTopService>();
         services.AddScoped<ITruckService, TruckService>();
         services.AddScoped<ISpareAccessorKompService, SpareAccessorKompService>();
-        services.AddScoped<ISpareAccessorTransportService, SpareAccessorTransportService>();
+        services.AddScoped<ISpareAccessorTranspService, SpareAccessorTranspService>();
 
 
 

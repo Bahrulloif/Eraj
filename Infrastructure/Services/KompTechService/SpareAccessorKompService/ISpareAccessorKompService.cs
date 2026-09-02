@@ -1,5 +1,4 @@
 using Domain.DTOs.KomTechDTOs.SpareAccessorKompDTOs;
-using Domain.DTOs.TransportDTOs.SpareAccessorKompDTOs;
 using Domain.Filters.KompTechFilters.SpareAccessorKompFilter;
 using Domain.Responses;
 
