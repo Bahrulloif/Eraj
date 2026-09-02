@@ -62,8 +62,8 @@ public class OrderService : IOrderService
         var find = await _context.Orders.FirstOrDefaultAsync(o => o.Id == order.Id);
         if (find != null)
         {
-            var mapped = _mapper.Map<Order>(order);
-            _context.Orders.Update(mapped);
+            _mapper.Map(order, find);
+            _context.Orders.Update(find);
             await _context.SaveChangesAsync();
             return new Response<GetOrderDTO>(System.Net.HttpStatusCode.OK, "Order updated successfully");
         }

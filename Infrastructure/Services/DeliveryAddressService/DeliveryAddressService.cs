@@ -58,8 +58,8 @@ public class DeliveryAddressService : IDeliveryAddressService
         var find = await _context.DeliveryAddresses.FirstOrDefaultAsync(d => d.Id == deliveryAddress.Id);
         if (find != null)
         {
-            var mapped = _mapper.Map<DeliveryAddress>(deliveryAddress);
-            _context.DeliveryAddresses.Update(mapped);
+            _mapper.Map(deliveryAddress, find);
+            _context.DeliveryAddresses.Update(find);
             await _context.SaveChangesAsync();
             return new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.OK, "DeliveryAddress updated successfully");
         }
