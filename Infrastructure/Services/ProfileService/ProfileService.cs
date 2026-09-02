@@ -49,6 +49,13 @@ public class ProfileService : IProfileService
     }
     public async Task<Response<GetProfileDTO>> AddProfile(AddProfileDTO profile, string currentUserId)
     {
+        // Registration already creates a Profiles row (PK = ApplicationUserId) for every user,
+        // so this always hit a duplicate-key crash before. Use PUT /profile to edit it instead.
+        var exists = await _context.Profiles.AnyAsync(p => p.ApplicationUserId == currentUserId);
+        if (exists)
+        {
+            return new Response<GetProfileDTO>(System.Net.HttpStatusCode.Conflict, "Profile already exists, use update instead");
+        }
         var mapped = _mapper.Map<ProfileUser>(profile);
         mapped.ApplicationUserId = currentUserId;
         await _context.Profiles.AddAsync(mapped);
