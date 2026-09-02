@@ -17,31 +17,40 @@ public class CartService : ICartService
         _context = context;
         _mapper = mapper;
     }
-    public async Task<Response<List<GetCartDTO>>> GetCart(CartFilter filter)
+    public async Task<Response<List<GetCartDTO>>> GetCart(CartFilter filter, string currentUserId, bool isPrivileged)
     {
-        var find = await _context.Carts.Where(c => c.Id == filter.Id).ToListAsync();
-        if (find.Any())
+        var query = _context.Carts.AsQueryable();
+        if (!isPrivileged)
         {
-            var mapped = _mapper.Map<List<GetCartDTO>>(find);
-            return new Response<List<GetCartDTO>>(mapped);
+            query = query.Where(c => c.ApplicationUserId == currentUserId);
         }
-        var result = await _context.Carts.ToListAsync();
+        if (filter.Id != 0)
+        {
+            query = query.Where(c => c.Id == filter.Id);
+        }
+        var result = await query.ToListAsync();
         var response = _mapper.Map<List<GetCartDTO>>(result);
         return new Response<List<GetCartDTO>>(response);
     }
-    public async Task<Response<GetCartDTO>> GetCartById(int cartId)
+    public async Task<Response<GetCartDTO>> GetCartById(int cartId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.Carts.FirstOrDefaultAsync(c => c.Id == cartId);
-        if (find != null)
+        if (find == null)
         {
-            var mapped = _mapper.Map<GetCartDTO>(find);
-            return new Response<GetCartDTO>(mapped);
+            return new Response<GetCartDTO>(System.Net.HttpStatusCode.NotFound, "Cart Not Found");
         }
-        return new Response<GetCartDTO>(System.Net.HttpStatusCode.NotFound, "Cart Not Found");
+        if (!isPrivileged && find.ApplicationUserId != currentUserId)
+        {
+            return new Response<GetCartDTO>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this cart");
+        }
+        var mapped = _mapper.Map<GetCartDTO>(find);
+        return new Response<GetCartDTO>(mapped);
     }
 
-    public async Task<Response<string>> AddCart(AddCartDTO cart)
+    public async Task<Response<string>> AddCart(AddCartDTO cart, string currentUserId)
     {
+        // Always the caller's own cart — never trust a client-supplied ApplicationUserId.
+        cart.ApplicationUserId = currentUserId;
         var find = await _context.Carts.AsNoTracking().FirstOrDefaultAsync(c => c.Id == cart.Id);
         if (find == null)
         {
@@ -53,27 +62,40 @@ public class CartService : ICartService
         return new Response<string>("Cart already exist");
     }
 
-    public async Task<Response<string>> UpdateCart(AddCartDTO cart)
+    public async Task<Response<string>> UpdateCart(AddCartDTO cart, string currentUserId, bool isPrivileged)
     {
-        var find = await _context.Carts.AsNoTracking().FirstOrDefaultAsync(c => c.Id == cart.Id);
-        if (find != null)
+        var find = await _context.Carts.FirstOrDefaultAsync(c => c.Id == cart.Id);
+        if (find == null)
         {
-            var mapped = _mapper.Map<Cart>(cart);
-            _context.Carts.Update(mapped);
-            await _context.SaveChangesAsync();
-            return new Response<string>("Cart updated successfully");
+            return new Response<string>(System.Net.HttpStatusCode.NotFound, "Cart Not Found");
         }
-        return new Response<string>("Cart Not Found");
+        if (!isPrivileged && find.ApplicationUserId != currentUserId)
+        {
+            return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this cart");
+        }
+        if (!isPrivileged)
+        {
+            // Never let a non-privileged caller reassign the cart to someone else.
+            cart.ApplicationUserId = currentUserId;
+        }
+        _mapper.Map(cart, find);
+        _context.Carts.Update(find);
+        await _context.SaveChangesAsync();
+        return new Response<string>("Cart updated successfully");
     }
-    public async Task<Response<GetCartDTO>> DeleteCart(int cartId)
+    public async Task<Response<GetCartDTO>> DeleteCart(int cartId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.Carts.FirstOrDefaultAsync(c => c.Id == cartId);
-        if (find != null)
+        if (find == null)
         {
-            _context.Carts.Remove(find);
-            await _context.SaveChangesAsync();
-            return new Response<GetCartDTO>(System.Net.HttpStatusCode.OK, "Cart deleted successfully");
+            return new Response<GetCartDTO>(System.Net.HttpStatusCode.NotFound, "Cart Not Found");
         }
-        return new Response<GetCartDTO>(System.Net.HttpStatusCode.NotFound, "Cart Not Found");
+        if (!isPrivileged && find.ApplicationUserId != currentUserId)
+        {
+            return new Response<GetCartDTO>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this cart");
+        }
+        _context.Carts.Remove(find);
+        await _context.SaveChangesAsync();
+        return new Response<GetCartDTO>(System.Net.HttpStatusCode.OK, "Cart deleted successfully");
     }
 }

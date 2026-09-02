@@ -55,18 +55,18 @@ public class AddressController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _addressService.UpdateAddress(address);
+            var result = await _addressService.UpdateAddress(address, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetAddressDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
-        return StatusCode(response.StatusCode, response);   
+        return StatusCode(response.StatusCode, response);
     }
     [HttpDelete("delete/address")]
     public async Task<IActionResult> DeleteAddress(int addressId)
     {
         if (ModelState.IsValid)
         {
-            var result = await _addressService.DeleteAddress(addressId);
+            var result = await _addressService.DeleteAddress(addressId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetAddressDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());

@@ -20,7 +20,7 @@ public class DeliveryAddressController : BaseController
   {
     if (ModelState.IsValid)
     {
-      var result = await _deliveryAddressService.GetDeliveryAddress(filter);
+      var result = await _deliveryAddressService.GetDeliveryAddress(filter, CurrentUserId!, IsPrivilegedUser);
       return StatusCode(result.StatusCode, result);
     }
     var response = new Response<List<GetDeliveryAddressDTO>>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -31,7 +31,7 @@ public class DeliveryAddressController : BaseController
   {
     if (ModelState.IsValid)
     {
-      var result = await _deliveryAddressService.GetDeliveryAddressById(deliveryAddressId);
+      var result = await _deliveryAddressService.GetDeliveryAddressById(deliveryAddressId, CurrentUserId!, IsPrivilegedUser);
       return StatusCode(result.StatusCode, result);
     }
     var response = new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -42,7 +42,7 @@ public class DeliveryAddressController : BaseController
   {
     if (ModelState.IsValid)
     {
-      var result = await _deliveryAddressService.AddDeliveryAddress(deliveryAddress);
+      var result = await _deliveryAddressService.AddDeliveryAddress(deliveryAddress, CurrentUserId!);
       return StatusCode(result.StatusCode, result);
     }
     var response = new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -53,7 +53,7 @@ public class DeliveryAddressController : BaseController
   {
     if (ModelState.IsValid)
     {
-      var result = await _deliveryAddressService.UpdateDeliveryAddress(deliveryAddress);
+      var result = await _deliveryAddressService.UpdateDeliveryAddress(deliveryAddress, CurrentUserId!, IsPrivilegedUser);
       return StatusCode(result.StatusCode, result);
     }
     var response = new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -64,7 +64,7 @@ public class DeliveryAddressController : BaseController
   {
     if (ModelState.IsValid)
     {
-      var result = await _deliveryAddressService.DeleteDeliveryAddress(deliveryAddressId);
+      var result = await _deliveryAddressService.DeleteDeliveryAddress(deliveryAddressId, CurrentUserId!, IsPrivilegedUser);
       return StatusCode(result.StatusCode, result);
 
     }

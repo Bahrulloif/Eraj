@@ -1,4 +1,3 @@
-using System.IO.Pipelines;
 using Domain.DTOs.ProfileDTO;
 using Domain.Filters.ProfileFilter;
 using Domain.Responses;
@@ -22,7 +21,7 @@ public class ProfileController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _profileService.GetProfile(filter);
+            var result = await _profileService.GetProfile(filter, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<List<GetProfileDTO>>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -33,7 +32,7 @@ public class ProfileController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _profileService.GetProfileById(profileId);
+            var result = await _profileService.GetProfileById(profileId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetProfileDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -44,7 +43,7 @@ public class ProfileController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _profileService.AddProfile(profile);
+            var result = await _profileService.AddProfile(profile, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetProfileDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -55,7 +54,7 @@ public class ProfileController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _profileService.UpdateProfile(profile);
+            var result = await _profileService.UpdateProfile(profile, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetProfileDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -66,7 +65,7 @@ public class ProfileController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _profileService.DeleteProfile(profileId);
+            var result = await _profileService.DeleteProfile(profileId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetProfileDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());

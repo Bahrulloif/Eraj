@@ -6,10 +6,9 @@ namespace Infrastructure.Services.DeliveryAddressService;
 
 public interface IDeliveryAddressService
 {
-  Task<Response<List<GetDeliveryAddressDTO>>> GetDeliveryAddress(DeliveryAddressFilter filter);
-  Task<Response<GetDeliveryAddressDTO>> GetDeliveryAddressById(int deliveryAddressId);
-  Task<Response<string>> AddDeliveryAddress(AddDeliveryAddressDTO deliveryAddress);
-  Task<Response<GetDeliveryAddressDTO>> UpdateDeliveryAddress(AddDeliveryAddressDTO deliveryAddress);
-  Task<Response<string>> DeleteDeliveryAddress(int deliveryAddressId);
+  Task<Response<List<GetDeliveryAddressDTO>>> GetDeliveryAddress(DeliveryAddressFilter filter, string currentUserId, bool isPrivileged);
+  Task<Response<GetDeliveryAddressDTO>> GetDeliveryAddressById(int deliveryAddressId, string currentUserId, bool isPrivileged);
+  Task<Response<string>> AddDeliveryAddress(AddDeliveryAddressDTO deliveryAddress, string currentUserId);
+  Task<Response<GetDeliveryAddressDTO>> UpdateDeliveryAddress(AddDeliveryAddressDTO deliveryAddress, string currentUserId, bool isPrivileged);
+  Task<Response<string>> DeleteDeliveryAddress(int deliveryAddressId, string currentUserId, bool isPrivileged);
 }
-

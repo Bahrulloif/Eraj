@@ -3,7 +3,6 @@ using Domain.Filters.OrderFilter;
 using Domain.Responses;
 using Infrastructure.Services.OrderService;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace WebApi.Controllers;
 
@@ -22,7 +21,7 @@ public class OrderController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _orderservice.GetOrder(filter);
+            var result = await _orderservice.GetOrder(filter, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<List<GetOrderDTO>>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -34,7 +33,7 @@ public class OrderController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _orderservice.GetOrderById(orderId);
+            var result = await _orderservice.GetOrderById(orderId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetOrderDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -46,7 +45,7 @@ public class OrderController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _orderservice.AddOrder(order);
+            var result = await _orderservice.AddOrder(order, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetOrderDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -58,7 +57,7 @@ public class OrderController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _orderservice.UpdateOrder(order);
+            var result = await _orderservice.UpdateOrder(order, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetOrderDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -70,7 +69,7 @@ public class OrderController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _orderservice.DeleteOrder(orderId);
+            var result = await _orderservice.DeleteOrder(orderId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetOrderDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());

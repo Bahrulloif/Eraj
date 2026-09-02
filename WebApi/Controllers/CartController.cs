@@ -20,7 +20,7 @@ public class CartController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _cartService.GetCart(filter);
+            var result = await _cartService.GetCart(filter, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<List<GetCartDTO>>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -31,7 +31,7 @@ public class CartController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _cartService.GetCartById(cartId);
+            var result = await _cartService.GetCartById(cartId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetCartDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -42,7 +42,7 @@ public class CartController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _cartService.AddCart(cart);
+            var result = await _cartService.AddCart(cart, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetCartDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -53,7 +53,7 @@ public class CartController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _cartService.UpdateCart(cart);
+            var result = await _cartService.UpdateCart(cart, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetCartDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -64,7 +64,7 @@ public class CartController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _cartService.DeleteCart(cartId);
+            var result = await _cartService.DeleteCart(cartId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetCartDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());

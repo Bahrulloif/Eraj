@@ -46,28 +46,54 @@ public class AddressService : IAddressService
         await _context.SaveChangesAsync();
         return new Response<GetAddressDTO>(System.Net.HttpStatusCode.OK, "Address added successfully");
     }
-    public async Task<Response<string>> UpdateAddress(UpdateAddressDTO address)
-    {
-        var find = await _context.Addresses.AsNoTracking().FirstOrDefaultAsync(a => a.Id == address.Id);
-        if (find != null)
-        {
-            var mapped = _mapper.Map<Address>(address);
-            _context.Addresses.Update(mapped);
-            await _context.SaveChangesAsync();
-            return new Response<string>("Address updated successfully");
-        }
-        return new Response<string>(System.Net.HttpStatusCode.NotFound, "Address Not Found");
 
-    }
-    public async Task<Response<GetAddressDTO>> DeleteAddress(int addressId)
+    /// <summary>
+    /// Address has no direct owner column — it's shared reference data pointed at by
+    /// ProfileUser.AddressId and DeliveryAddress.AddressId. A non-privileged caller may only
+    /// mutate one that's actually referenced by their own profile or one of their own
+    /// delivery addresses.
+    /// </summary>
+    private async Task<bool> OwnsAddress(int addressId, string currentUserId)
     {
-        var find = await _context.Addresses.AsNoTracking().FirstOrDefaultAsync(a => a.Id == addressId);
-        if (find != null)
+        var ownsViaProfile = await _context.Profiles
+            .AnyAsync(p => p.ApplicationUserId == currentUserId && p.AddressId == addressId);
+        if (ownsViaProfile)
         {
-            _context.Addresses.Remove(find);
-            await _context.SaveChangesAsync();
-            return new Response<GetAddressDTO>(System.Net.HttpStatusCode.OK, "Address deleted successfully");
+            return true;
         }
-        return new Response<GetAddressDTO>(System.Net.HttpStatusCode.NotFound, "Address Not Found");
+        return await _context.DeliveryAddresses
+            .AnyAsync(d => d.ApplicationUserId == currentUserId && d.AddressId == addressId);
+    }
+
+    public async Task<Response<string>> UpdateAddress(UpdateAddressDTO address, string currentUserId, bool isPrivileged)
+    {
+        var find = await _context.Addresses.FirstOrDefaultAsync(a => a.Id == address.Id);
+        if (find == null)
+        {
+            return new Response<string>(System.Net.HttpStatusCode.NotFound, "Address Not Found");
+        }
+        if (!isPrivileged && !await OwnsAddress(address.Id, currentUserId))
+        {
+            return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this address");
+        }
+        _mapper.Map(address, find);
+        _context.Addresses.Update(find);
+        await _context.SaveChangesAsync();
+        return new Response<string>("Address updated successfully");
+    }
+    public async Task<Response<GetAddressDTO>> DeleteAddress(int addressId, string currentUserId, bool isPrivileged)
+    {
+        var find = await _context.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
+        if (find == null)
+        {
+            return new Response<GetAddressDTO>(System.Net.HttpStatusCode.NotFound, "Address Not Found");
+        }
+        if (!isPrivileged && !await OwnsAddress(addressId, currentUserId))
+        {
+            return new Response<GetAddressDTO>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this address");
+        }
+        _context.Addresses.Remove(find);
+        await _context.SaveChangesAsync();
+        return new Response<GetAddressDTO>(System.Net.HttpStatusCode.OK, "Address deleted successfully");
     }
 }

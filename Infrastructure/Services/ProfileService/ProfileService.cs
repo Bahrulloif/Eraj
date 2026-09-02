@@ -18,20 +18,27 @@ public class ProfileService : IProfileService
         _mapper = mapper;
     }
 
-    public async Task<Response<List<GetProfileDTO>>> GetProfile(GetProfileFilter filter)
+    public async Task<Response<List<GetProfileDTO>>> GetProfile(GetProfileFilter filter, string currentUserId, bool isPrivileged)
     {
+        var query = _context.Profiles.AsQueryable();
+        if (!isPrivileged)
+        {
+            query = query.Where(p => p.ApplicationUserId == currentUserId);
+        }
         if (filter.Name != null)
         {
-            var profile = await _context.Profiles.Where(p => p.Name == filter.Name).ToListAsync();
-            var result = _mapper.Map<List<GetProfileDTO>>(profile);
-            return new Response<List<GetProfileDTO>>(result);
+            query = query.Where(p => p.Name == filter.Name);
         }
-        var response = await _context.Profiles.ToListAsync();
-        var mapped = _mapper.Map<List<GetProfileDTO>>(response);
-        return new Response<List<GetProfileDTO>>(mapped);
+        var profile = await query.ToListAsync();
+        var result = _mapper.Map<List<GetProfileDTO>>(profile);
+        return new Response<List<GetProfileDTO>>(result);
     }
-    public async Task<Response<GetProfileDTO>> GetProfileById(string profileId)
+    public async Task<Response<GetProfileDTO>> GetProfileById(string profileId, string currentUserId, bool isPrivileged)
     {
+        if (!isPrivileged && profileId != currentUserId)
+        {
+            return new Response<GetProfileDTO>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this profile");
+        }
         var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.ApplicationUserId == profileId);
         if (profile != null)
         {
@@ -40,16 +47,21 @@ public class ProfileService : IProfileService
         }
         return new Response<GetProfileDTO>(System.Net.HttpStatusCode.NotFound, "Profile Not Found");
     }
-    public async Task<Response<GetProfileDTO>> AddProfile(AddProfileDTO profile)
+    public async Task<Response<GetProfileDTO>> AddProfile(AddProfileDTO profile, string currentUserId)
     {
         var mapped = _mapper.Map<ProfileUser>(profile);
+        mapped.ApplicationUserId = currentUserId;
         await _context.Profiles.AddAsync(mapped);
         await _context.SaveChangesAsync();
         return new Response<GetProfileDTO>(System.Net.HttpStatusCode.OK, "Profile added successfully");
 
     }
-    public async Task<Response<GetProfileDTO>> UpdateProfile(UpdateProfileDTO profile)
+    public async Task<Response<GetProfileDTO>> UpdateProfile(UpdateProfileDTO profile, string currentUserId, bool isPrivileged)
     {
+        if (!isPrivileged && profile.Id != currentUserId)
+        {
+            return new Response<GetProfileDTO>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this profile");
+        }
         var find = await _context.Profiles.FirstOrDefaultAsync(p => p.ApplicationUserId == profile.Id);
         if (find != null)
         {
@@ -60,8 +72,12 @@ public class ProfileService : IProfileService
         }
         return new Response<GetProfileDTO>(System.Net.HttpStatusCode.NotFound, "Profile not found");
     }
-    public async Task<Response<GetProfileDTO>> DeleteProfile(string profileId)
+    public async Task<Response<GetProfileDTO>> DeleteProfile(string profileId, string currentUserId, bool isPrivileged)
     {
+        if (!isPrivileged && profileId != currentUserId)
+        {
+            return new Response<GetProfileDTO>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this profile");
+        }
         var find = await _context.Profiles.FirstOrDefaultAsync(p => p.ApplicationUserId == profileId);
         if (find != null)
         {

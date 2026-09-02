@@ -17,32 +17,43 @@ public class DeliveryAddressService : IDeliveryAddressService
         _context = context;
         _mapper = mapper;
     }
-    public async Task<Response<List<GetDeliveryAddressDTO>>> GetDeliveryAddress(DeliveryAddressFilter filter)
+    public async Task<Response<List<GetDeliveryAddressDTO>>> GetDeliveryAddress(DeliveryAddressFilter filter, string currentUserId, bool isPrivileged)
     {
-
+        var query = _context.DeliveryAddresses.AsQueryable();
+        if (!isPrivileged)
+        {
+            query = query.Where(d => d.ApplicationUserId == currentUserId);
+        }
         if (filter.Id != null)
         {
-            var find = await _context.DeliveryAddresses.Where(d => d.Id == filter.Id).ToListAsync();
+            query = query.Where(d => d.Id == filter.Id);
+            var find = await query.ToListAsync();
             var mapped = _mapper.Map<List<GetDeliveryAddressDTO>>(find);
             return new Response<List<GetDeliveryAddressDTO>>(mapped);
         }
-        var result = await _context.DeliveryAddresses.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToListAsync();
+        var result = await query.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToListAsync();
         var response = _mapper.Map<List<GetDeliveryAddressDTO>>(result);
         return new Response<List<GetDeliveryAddressDTO>>(response);
 
     }
-    public async Task<Response<GetDeliveryAddressDTO>> GetDeliveryAddressById(int deliveryAddressId)
+    public async Task<Response<GetDeliveryAddressDTO>> GetDeliveryAddressById(int deliveryAddressId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.DeliveryAddresses.FirstOrDefaultAsync(d => d.Id == deliveryAddressId);
-        if (find != null)
+        if (find == null)
         {
-            var mapped = _mapper.Map<GetDeliveryAddressDTO>(find);
-            return new Response<GetDeliveryAddressDTO>(mapped);
+            return new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.NotFound, "DeliveryAddress not Found");
         }
-        return new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.NotFound, "DeliveryAddress not Found");
+        if (!isPrivileged && find.ApplicationUserId != currentUserId)
+        {
+            return new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this delivery address");
+        }
+        var mapped = _mapper.Map<GetDeliveryAddressDTO>(find);
+        return new Response<GetDeliveryAddressDTO>(mapped);
     }
-    public async Task<Response<string>> AddDeliveryAddress(AddDeliveryAddressDTO deliveryAddress)
+    public async Task<Response<string>> AddDeliveryAddress(AddDeliveryAddressDTO deliveryAddress, string currentUserId)
     {
+        // Always the caller's own delivery address — never trust a client-supplied ApplicationUserId.
+        deliveryAddress.ApplicationUserId = currentUserId;
         var find = await _context.DeliveryAddresses.FirstOrDefaultAsync(d => d.Id == deliveryAddress.Id);
         if (find == null)
         {
@@ -53,28 +64,41 @@ public class DeliveryAddressService : IDeliveryAddressService
         }
         return new Response<string>(System.Net.HttpStatusCode.Conflict, "DeliveryAddress already exist");
     }
-    public async Task<Response<GetDeliveryAddressDTO>> UpdateDeliveryAddress(AddDeliveryAddressDTO deliveryAddress)
+    public async Task<Response<GetDeliveryAddressDTO>> UpdateDeliveryAddress(AddDeliveryAddressDTO deliveryAddress, string currentUserId, bool isPrivileged)
     {
         var find = await _context.DeliveryAddresses.FirstOrDefaultAsync(d => d.Id == deliveryAddress.Id);
-        if (find != null)
+        if (find == null)
         {
-            _mapper.Map(deliveryAddress, find);
-            _context.DeliveryAddresses.Update(find);
-            await _context.SaveChangesAsync();
-            return new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.OK, "DeliveryAddress updated successfully");
+            return new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.NotFound, "DeliveryAddress Not Found");
         }
-        return new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.NotFound, "DeliveryAddress Not Found");
+        if (!isPrivileged && find.ApplicationUserId != currentUserId)
+        {
+            return new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this delivery address");
+        }
+        if (!isPrivileged)
+        {
+            // Never let a non-privileged caller reassign the delivery address to someone else.
+            deliveryAddress.ApplicationUserId = currentUserId;
+        }
+        _mapper.Map(deliveryAddress, find);
+        _context.DeliveryAddresses.Update(find);
+        await _context.SaveChangesAsync();
+        return new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.OK, "DeliveryAddress updated successfully");
     }
 
-    public async Task<Response<string>> DeleteDeliveryAddress(int deliveryAddressId)
+    public async Task<Response<string>> DeleteDeliveryAddress(int deliveryAddressId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.DeliveryAddresses.FirstOrDefaultAsync(d => d.Id == deliveryAddressId);
-        if (find != null)
+        if (find == null)
         {
-            _context.DeliveryAddresses.Remove(find);
-            await _context.SaveChangesAsync();
-            return new Response<string>("DeliveryAddress deleted successfully");
+            return new Response<string>(System.Net.HttpStatusCode.NotFound, "DeliveryAddress Not Found");
         }
-        return new Response<string>(System.Net.HttpStatusCode.NotFound, "DeliveryAddress Not Found");
+        if (!isPrivileged && find.ApplicationUserId != currentUserId)
+        {
+            return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this delivery address");
+        }
+        _context.DeliveryAddresses.Remove(find);
+        await _context.SaveChangesAsync();
+        return new Response<string>("DeliveryAddress deleted successfully");
     }
 }
