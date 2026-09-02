@@ -66,7 +66,8 @@ Swagger UI доступен по `/swagger` в режиме Development.
 - Доступные роли: `SuperAdmin`, `Admin`, `Marketing`, `User`, `Businessman`, `Courier`
 
 ## Статус багов
-Все известные баги исправлены в коммитах на ветке `main` (2026-06-02). Сервисы проверены:
-`OrderService`, `CartService`, `AccountService`, `TruckService`, `TabletService`,
-`MotorbikeService`, `CarService`, `SmartPhoneService`, `ProfileService`,
-`SubCategoryService`, `DeliveryAddressService`, `CategoryService`, `CatalogService`, `NoteBookService`.
+Полный список того, что исправлено 2026-09-02 (16 коммитов, `467b237`..`6c972ec`, не запушены)
+и что осталось сделать — в `../CLAUDE.md` (корень проекта, вне этого репозитория), раздел
+«Статус проекта и известные баги». Коротко: проект приведён в рабочее состояние (компиляция,
+схема БД, регистрация, авторизация, IDOR, владение товарами, заказы, картинки) — не осталось
+ничего, что раньше выдавал этот раздел за факт "все исправлено" на 2026-06-02, это устарело.
