@@ -2,6 +2,7 @@ using Domain.DTOs.TransportDTOs.SpareAccessorTranspDTOs;
 using Domain.Filters.TransportFilter.SpareAccessorTranspFilters;
 using Domain.Responses;
 using Infrastructure.Services.TransportService.SpareAccessorTranspService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.TransportController;
@@ -16,7 +17,7 @@ public class SpareAccessorTranspController : BaseController
         _spareAccessorTranspService = spareAccessorTranspService;
     }
 
-    [HttpGet("get/spareAccessorTransp")]
+    [HttpGet("get/spareAccessorTransp"), AllowAnonymous]
     public async Task<IActionResult> GetSpareAccessorTransp([FromQuery] GetSpareAccessorTranspFilter filter)
     {
         if (ModelState.IsValid)
@@ -28,7 +29,7 @@ public class SpareAccessorTranspController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpGet("get/spareAccessorTranspById")]
+    [HttpGet("get/spareAccessorTranspById"), AllowAnonymous]
     public async Task<IActionResult> GetSpareAccessorTranspById(int spareAccessorTranspId)
     {
         if (ModelState.IsValid)

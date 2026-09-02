@@ -2,6 +2,7 @@ using Domain.DTOs.SubCategoryDTOs;
 using Domain.Filters.GetSubCategoryFilter;
 using Domain.Responses;
 using Infrastructure.Services.SubCategoryService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
@@ -15,7 +16,7 @@ public class SubCategoryController : BaseController
     {
         _subCategoryService = subCategoryService;
     }
-    [HttpGet("get/subcategory")]
+    [HttpGet("get/subcategory"), AllowAnonymous]
     public async Task<ActionResult> GetSubCategory([FromQuery] GetSubCategoryFilter filter)
     {
         if (ModelState.IsValid)
@@ -27,7 +28,7 @@ public class SubCategoryController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpGet("get/subcategoryById")]
+    [HttpGet("get/subcategoryById"), AllowAnonymous]
     public async Task<ActionResult> GetSubCategoryById(int subCategoryId)
     {
         if (ModelState.IsValid)

@@ -1,6 +1,7 @@
 using Domain.DTOs.CategoryDTOs;
 using Domain.Responses;
 using Infrastructure.Services.CategoryService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
@@ -14,7 +15,7 @@ public class CategoryController : BaseController
     {
         _categoryService = categoryService;
     }
-    [HttpGet("get/category")]
+    [HttpGet("get/category"), AllowAnonymous]
     public async Task<ActionResult> GetCategory([FromQuery] GetCategoryFilter filter)
     {
         if (ModelState.IsValid)
@@ -26,7 +27,7 @@ public class CategoryController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpGet("get/categoryById")]
+    [HttpGet("get/categoryById"), AllowAnonymous]
     public async Task<ActionResult> GetCategoryById(int categoryId)
     {
         if (ModelState.IsValid)

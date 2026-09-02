@@ -2,6 +2,7 @@ using Domain.DTOs.KomTechDTOs.TabletDTOs;
 using Domain.Filters.KompTechFilters.TabletFilter;
 using Domain.Responses;
 using Infrastructure.Services.KompTechService.TabletService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -17,7 +18,7 @@ public class TabletController : BaseController
         _tabletService = tabletService;
     }
 
-    [HttpGet("get/tablet")]
+    [HttpGet("get/tablet"), AllowAnonymous]
     public async Task<IActionResult> GetTablet([FromQuery] GetTabletFilter filter)
     {
         if (ModelState.IsValid)
@@ -30,7 +31,7 @@ public class TabletController : BaseController
     }
 
 
-    [HttpGet("get/tabletById")]
+    [HttpGet("get/tabletById"), AllowAnonymous]
     public async Task<IActionResult> GetTabletById(int tabletId)
     {
         if (ModelState.IsValid)

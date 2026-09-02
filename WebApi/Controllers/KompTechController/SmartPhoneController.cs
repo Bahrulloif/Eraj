@@ -2,6 +2,7 @@ using Domain.DTOs.KomTechDTOs.SmartPhoneDTOs;
 using Domain.Filters.KompTechFilters.SmartPhoneFilters;
 using Domain.Responses;
 using Infrastructure.Services.KompTechService.SmartPhoneService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -17,7 +18,7 @@ public class SmartPhoneController : BaseController
         _smartPhoneService = smartPhoneService;
     }
 
-    [HttpGet("get/smartphone")]
+    [HttpGet("get/smartphone"), AllowAnonymous]
     public async Task<IActionResult> GetSmartPhone([FromQuery] GetSmartPhoneFilter filter)
     {
         if (ModelState.IsValid)
@@ -29,7 +30,7 @@ public class SmartPhoneController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpGet("get/smartphoneById")]
+    [HttpGet("get/smartphoneById"), AllowAnonymous]
     public async Task<IActionResult> GetSmartPhoneById(int smartPhoneId)
     {
         if (ModelState.IsValid)

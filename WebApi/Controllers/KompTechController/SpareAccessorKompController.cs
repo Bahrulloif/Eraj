@@ -2,6 +2,7 @@ using Domain.DTOs.KomTechDTOs.SpareAccessorKompDTOs;
 using Domain.Filters.KompTechFilters.SpareAccessorKompFilter;
 using Domain.Responses;
 using Infrastructure.Services.KompTechService.SpareAccessorKompService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.KompTechController;
@@ -16,7 +17,7 @@ public class SpareAccessorKompController : BaseController
         _spareAccessorKompService = spareAccessorKompService;
     }
 
-    [HttpGet("get/spareAccessorKomp")]
+    [HttpGet("get/spareAccessorKomp"), AllowAnonymous]
     public async Task<IActionResult> GetSpareAccessorKomp([FromQuery] GetSpareAccessorKompFilter filter)
     {
         if (ModelState.IsValid)
@@ -28,7 +29,7 @@ public class SpareAccessorKompController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpGet("get/spareAccessorKompById")]
+    [HttpGet("get/spareAccessorKompById"), AllowAnonymous]
     public async Task<IActionResult> GetSpareAccessorKompById(int spareAccessorKompId)
     {
         if (ModelState.IsValid)

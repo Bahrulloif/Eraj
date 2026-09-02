@@ -1,6 +1,7 @@
 using Domain.DTOs.RecommendationDTOs;
 using Domain.Responses;
 using Infrastructure.Services.RecommendationService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
@@ -15,7 +16,7 @@ public class RecommendationController : BaseController
         _recommendationService = recommendationService;
     }
 
-    [HttpGet("get/recommendation")]
+    [HttpGet("get/recommendation"), AllowAnonymous]
     public async Task<IActionResult> GetRecommendation(string model)
     {
         if (ModelState.IsValid)
