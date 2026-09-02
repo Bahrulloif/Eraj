@@ -39,30 +39,35 @@ public class AddressService : IAddressService
         }
         return new Response<GetAddressDTO>(System.Net.HttpStatusCode.NotFound, "Address Not Found");
     }
-    public async Task<Response<GetAddressDTO>> AddAddress(AddAddressDTO address)
+    public async Task<Response<GetAddressDTO>> AddAddress(AddAddressDTO address, string currentUserId)
     {
         var mapped = _mapper.Map<Address>(address);
+        mapped.OwnerId = currentUserId;
         await _context.Addresses.AddAsync(mapped);
         await _context.SaveChangesAsync();
         return new Response<GetAddressDTO>(System.Net.HttpStatusCode.OK, "Address added successfully");
     }
 
     /// <summary>
-    /// Address has no direct owner column — it's shared reference data pointed at by
-    /// ProfileUser.AddressId and DeliveryAddress.AddressId. A non-privileged caller may only
-    /// mutate one that's actually referenced by their own profile or one of their own
-    /// delivery addresses.
+    /// Address is shared reference data (also pointed at by ProfileUser.AddressId and
+    /// DeliveryAddress.AddressId once linked), so ownership isn't only OwnerId: a non-privileged
+    /// caller may manage one they created, or one actually referenced by their own profile or
+    /// one of their own delivery addresses.
     /// </summary>
-    private async Task<bool> OwnsAddress(int addressId, string currentUserId)
+    private async Task<bool> OwnsAddress(Address address, string currentUserId)
     {
+        if (address.OwnerId == currentUserId)
+        {
+            return true;
+        }
         var ownsViaProfile = await _context.Profiles
-            .AnyAsync(p => p.ApplicationUserId == currentUserId && p.AddressId == addressId);
+            .AnyAsync(p => p.ApplicationUserId == currentUserId && p.AddressId == address.Id);
         if (ownsViaProfile)
         {
             return true;
         }
         return await _context.DeliveryAddresses
-            .AnyAsync(d => d.ApplicationUserId == currentUserId && d.AddressId == addressId);
+            .AnyAsync(d => d.ApplicationUserId == currentUserId && d.AddressId == address.Id);
     }
 
     public async Task<Response<string>> UpdateAddress(UpdateAddressDTO address, string currentUserId, bool isPrivileged)
@@ -72,7 +77,7 @@ public class AddressService : IAddressService
         {
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "Address Not Found");
         }
-        if (!isPrivileged && !await OwnsAddress(address.Id, currentUserId))
+        if (!isPrivileged && !await OwnsAddress(find, currentUserId))
         {
             return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this address");
         }
@@ -88,7 +93,7 @@ public class AddressService : IAddressService
         {
             return new Response<GetAddressDTO>(System.Net.HttpStatusCode.NotFound, "Address Not Found");
         }
-        if (!isPrivileged && !await OwnsAddress(addressId, currentUserId))
+        if (!isPrivileged && !await OwnsAddress(find, currentUserId))
         {
             return new Response<GetAddressDTO>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this address");
         }

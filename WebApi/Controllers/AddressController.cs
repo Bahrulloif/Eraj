@@ -44,7 +44,7 @@ public class AddressController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _addressService.AddAddress(address);
+            var result = await _addressService.AddAddress(address, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetAddressDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
