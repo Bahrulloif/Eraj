@@ -18,7 +18,7 @@ public class OrderController : BaseController
 
     }
     [HttpGet("get/orders")]
-    public async Task<ActionResult> GetOrder(OrderFilter filter)
+    public async Task<ActionResult> GetOrder([FromQuery] OrderFilter filter)
     {
         if (ModelState.IsValid)
         {

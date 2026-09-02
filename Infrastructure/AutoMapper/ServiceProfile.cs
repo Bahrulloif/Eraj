@@ -52,8 +52,12 @@ public class ServiceProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApplicationUserId))
             .ReverseMap();
 
-        CreateMap<Order, GetOrderDTO>().ReverseMap();
-        CreateMap<Order, AddOrderDTO>().ReverseMap();
+        CreateMap<Order, GetOrderDTO>()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.ApplicationUserId))
+            .ReverseMap();
+        CreateMap<Order, AddOrderDTO>()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.ApplicationUserId))
+            .ReverseMap();
 
         CreateMap<Cart, GetCartDTO>().ReverseMap();
         CreateMap<Cart, AddCartDTO>().ReverseMap();
