@@ -58,7 +58,7 @@ public class CategoryController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _categoryService.AddCategory(category);
+            var result = await _categoryService.UpdateCategory(category);
             return StatusCode(result.StatusCode, result);
 
         }
