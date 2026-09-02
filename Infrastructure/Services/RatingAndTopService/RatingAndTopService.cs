@@ -125,12 +125,13 @@ public class RatingAndTopService : IRatingAndTopService
         .Select(z => new RatingAndTopDTO
         {
             ProductId = z.Id,
+            SubCategoryId = z.SubCategoryId,
             DiscountPrice = z.DiscountPrice,
             Model = z.Model,
             Price = z.Price,
             Images = _context.Pictures
                 .Where(x => x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
-                .Select(y => new PictureDto { Id = y.ProductId, ImageName = y.ImageName }).ToList()
+                .Select(y => new PictureDto { Id = y.Id, ImageName = y.ImageName }).ToList()
         }).ToListAsync();
         hotdiscount.AddRange(smart);
 
@@ -141,12 +142,13 @@ public class RatingAndTopService : IRatingAndTopService
         .Select(z => new RatingAndTopDTO
         {
             ProductId = z.Id,
+            SubCategoryId = z.SubCategoryId,
             DiscountPrice = z.DiscountPrice,
             Model = z.Model,
             Price = z.Price,
             Images = _context.Pictures
                 .Where(x => x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
-                .Select(y => new PictureDto { Id = y.ProductId, ImageName = y.ImageName }).ToList()
+                .Select(y => new PictureDto { Id = y.Id, ImageName = y.ImageName }).ToList()
         }).ToListAsync();
         hotdiscount.AddRange(noteBook);
 
@@ -156,12 +158,13 @@ public class RatingAndTopService : IRatingAndTopService
         .Select(z => new RatingAndTopDTO
         {
             ProductId = z.Id,
+            SubCategoryId = z.SubCategoryId,
             DiscountPrice = z.DiscountPrice,
             Model = z.Model,
             Price = z.Price,
             Images = _context.Pictures
           .Where(x => x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
-          .Select(y => new PictureDto { Id = y.ProductId, ImageName = y.ImageName }).ToList()
+          .Select(y => new PictureDto { Id = y.Id, ImageName = y.ImageName }).ToList()
         }).ToListAsync();
         hotdiscount.AddRange(tablet);
 
@@ -171,12 +174,13 @@ public class RatingAndTopService : IRatingAndTopService
         .Select(z => new RatingAndTopDTO
         {
             ProductId = z.Id,
+            SubCategoryId = z.SubCategoryId,
             DiscountPrice = z.DiscountPrice,
             Model = z.Model,
             Price = z.Price,
             Images = _context.Pictures
            .Where(x => x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
-           .Select(y => new PictureDto { Id = y.ProductId, ImageName = y.ImageName })
+           .Select(y => new PictureDto { Id = y.Id, ImageName = y.ImageName })
            .ToList()
         }).ToListAsync();
         hotdiscount.AddRange(spareAccessorKomp);
@@ -187,12 +191,13 @@ public class RatingAndTopService : IRatingAndTopService
         .Select(z => new RatingAndTopDTO
         {
             ProductId = z.Id,
+            SubCategoryId = z.SubCategoryId,
             DiscountPrice = z.DiscountPrice,
             Model = z.Model,
             Price = z.Price,
             Images = _context.Pictures
             .Where(x => x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
-            .Select(y => new PictureDto { Id = y.ProductId, ImageName = y.ImageName })
+            .Select(y => new PictureDto { Id = y.Id, ImageName = y.ImageName })
             .ToList()
         }).ToListAsync();
         hotdiscount.AddRange(car);
@@ -203,7 +208,8 @@ public class RatingAndTopService : IRatingAndTopService
 
         hotdiscount = hotdiscount.OrderByDescending(r => r.DiscountPrice).ToList();
         var totalCount = hotdiscount.Count();
-        return new PagedResponse<List<RatingAndTopDTO>>(hotdiscount, filter.PageNumber, filter.PageSize, totalCount);
+        var paged = hotdiscount.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToList();
+        return new PagedResponse<List<RatingAndTopDTO>>(paged, filter.PageNumber, filter.PageSize, totalCount);
     }
     // public Task<PagedResponse<List<RatingAndTopDTO>>> RecommendedProduct(RatingAndTopFilter filter);
     // public Task<PagedResponse<List<RatingAndTopDTO>>> PopularProduct(RatingAndTopFilter filter);
