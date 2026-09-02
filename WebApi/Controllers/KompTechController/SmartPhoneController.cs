@@ -43,6 +43,7 @@ public class SmartPhoneController : BaseController
     }
 
     [HttpPost("post/smartphone")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<IActionResult> AddSmartPhone([FromForm] AddSmartPhoneDTO smartPhone)
     {
         if (ModelState.IsValid)
@@ -55,6 +56,7 @@ public class SmartPhoneController : BaseController
     }
 
     [HttpPut("put/smartphone")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<IActionResult> UpdateSmartPhone([FromForm]AddSmartPhoneDTO smartPhone)
     {
         if (ModelState.IsValid)
@@ -67,6 +69,7 @@ public class SmartPhoneController : BaseController
     }
 
     [HttpDelete("delete/smartphone")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<ActionResult> DeleteSmartPhone(int smartPhoneId)
     {
         if (ModelState.IsValid)

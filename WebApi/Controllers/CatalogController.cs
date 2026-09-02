@@ -19,7 +19,7 @@ public class CatalogController : BaseController
     }
 
     [HttpGet("get/catalogs")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetCatalog([FromQuery] GetCatalogFilter filter)
     {
         if (ModelState.IsValid)
@@ -44,6 +44,7 @@ public class CatalogController : BaseController
     }
 
     [HttpPost("post/catalog")]
+    [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<ActionResult> AddCatalog(AddCatalogDTO catalog)
     {
         if (ModelState.IsValid)
@@ -56,6 +57,7 @@ public class CatalogController : BaseController
     }
 
     [HttpPut("put/catalog")]
+    [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<ActionResult> UpdateCatalog(AddCatalogDTO catalog)
     {
         if (ModelState.IsValid)
@@ -68,6 +70,7 @@ public class CatalogController : BaseController
     }
 
     [HttpDelete("deleted/catalog")]
+    [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<ActionResult> DeleteCatalog(int catalogId)
     {
         if (ModelState.IsValid)

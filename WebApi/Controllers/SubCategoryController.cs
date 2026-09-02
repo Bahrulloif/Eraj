@@ -41,6 +41,7 @@ public class SubCategoryController : BaseController
     }
 
     [HttpPost("post/subcategory")]
+    [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<ActionResult> AddSubCategory(AddSubCategoryDTO subCategory)
     {
         if (ModelState.IsValid)
@@ -53,6 +54,7 @@ public class SubCategoryController : BaseController
     }
 
     [HttpPut("put/subcategory")]
+    [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<ActionResult> UpdateSubCategory(AddSubCategoryDTO subCategory)
     {
         if (ModelState.IsValid)
@@ -65,6 +67,7 @@ public class SubCategoryController : BaseController
     }
 
     [HttpDelete("delete/subcategory")]
+    [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<ActionResult> DeleteSubCategory(int subCategoryId)
     {
         if (ModelState.IsValid)

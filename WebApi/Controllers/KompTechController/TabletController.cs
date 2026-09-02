@@ -44,6 +44,7 @@ public class TabletController : BaseController
     }
 
     [HttpPost("post/tablet")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<IActionResult> AddTablet([FromForm] AddTabletDTO tablet)
     {
         if (ModelState.IsValid)
@@ -56,6 +57,7 @@ public class TabletController : BaseController
     }
 
     [HttpPut("put/tablet")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<IActionResult> UpdateTablet([FromForm] AddTabletDTO tablet)
     {
         if (ModelState.IsValid)
@@ -68,6 +70,7 @@ public class TabletController : BaseController
     }
 
     [HttpDelete("delete/tablet")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<IActionResult> DeleteTablet(int tabletId)
     {
         if (ModelState.IsValid)

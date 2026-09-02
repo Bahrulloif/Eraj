@@ -42,6 +42,7 @@ public class SpareAccessorKompController : BaseController
     }
 
     [HttpPost("post/spareAccessorKomp")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<IActionResult> AddSpareAccessorKomp([FromForm] AddSpareAccessorKompDTO spareAccessorKomp)
     {
         if (ModelState.IsValid)
@@ -54,6 +55,7 @@ public class SpareAccessorKompController : BaseController
     }
 
     [HttpPut("put/spareAccessorKomp")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<IActionResult> UpdateSpareAccessorKomp([FromForm] AddSpareAccessorKompDTO spareAccessorKomp)
     {
         if (ModelState.IsValid)
@@ -66,6 +68,7 @@ public class SpareAccessorKompController : BaseController
     }
 
     [HttpDelete("delete/spareAccessorKomp")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<IActionResult> DeleteSpareAccessorKomp(int spareAccessorKompId)
     {
         if (ModelState.IsValid)

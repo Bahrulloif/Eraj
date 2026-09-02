@@ -40,6 +40,7 @@ public class CategoryController : BaseController
     }
 
     [HttpPost("post/category")]
+    [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<ActionResult> AddCategory(AddCategoryDTO category)
     {
         if (ModelState.IsValid)
@@ -52,6 +53,7 @@ public class CategoryController : BaseController
     }
 
     [HttpPut("put/category")]
+    [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<ActionResult> UpdateCategory(AddCategoryDTO category)
     {
         if (ModelState.IsValid)
@@ -65,6 +67,7 @@ public class CategoryController : BaseController
     }
 
     [HttpDelete("delete/category")]
+    [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<ActionResult> DeleteCategory(int categoryId)
     {
         if (ModelState.IsValid)

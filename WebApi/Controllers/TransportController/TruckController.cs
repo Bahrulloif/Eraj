@@ -42,7 +42,8 @@ public class TruckController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpPost("post/AddTruck"), AllowAnonymous]
+    [HttpPost("post/AddTruck")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<ActionResult> AddTruck([FromForm] AddTruckDTO truck)
     {
         if (ModelState.IsValid)
@@ -54,7 +55,8 @@ public class TruckController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpPut("put/UpdateTruck"), AllowAnonymous]
+    [HttpPut("put/UpdateTruck")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<ActionResult> UpdateTruck([FromForm] AddTruckDTO truck)
     {
         if (ModelState.IsValid)
@@ -66,6 +68,7 @@ public class TruckController : BaseController
         return StatusCode(response.StatusCode, response);
     }
     [HttpDelete("delete/DeleteTruck")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<ActionResult> DeleteTruck(int truckId)
     {
         if (ModelState.IsValid)

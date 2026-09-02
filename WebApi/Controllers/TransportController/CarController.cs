@@ -41,6 +41,7 @@ public class CarController : BaseController
     }
 
     [HttpPost("post/addCar")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<ActionResult> AddCar([FromForm] AddCarDTO car)
     {
         if (ModelState.IsValid)
@@ -53,6 +54,7 @@ public class CarController : BaseController
     }
 
     [HttpPost("post/updateCar")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<ActionResult> UpdateCar([FromForm] AddCarDTO car)
     {
         if (ModelState.IsValid)
@@ -65,6 +67,7 @@ public class CarController : BaseController
     }
 
     [HttpDelete("delete/deleteCar")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<ActionResult> DeleteCar(int carId)
     {
         if (ModelState.IsValid)

@@ -40,6 +40,7 @@ public class MotorbikeController : BaseController
 
     }
     [HttpPost("post/addMotorbike")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<ActionResult> AddMotorbike([FromForm] AddMotorbikeDTO motorbike)
     {
         if (ModelState.IsValid)
@@ -52,6 +53,7 @@ public class MotorbikeController : BaseController
     }
 
     [HttpPut("put/updateMotorbike")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<ActionResult> UpdateMotorbike([FromForm] AddMotorbikeDTO motorbike)
     {
         if (ModelState.IsValid)
@@ -64,6 +66,7 @@ public class MotorbikeController : BaseController
     }
 
     [HttpDelete("delete/deleteMotorbike")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<ActionResult> DeleteMotorbike(int motorbikeId)
     {
         if (ModelState.IsValid)

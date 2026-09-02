@@ -42,6 +42,7 @@ public class SpareAccessorTranspController : BaseController
     }
 
     [HttpPost("post/spareAccessorTransp")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<IActionResult> AddSpareAccessorTransp([FromForm] AddSpareAccessorTranspDTO spareAccessorTransp)
     {
         if (ModelState.IsValid)
@@ -54,6 +55,7 @@ public class SpareAccessorTranspController : BaseController
     }
 
     [HttpPut("put/spareAccessorTransp")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<IActionResult> UpdateSpareAccessorTransp([FromForm] AddSpareAccessorTranspDTO spareAccessorTransp)
     {
         if (ModelState.IsValid)
@@ -66,6 +68,7 @@ public class SpareAccessorTranspController : BaseController
     }
 
     [HttpDelete("delete/spareAccessorTransp")]
+    [Authorize(Roles = "SuperAdmin, Admin, Businessman")]
     public async Task<IActionResult> DeleteSpareAccessorTransp(int spareAccessorTranspId)
     {
         if (ModelState.IsValid)
