@@ -6,6 +6,7 @@ namespace Domain.Entities.RealEstate;
 public class Cottage
 {
     public int Id { get; set; }
+    public int SubCategoryId { get; set; }
     public TypeOfEstateEnum TypeOfRealEstate { get; set; }
     public decimal Price { get; set; }
     public double PricePerM2 { get; set; }

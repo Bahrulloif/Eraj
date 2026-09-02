@@ -5,6 +5,7 @@ namespace Domain.Entities.RealEstate;
 public class Apartment
 {
     public int Id { get; set; }
+    public int SubCategoryId { get; set; }
     public int NumberOfRooms { get; set; }
     public decimal Price { get; set; }
     public decimal PricePerM2 { get; set; }

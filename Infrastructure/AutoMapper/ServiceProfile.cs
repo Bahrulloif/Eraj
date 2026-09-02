@@ -19,6 +19,10 @@ using Domain.DTOs.TransportDTOs.MotorbikeDTOs;
 using Domain.DTOs.TransportDTOs.TruckDTOs;
 using Domain.DTOs.TransportDTOs.SpareAccessorTranspDTOs;
 using Domain.Entities.Transport;
+using Domain.Entities.RealEstate;
+using Domain.DTOs.RealEstateDTOs.ApartmentDTOs;
+using Domain.DTOs.RealEstateDTOs.CommercialRealEstateDTOs;
+using Domain.DTOs.RealEstateDTOs.CottageDTOs;
 
 namespace Infrastructure.AutoMapper;
 
@@ -83,6 +87,15 @@ public class ServiceProfile : Profile
 
         CreateMap<SpareAccessorTransp, GetSpareAccessorTranspDTO>().ReverseMap();
         CreateMap<SpareAccessorTransp, AddSpareAccessorTranspDTO>().ReverseMap();
+
+        CreateMap<Apartment, GetApartmentDTO>().ReverseMap();
+        CreateMap<Apartment, AddApartmentDTO>().ReverseMap();
+
+        CreateMap<CommercialRealEstate, GetCommercialRealEstateDTO>().ReverseMap();
+        CreateMap<CommercialRealEstate, AddCommercialRealEstateDTO>().ReverseMap();
+
+        CreateMap<Cottage, GetCottageDTO>().ReverseMap();
+        CreateMap<Cottage, AddCottageDTO>().ReverseMap();
 
     }
 }

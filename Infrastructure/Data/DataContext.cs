@@ -1,5 +1,6 @@
 using Domain.Entities;
 using Domain.Entities.KompTech;
+using Domain.Entities.RealEstate;
 using Domain.Entities.Transport;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -29,4 +30,7 @@ public class DataContext : IdentityDbContext<ApplicationUser>
     public DbSet<Truck> Trucks { get; set; }
     public DbSet<SpareAccessorTransp> SpareAccessorTransps { get; set; }
     public DbSet<SpareAccessorKomp> SpareAccessorKomps { get; set; }
+    public DbSet<Apartment> Apartments { get; set; }
+    public DbSet<CommercialRealEstate> CommercialRealEstates { get; set; }
+    public DbSet<Cottage> Cottages { get; set; }
 }

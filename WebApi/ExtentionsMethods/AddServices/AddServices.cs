@@ -22,6 +22,9 @@ using Infrastructure.Services.TransportService.MotorbikeService;
 using Infrastructure.Services.TransportService.TruckService;
 using Infrastructure.Services.KompTechService.SpareAccessorKompService;
 using Infrastructure.Services.TransportService.SpareAccessorTranspService;
+using Infrastructure.Services.RealEstateService.ApartmentService;
+using Infrastructure.Services.RealEstateService.CommercialRealEstateService;
+using Infrastructure.Services.RealEstateService.CottageService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -56,6 +59,9 @@ public static class AddServices
         services.AddScoped<ITruckService, TruckService>();
         services.AddScoped<ISpareAccessorKompService, SpareAccessorKompService>();
         services.AddScoped<ISpareAccessorTranspService, SpareAccessorTranspService>();
+        services.AddScoped<IApartmentService, ApartmentService>();
+        services.AddScoped<ICommercialRealEstateService, CommercialRealEstateService>();
+        services.AddScoped<ICottageService, CottageService>();
 
 
 
