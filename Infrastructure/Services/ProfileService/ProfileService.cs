@@ -20,7 +20,7 @@ public class ProfileService : IProfileService
 
     public async Task<Response<List<GetProfileDTO>>> GetProfile(GetProfileFilter filter)
     {
-        if (filter != null)
+        if (filter.Name != null)
         {
             var profile = await _context.Profiles.Where(p => p.Name == filter.Name).ToListAsync();
             var result = _mapper.Map<List<GetProfileDTO>>(profile);

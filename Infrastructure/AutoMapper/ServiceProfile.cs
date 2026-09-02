@@ -44,9 +44,13 @@ public class ServiceProfile : Profile
         CreateMap<Tablet, GetTabletDTO>().ReverseMap();
         CreateMap<Tablet, AddTabletDTO>().ReverseMap();
 
-        CreateMap<ProfileUser, GetProfileDTO>().ReverseMap();
+        CreateMap<ProfileUser, GetProfileDTO>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApplicationUserId))
+            .ReverseMap();
         CreateMap<ProfileUser, AddProfileDTO>().ReverseMap();
-        CreateMap<ProfileUser, UpdateProfileDTO>().ReverseMap();
+        CreateMap<ProfileUser, UpdateProfileDTO>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApplicationUserId))
+            .ReverseMap();
 
         CreateMap<Order, GetOrderDTO>().ReverseMap();
         CreateMap<Order, AddOrderDTO>().ReverseMap();
