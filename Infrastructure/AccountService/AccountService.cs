@@ -82,7 +82,8 @@ public class AccountService : IAccountService
         {
             ApplicationUserId = newUser.Id,
             Name = user.Name,
-            Surname = user.Surname
+            Surname = user.Surname,
+            TelephoneNumber = user.TelephoneNumber
         };
         await _context.Profiles.AddAsync(newProfile);
         await _context.SaveChangesAsync();

@@ -64,7 +64,8 @@ public class Seeds
             {
                 ApplicationUserId = superAdmin.Id,
                 Name = "Admin",
-                Surname = "Super"
+                Surname = "Super",
+                TelephoneNumber = superAdmin.PhoneNumber!
             };
             await _context.Profiles.AddAsync(newProfile);
             await _context.SaveChangesAsync();
