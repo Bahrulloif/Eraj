@@ -4,6 +4,13 @@ using WebApi.ExtensionMethods.SwaggerConfiguration;
 using WebApi.ExtentionsMethods.AddAuthConfiguraion;
 using WebApi.ExtentionsMethods.AddServices;
 
+// Npgsql (6+) requires DateTime.Kind == Utc for "timestamp with time zone" columns.
+// Request bodies deserialize DateTime as Kind=Unspecified by default, so any client
+// not sending an explicit UTC offset (e.g. Order.OrderDate, Cart.DateOfPurchase,
+// ProfileUser.Dob) would crash on save. Restore the pre-6.0 lenient behavior instead
+// of requiring every client/DTO to be UTC-aware.
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
