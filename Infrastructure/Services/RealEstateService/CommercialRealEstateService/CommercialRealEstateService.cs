@@ -69,9 +69,10 @@ public class CommercialRealEstateService : ICommercialRealEstateService
         return new Response<GetCommercialRealEstateDTO>(mapped);
     }
 
-    public async Task<Response<string>> AddCommercialRealEstate(AddCommercialRealEstateDTO commercialRealEstate)
+    public async Task<Response<string>> AddCommercialRealEstate(AddCommercialRealEstateDTO commercialRealEstate, string currentUserId)
     {
         var mapped = _mapper.Map<CommercialRealEstate>(commercialRealEstate);
+        mapped.OwnerId = currentUserId;
         await _context.CommercialRealEstates.AddAsync(mapped);
         await _context.SaveChangesAsync();
         foreach (var item in commercialRealEstate.Images)
@@ -89,12 +90,16 @@ public class CommercialRealEstateService : ICommercialRealEstateService
         return new Response<string>(System.Net.HttpStatusCode.OK, "CommercialRealEstate added successfully");
     }
 
-    public async Task<Response<string>> UpdateCommercialRealEstate(AddCommercialRealEstateDTO commercialRealEstate)
+    public async Task<Response<string>> UpdateCommercialRealEstate(AddCommercialRealEstateDTO commercialRealEstate, string currentUserId, bool isPrivileged)
     {
         var find = await _context.CommercialRealEstates.FirstOrDefaultAsync(x => x.Id == commercialRealEstate.Id);
         if (find == null)
         {
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "CommercialRealEstate not found");
+        }
+        if (!isPrivileged && find.OwnerId != currentUserId)
+        {
+            return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         _mapper.Map(commercialRealEstate, find);
         _context.CommercialRealEstates.Update(find);
@@ -126,12 +131,16 @@ public class CommercialRealEstateService : ICommercialRealEstateService
         return new Response<string>(System.Net.HttpStatusCode.OK, "CommercialRealEstate was updated successfully");
     }
 
-    public async Task<Response<string>> DeleteCommercialRealEstate(int commercialRealEstateId)
+    public async Task<Response<string>> DeleteCommercialRealEstate(int commercialRealEstateId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.CommercialRealEstates.FirstOrDefaultAsync(x => x.Id == commercialRealEstateId);
         if (find == null)
         {
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "CommercialRealEstate not found");
+        }
+        if (!isPrivileged && find.OwnerId != currentUserId)
+        {
+            return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         var images = await _context.Pictures
             .Where(p => p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)

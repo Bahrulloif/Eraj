@@ -89,9 +89,10 @@ public class ApartmentService : IApartmentService
         return new Response<GetApartmentDTO>(mapped);
     }
 
-    public async Task<Response<string>> AddApartment(AddApartmentDTO apartment)
+    public async Task<Response<string>> AddApartment(AddApartmentDTO apartment, string currentUserId)
     {
         var mapped = _mapper.Map<Apartment>(apartment);
+        mapped.OwnerId = currentUserId;
         await _context.Apartments.AddAsync(mapped);
         await _context.SaveChangesAsync();
         foreach (var item in apartment.Images)
@@ -109,12 +110,16 @@ public class ApartmentService : IApartmentService
         return new Response<string>(System.Net.HttpStatusCode.OK, "Apartment added successfully");
     }
 
-    public async Task<Response<string>> UpdateApartment(AddApartmentDTO apartment)
+    public async Task<Response<string>> UpdateApartment(AddApartmentDTO apartment, string currentUserId, bool isPrivileged)
     {
         var find = await _context.Apartments.FirstOrDefaultAsync(x => x.Id == apartment.Id);
         if (find == null)
         {
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "Apartment not found");
+        }
+        if (!isPrivileged && find.OwnerId != currentUserId)
+        {
+            return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         _mapper.Map(apartment, find);
         _context.Apartments.Update(find);
@@ -146,12 +151,16 @@ public class ApartmentService : IApartmentService
         return new Response<string>(System.Net.HttpStatusCode.OK, "Apartment was updated successfully");
     }
 
-    public async Task<Response<string>> DeleteApartment(int apartmentId)
+    public async Task<Response<string>> DeleteApartment(int apartmentId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.Apartments.FirstOrDefaultAsync(x => x.Id == apartmentId);
         if (find == null)
         {
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "Apartment not found");
+        }
+        if (!isPrivileged && find.OwnerId != currentUserId)
+        {
+            return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         var images = await _context.Pictures
             .Where(p => p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)

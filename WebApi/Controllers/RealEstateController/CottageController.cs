@@ -47,7 +47,7 @@ public class CottageController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _cottageService.AddCottage(cottage);
+            var result = await _cottageService.AddCottage(cottage, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetCottageDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -60,7 +60,7 @@ public class CottageController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _cottageService.UpdateCottage(cottage);
+            var result = await _cottageService.UpdateCottage(cottage, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetCottageDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -73,7 +73,7 @@ public class CottageController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _cottageService.DeleteCottage(cottageId);
+            var result = await _cottageService.DeleteCottage(cottageId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetCottageDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());

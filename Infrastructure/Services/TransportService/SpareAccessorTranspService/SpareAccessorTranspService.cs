@@ -70,9 +70,10 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
         return new Response<GetSpareAccessorTranspDTO>(mapped);
     }
 
-    public async Task<Response<string>> AddSpareAccessorTransp(AddSpareAccessorTranspDTO spareAccessorTransp)
+    public async Task<Response<string>> AddSpareAccessorTransp(AddSpareAccessorTranspDTO spareAccessorTransp, string currentUserId)
     {
         var mapped = _mapper.Map<SpareAccessorTransp>(spareAccessorTransp);
+        mapped.OwnerId = currentUserId;
         await _context.SpareAccessorTransps.AddAsync(mapped);
         await _context.SaveChangesAsync();
         if (spareAccessorTransp.Images != null)
@@ -93,11 +94,15 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
         return new Response<string>(System.Net.HttpStatusCode.OK, $"{spareAccessorTransp.Model} added successfully");
     }
 
-    public async Task<Response<string>> UpdateSpareAccessorTransp(AddSpareAccessorTranspDTO spareAccessorTransp)
+    public async Task<Response<string>> UpdateSpareAccessorTransp(AddSpareAccessorTranspDTO spareAccessorTransp, string currentUserId, bool isPrivileged)
     {
         var find = await _context.SpareAccessorTransps.FirstOrDefaultAsync(x => x.Id == spareAccessorTransp.Id);
         if (find != null)
         {
+            if (!isPrivileged && find.OwnerId != currentUserId)
+            {
+                return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
+            }
             _mapper.Map(spareAccessorTransp, find);
             _context.SpareAccessorTransps.Update(find);
             await _context.SaveChangesAsync();
@@ -129,11 +134,15 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
         return new Response<string>(System.Net.HttpStatusCode.NotFound, $"{spareAccessorTransp.Model} not found");
     }
 
-    public async Task<Response<string>> DeleteSpareAccessorTransp(int spareAccessorTranspId)
+    public async Task<Response<string>> DeleteSpareAccessorTransp(int spareAccessorTranspId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.SpareAccessorTransps.FirstOrDefaultAsync(x => x.Id == spareAccessorTranspId);
         if (find != null)
         {
+            if (!isPrivileged && find.OwnerId != currentUserId)
+            {
+                return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
+            }
             var images = await _context.Pictures.Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).ToListAsync();
             foreach (var item in images)
             {

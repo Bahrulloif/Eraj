@@ -83,13 +83,14 @@ public class SmartPhoneService : ISmartPhoneService
                             FirstOrDefaultAsync();
         return new Response<GetSmartPhoneDTO>(mapped);
     }
-    public async Task<Response<string>> AddSmartPhone(AddSmartPhoneDTO smartPhone)
+    public async Task<Response<string>> AddSmartPhone(AddSmartPhoneDTO smartPhone, string currentUserId)
     {
         if (smartPhone == null)
         {
             return new Response<string>(HttpStatusCode.OK, "Please fill the SmartPhone");
         }
         var mapped = _mapper.Map<SmartPhone>(smartPhone);
+        mapped.OwnerId = currentUserId;
         await _context.SmartPhones.AddAsync(mapped);
         await _context.SaveChangesAsync();
         foreach (var item in smartPhone.Images)
@@ -106,12 +107,17 @@ public class SmartPhoneService : ISmartPhoneService
         }
         return new Response<string>($"{mapped.Model} SmartPhone was added successfully");
     }
-    public async Task<Response<string>> UpdateSmartPhone(AddSmartPhoneDTO smartPhone)
+    public async Task<Response<string>> UpdateSmartPhone(AddSmartPhoneDTO smartPhone, string currentUserId, bool isPrivileged)
     {
         var find = await _context.SmartPhones.Where(s => s.Id == smartPhone.Id).AsNoTracking().FirstOrDefaultAsync();
         if (find != null)
         {
+            if (!isPrivileged && find.OwnerId != currentUserId)
+            {
+                return new Response<string>(HttpStatusCode.Forbidden, "You do not have access to this listing");
+            }
             var mapped = _mapper.Map<SmartPhone>(smartPhone);
+            mapped.OwnerId = find.OwnerId;
             _context.SmartPhones.Update(mapped);
             if (smartPhone.Images != null)
             {
@@ -142,12 +148,16 @@ public class SmartPhoneService : ISmartPhoneService
         }
         return new Response<string>(HttpStatusCode.NotFound, "SmartPhone not found");
     }
-    public async Task<Response<string>> DeleteSmartPhone(int smartPhoneId)
+    public async Task<Response<string>> DeleteSmartPhone(int smartPhoneId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.SmartPhones.FirstOrDefaultAsync(s => s.Id == smartPhoneId);
         if (find == null)
         {
             return new Response<string>(HttpStatusCode.NotFound, "SmartPhone not found");
+        }
+        if (!isPrivileged && find.OwnerId != currentUserId)
+        {
+            return new Response<string>(HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         var images = await _context.Pictures.Where(s => s.ProductId == find.Id && s.SubCategoryId == find.SubCategoryId).ToListAsync();
         foreach (var item in images)

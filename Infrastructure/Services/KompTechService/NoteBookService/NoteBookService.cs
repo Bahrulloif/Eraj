@@ -82,13 +82,14 @@ public class NoteBookService : INoteBookService
                             }).FirstOrDefaultAsync();
         return new Response<GetNoteBookDTO>(mapped);
     }
-    public async Task<Response<string>> AddNoteBook(AddNoteBookDTO noteBook)
+    public async Task<Response<string>> AddNoteBook(AddNoteBookDTO noteBook, string currentUserId)
     {
         if (noteBook == null)
         {
             return new Response<string>(HttpStatusCode.BadRequest, "Please fill the parameters");
         }
         var mapped = _mapper.Map<NoteBook>(noteBook);
+        mapped.OwnerId = currentUserId;
         await _context.NoteBooks.AddAsync(mapped);
         await _context.SaveChangesAsync();
         foreach (var item in noteBook.Images)
@@ -105,16 +106,21 @@ public class NoteBookService : INoteBookService
         }
         return new Response<string>("NoteBook added successfully");
     }
-    public async Task<Response<string>> UpdateNoteBook(AddNoteBookDTO noteBook)
+    public async Task<Response<string>> UpdateNoteBook(AddNoteBookDTO noteBook, string currentUserId, bool isPrivileged)
     {
         if (noteBook == null)
         {
             return new Response<string>(HttpStatusCode.BadRequest, "Please fill the parameters");
         }
-        var find = await _context.NoteBooks.Where(n => n.Id == noteBook.Id).AsNoTracking().FirstOrDefaultAsync();
+        var find = await _context.NoteBooks.Where(n => n.Id == noteBook.Id).FirstOrDefaultAsync();
         if (find != null)
         {
-            var mapped = _mapper.Map<NoteBook>(noteBook);
+            if (!isPrivileged && find.OwnerId != currentUserId)
+            {
+                return new Response<string>(HttpStatusCode.Forbidden, "You do not have access to this listing");
+            }
+            var mapped = find;
+            _mapper.Map(noteBook, mapped);
             _context.NoteBooks.Update(mapped);
             if (noteBook.Images != null)
             {
@@ -145,12 +151,16 @@ public class NoteBookService : INoteBookService
         }
         return new Response<string>(HttpStatusCode.NotFound, "NoteBook not found");
     }
-    public async Task<Response<string>> DeleteNoteBook(int noteBookId)
+    public async Task<Response<string>> DeleteNoteBook(int noteBookId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.NoteBooks.FirstOrDefaultAsync(n => n.Id == noteBookId);
         if (find == null)
         {
             return new Response<string>(HttpStatusCode.NotFound, "The NoteBook is not found");
+        }
+        if (!isPrivileged && find.OwnerId != currentUserId)
+        {
+            return new Response<string>(HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         var images = await _context.Pictures.Where(p => p.ProductId == find.Id &&
                             p.SubCategoryId == find.SubCategoryId).

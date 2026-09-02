@@ -49,7 +49,7 @@ public class TabletController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _tabletService.AddTablet(tablet);
+            var result = await _tabletService.AddTablet(tablet, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetTabletDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -62,7 +62,7 @@ public class TabletController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _tabletService.UpdateTablet(tablet);
+            var result = await _tabletService.UpdateTablet(tablet, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetTabletDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -75,7 +75,7 @@ public class TabletController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _tabletService.DeleteTablet(tabletId);
+            var result = await _tabletService.DeleteTablet(tabletId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetTabletDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());

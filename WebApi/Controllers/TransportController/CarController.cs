@@ -46,7 +46,7 @@ public class CarController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _carService.AddCar(car);
+            var result = await _carService.AddCar(car, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetCarDTO>(System.Net.HttpStatusCode.BadGateway, ModelStateErrors());
@@ -59,7 +59,7 @@ public class CarController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _carService.UpdateCar(car);
+            var result = await _carService.UpdateCar(car, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetCarDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -72,7 +72,7 @@ public class CarController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _carService.DeleteCar(carId);
+            var result = await _carService.DeleteCar(carId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetCarDTO>(System.Net.HttpStatusCode.BadGateway, ModelStateErrors());

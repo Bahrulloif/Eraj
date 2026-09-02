@@ -80,13 +80,14 @@ public class TabletService : ITabletService
                             }).FirstOrDefaultAsync();
         return new Response<GetTabletDTO>(mapped);
     }
-    public async Task<Response<string>> AddTablet(AddTabletDTO tablet)
+    public async Task<Response<string>> AddTablet(AddTabletDTO tablet, string currentUserId)
     {
         if (tablet == null)
         {
             return new Response<string>(HttpStatusCode.NotFound, "Please fill the parameter");
         }
         var mapped = _mapper.Map<Tablet>(tablet);
+        mapped.OwnerId = currentUserId;
         await _context.Tablets.AddAsync(mapped);
         await _context.SaveChangesAsync();
         foreach (var item in tablet.Images)
@@ -104,7 +105,7 @@ public class TabletService : ITabletService
 
         return new Response<string>($"{mapped.Model}Tablet added successfully");
     }
-    public async Task<Response<string>> UpdateTablet(AddTabletDTO tablet)
+    public async Task<Response<string>> UpdateTablet(AddTabletDTO tablet, string currentUserId, bool isPrivileged)
     {
         if (tablet == null)
         {
@@ -113,6 +114,10 @@ public class TabletService : ITabletService
         var find = await _context.Tablets.AsNoTracking().FirstOrDefaultAsync(t => t.Id == tablet.Id);
         if (find != null)
         {
+            if (!isPrivileged && find.OwnerId != currentUserId)
+            {
+                return new Response<string>(HttpStatusCode.Forbidden, "You do not have access to this listing");
+            }
             if (tablet.Images != null)
             {
                 var images = await _context.Pictures.
@@ -138,18 +143,23 @@ public class TabletService : ITabletService
                 }
             }
             var mapped = _mapper.Map<Tablet>(tablet);
+            mapped.OwnerId = find.OwnerId;
             _context.Tablets.Update(mapped);
             await _context.SaveChangesAsync();
             return new Response<string>("Tablet updated successfully");
         }
         return new Response<string>(HttpStatusCode.NotFound, "Tablet not found");
     }
-    public async Task<Response<string>> DeleteTablet(int tabletId)
+    public async Task<Response<string>> DeleteTablet(int tabletId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.Tablets.FirstOrDefaultAsync(t => t.Id == tabletId);
         if (find == null)
         {
             return new Response<string>(HttpStatusCode.NotFound, "Tablet not found");
+        }
+        if (!isPrivileged && find.OwnerId != currentUserId)
+        {
+            return new Response<string>(HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         var images = await _context.Pictures.
         Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).

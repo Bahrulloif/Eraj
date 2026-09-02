@@ -47,7 +47,7 @@ public class SpareAccessorTranspController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _spareAccessorTranspService.AddSpareAccessorTransp(spareAccessorTransp);
+            var result = await _spareAccessorTranspService.AddSpareAccessorTransp(spareAccessorTransp, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<string>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -60,7 +60,7 @@ public class SpareAccessorTranspController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _spareAccessorTranspService.UpdateSpareAccessorTransp(spareAccessorTransp);
+            var result = await _spareAccessorTranspService.UpdateSpareAccessorTransp(spareAccessorTransp, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<string>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -73,7 +73,7 @@ public class SpareAccessorTranspController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _spareAccessorTranspService.DeleteSpareAccessorTransp(spareAccessorTranspId);
+            var result = await _spareAccessorTranspService.DeleteSpareAccessorTransp(spareAccessorTranspId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<string>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());

@@ -98,9 +98,10 @@ public class TruckService : ITruckService
         return new Response<GetTruckDTO>(mapped);
     }
 
-    public async Task<Response<string>> AddTruck(AddTruckDTO truck)
+    public async Task<Response<string>> AddTruck(AddTruckDTO truck, string currentUserId)
     {
         var mapped = _mapper.Map<Truck>(truck);
+        mapped.OwnerId = currentUserId;
         await _context.Trucks.AddRangeAsync(mapped);
         await _context.SaveChangesAsync();
         foreach (var item in truck.Images)
@@ -118,12 +119,16 @@ public class TruckService : ITruckService
         return new Response<string>(System.Net.HttpStatusCode.OK, $"{truck.Model} added successfully");
     }
 
-    public async Task<Response<string>> UpdateTruck(AddTruckDTO truck)
+    public async Task<Response<string>> UpdateTruck(AddTruckDTO truck, string currentUserId, bool isPrivileged)
     {
         var find = await _context.Trucks.FirstOrDefaultAsync(x => x.Id == truck.Id);
         if (find == null)
         {
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "Truck not found");
+        }
+        if (!isPrivileged && find.OwnerId != currentUserId)
+        {
+            return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         _mapper.Map(truck, find);
         _context.Trucks.Update(find);
@@ -156,12 +161,16 @@ public class TruckService : ITruckService
         return new Response<string>(System.Net.HttpStatusCode.OK, $"{truck.Model} was updated successfully");
     }
 
-    public async Task<Response<string>> DeleteTruck(int truckId)
+    public async Task<Response<string>> DeleteTruck(int truckId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.Trucks.FirstOrDefaultAsync(x => x.Id == truckId);
         if (find == null)
         {
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "Truck not found");
+        }
+        if (!isPrivileged && find.OwnerId != currentUserId)
+        {
+            return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         var images = await _context.Pictures.
         Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).

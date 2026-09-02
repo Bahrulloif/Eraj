@@ -47,7 +47,7 @@ public class ApartmentController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _apartmentService.AddApartment(apartment);
+            var result = await _apartmentService.AddApartment(apartment, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetApartmentDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -60,7 +60,7 @@ public class ApartmentController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _apartmentService.UpdateApartment(apartment);
+            var result = await _apartmentService.UpdateApartment(apartment, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetApartmentDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -73,7 +73,7 @@ public class ApartmentController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _apartmentService.DeleteApartment(apartmentId);
+            var result = await _apartmentService.DeleteApartment(apartmentId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetApartmentDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());

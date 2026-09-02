@@ -47,7 +47,7 @@ public class CommercialRealEstateController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _commercialRealEstateService.AddCommercialRealEstate(commercialRealEstate);
+            var result = await _commercialRealEstateService.AddCommercialRealEstate(commercialRealEstate, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetCommercialRealEstateDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -60,7 +60,7 @@ public class CommercialRealEstateController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _commercialRealEstateService.UpdateCommercialRealEstate(commercialRealEstate);
+            var result = await _commercialRealEstateService.UpdateCommercialRealEstate(commercialRealEstate, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetCommercialRealEstateDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -73,7 +73,7 @@ public class CommercialRealEstateController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _commercialRealEstateService.DeleteCommercialRealEstate(commercialRealEstateId);
+            var result = await _commercialRealEstateService.DeleteCommercialRealEstate(commercialRealEstateId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetCommercialRealEstateDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());

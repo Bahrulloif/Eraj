@@ -47,7 +47,7 @@ public class SpareAccessorKompController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _spareAccessorKompService.AddSpareAccessorKomp(spareAccessorKomp);
+            var result = await _spareAccessorKompService.AddSpareAccessorKomp(spareAccessorKomp, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<string>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -60,7 +60,7 @@ public class SpareAccessorKompController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _spareAccessorKompService.UpdateSpareAccessorKomp(spareAccessorKomp);
+            var result = await _spareAccessorKompService.UpdateSpareAccessorKomp(spareAccessorKomp, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<string>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -73,7 +73,7 @@ public class SpareAccessorKompController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _spareAccessorKompService.DeleteSpareAccessorKomp(spareAccessorKompId);
+            var result = await _spareAccessorKompService.DeleteSpareAccessorKomp(spareAccessorKompId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<string>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());

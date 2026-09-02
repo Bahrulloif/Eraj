@@ -7,6 +7,7 @@ public class Cottage
 {
     public int Id { get; set; }
     public int SubCategoryId { get; set; }
+    public string? OwnerId { get; set; } // Businessman who created this listing; null for legacy rows managed only by Admin/SuperAdmin.
     public TypeOfEstateEnum TypeOfRealEstate { get; set; }
     public decimal Price { get; set; }
     public double PricePerM2 { get; set; }

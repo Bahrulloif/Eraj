@@ -9,7 +9,7 @@ public interface ISpareAccessorKompService
 
     public Task<PagedResponse<List<GetSpareAccessorKompDTO>>> GetSpareAccessorKomp(GetSpareAccessorKompFilter filter);
     public Task<Response<GetSpareAccessorKompDTO>> GetSpareAccessorKompById(int spareAccessorKompId);
-    public Task<Response<string>> AddSpareAccessorKomp(AddSpareAccessorKompDTO spareAccessorKomp);
-    public Task<Response<string>> UpdateSpareAccessorKomp(AddSpareAccessorKompDTO spareAccessorKomp);
-    public Task<Response<string>> DeleteSpareAccessorKomp(int spareAccessorKompId);
+    public Task<Response<string>> AddSpareAccessorKomp(AddSpareAccessorKompDTO spareAccessorKomp, string currentUserId);
+    public Task<Response<string>> UpdateSpareAccessorKomp(AddSpareAccessorKompDTO spareAccessorKomp, string currentUserId, bool isPrivileged);
+    public Task<Response<string>> DeleteSpareAccessorKomp(int spareAccessorKompId, string currentUserId, bool isPrivileged);
 }

@@ -74,9 +74,10 @@ public class SpareAccessorKompService : ISpareAccessorKompService
     }
 
 
-    public async Task<Response<string>> AddSpareAccessorKomp(AddSpareAccessorKompDTO spareAccessorKomp)
+    public async Task<Response<string>> AddSpareAccessorKomp(AddSpareAccessorKompDTO spareAccessorKomp, string currentUserId)
     {
         var mapped = _mapper.Map<SpareAccessorKomp>(spareAccessorKomp);
+        mapped.OwnerId = currentUserId;
         await _context.SpareAccessorKomps.AddAsync(mapped);
         await _context.SaveChangesAsync();
         if (spareAccessorKomp.Images != null)
@@ -97,11 +98,15 @@ public class SpareAccessorKompService : ISpareAccessorKompService
         return new Response<string>(System.Net.HttpStatusCode.OK, $"{spareAccessorKomp.Model} added successfully");
     }
 
-    public async Task<Response<string>> UpdateSpareAccessorKomp(AddSpareAccessorKompDTO spareAccessorKomp)
+    public async Task<Response<string>> UpdateSpareAccessorKomp(AddSpareAccessorKompDTO spareAccessorKomp, string currentUserId, bool isPrivileged)
     {
         var find = await _context.SpareAccessorKomps.FirstOrDefaultAsync(x => x.Id == spareAccessorKomp.Id);
         if (find != null)
         {
+            if (!isPrivileged && find.OwnerId != currentUserId)
+            {
+                return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
+            }
             _mapper.Map(spareAccessorKomp, find);
             _context.SpareAccessorKomps.Update(find);
             await _context.SaveChangesAsync();
@@ -135,11 +140,15 @@ public class SpareAccessorKompService : ISpareAccessorKompService
     }
 
 
-    public async Task<Response<string>> DeleteSpareAccessorKomp(int spareAccessorKompId)
+    public async Task<Response<string>> DeleteSpareAccessorKomp(int spareAccessorKompId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.SpareAccessorKomps.FirstOrDefaultAsync(x => x.Id == spareAccessorKompId);
         if (find != null)
         {
+            if (!isPrivileged && find.OwnerId != currentUserId)
+            {
+                return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
+            }
             var images = await _context.Pictures
             .Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId)
             .ToListAsync();

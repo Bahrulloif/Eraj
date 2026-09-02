@@ -100,9 +100,10 @@ public class MotorbikeService : IMotorbikeService
         return new Response<GetMotorbikeDTO>(System.Net.HttpStatusCode.NotFound, "Motorbike not found");
     }
 
-    public async Task<Response<string>> AddMotorbike(AddMotorbikeDTO motorbike)
+    public async Task<Response<string>> AddMotorbike(AddMotorbikeDTO motorbike, string currentUserId)
     {
         var mapped = _mapper.Map<Motorbike>(motorbike);
+        mapped.OwnerId = currentUserId;
         await _context.Motorbikes.AddAsync(mapped);
         await _context.SaveChangesAsync();
         foreach (var item in motorbike.Images)
@@ -120,12 +121,16 @@ public class MotorbikeService : IMotorbikeService
         return new Response<string>(System.Net.HttpStatusCode.OK, "Motorbike added successfully");
     }
 
-    public async Task<Response<string>> UpdateMotorbike(AddMotorbikeDTO motorbike)
+    public async Task<Response<string>> UpdateMotorbike(AddMotorbikeDTO motorbike, string currentUserId, bool isPrivileged)
     {
         var find = await _context.Motorbikes.FirstOrDefaultAsync(x => x.Id == motorbike.Id);
         if (find == null)
         {
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "Motorbike not found");
+        }
+        if (!isPrivileged && find.OwnerId != currentUserId)
+        {
+            return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         _mapper.Map(motorbike, find);
         _context.Motorbikes.Update(find);
@@ -158,12 +163,16 @@ public class MotorbikeService : IMotorbikeService
         return new Response<string>(System.Net.HttpStatusCode.OK, "The Motorbike is updated successfully");
     }
 
-    public async Task<Response<string>> DeleteMotorbike(int motorbikeId)
+    public async Task<Response<string>> DeleteMotorbike(int motorbikeId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.Motorbikes.FirstOrDefaultAsync(x => x.Id == motorbikeId);
         if (find == null)
         {
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "Motorbike not found");
+        }
+        if (!isPrivileged && find.OwnerId != currentUserId)
+        {
+            return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         var images = await _context.Pictures.
         Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).

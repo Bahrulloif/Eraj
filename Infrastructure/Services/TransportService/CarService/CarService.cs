@@ -140,13 +140,14 @@ public class CarService : ICarService
         return new Response<GetCarDTO>(mapped);
     }
 
-    public async Task<Response<string>> AddCar(AddCarDTO car)
+    public async Task<Response<string>> AddCar(AddCarDTO car, string currentUserId)
     {
         if (car == null)
         {
             return new Response<string>(HttpStatusCode.NotFound, "Please fill the parameters");
         }
         var mapped = _mapper.Map<Car>(car);
+        mapped.OwnerId = currentUserId;
         await _context.Cars.AddAsync(mapped);
         await _context.SaveChangesAsync();
         foreach (var item in car.Images)
@@ -164,11 +165,15 @@ public class CarService : ICarService
         return new Response<string>(HttpStatusCode.OK, $"{car.Model} added successfully");
     }
 
-    public async Task<Response<string>> UpdateCar(AddCarDTO car)
+    public async Task<Response<string>> UpdateCar(AddCarDTO car, string currentUserId, bool isPrivileged)
     {
         var find = await _context.Cars.FirstOrDefaultAsync(x => x.Id == car.Id);
         if (find != null)
         {
+            if (!isPrivileged && find.OwnerId != currentUserId)
+            {
+                return new Response<string>(HttpStatusCode.Forbidden, "You do not have access to this listing");
+            }
             _mapper.Map(car, find);
             _context.Cars.Update(find);
             await _context.SaveChangesAsync();
@@ -201,11 +206,15 @@ public class CarService : ICarService
         return new Response<string>(HttpStatusCode.NotFound, $"{car.Model}  not found");
     }
 
-    public async Task<Response<string>> DeleteCar(int carId)
+    public async Task<Response<string>> DeleteCar(int carId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.Cars.FirstOrDefaultAsync(x => x.Id == carId);
         if (find != null)
         {
+            if (!isPrivileged && find.OwnerId != currentUserId)
+            {
+                return new Response<string>(HttpStatusCode.Forbidden, "You do not have access to this listing");
+            }
             var images = await _context.Pictures.
             Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).
             ToListAsync();

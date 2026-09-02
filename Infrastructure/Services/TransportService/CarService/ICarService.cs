@@ -11,7 +11,7 @@ public interface ICarService
 {
     public Task<PagedResponse<List<GetCarDTO>>> GetCar(GetCarFilter filter);
     public Task<Response<GetCarDTO>> GetCarById(int carId);
-    public Task<Response<string>> AddCar(AddCarDTO car);
-    public Task<Response<string>> UpdateCar(AddCarDTO car);
-    public Task<Response<string>> DeleteCar(int carId);
+    public Task<Response<string>> AddCar(AddCarDTO car, string currentUserId);
+    public Task<Response<string>> UpdateCar(AddCarDTO car, string currentUserId, bool isPrivileged);
+    public Task<Response<string>> DeleteCar(int carId, string currentUserId, bool isPrivileged);
 }

@@ -45,7 +45,7 @@ public class MotorbikeController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _motorbikeService.AddMotorbike(motorbike);
+            var result = await _motorbikeService.AddMotorbike(motorbike, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetMotorbikeDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -58,7 +58,7 @@ public class MotorbikeController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _motorbikeService.UpdateMotorbike(motorbike);
+            var result = await _motorbikeService.UpdateMotorbike(motorbike, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetMotorbikeDTO>(System.Net.HttpStatusCode.BadGateway, ModelStateErrors());
@@ -71,7 +71,7 @@ public class MotorbikeController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _motorbikeService.DeleteMotorbike(motorbikeId);
+            var result = await _motorbikeService.DeleteMotorbike(motorbikeId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetMotorbikeDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());

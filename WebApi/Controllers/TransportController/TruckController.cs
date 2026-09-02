@@ -48,7 +48,7 @@ public class TruckController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _truckService.AddTruck(truck);
+            var result = await _truckService.AddTruck(truck, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetTruckDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -61,7 +61,7 @@ public class TruckController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _truckService.UpdateTruck(truck);
+            var result = await _truckService.UpdateTruck(truck, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetTruckDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -73,7 +73,7 @@ public class TruckController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _truckService.DeleteTruck(truckId);
+            var result = await _truckService.DeleteTruck(truckId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetTruckDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());

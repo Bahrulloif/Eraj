@@ -83,9 +83,10 @@ public class CottageService : ICottageService
         return new Response<GetCottageDTO>(mapped);
     }
 
-    public async Task<Response<string>> AddCottage(AddCottageDTO cottage)
+    public async Task<Response<string>> AddCottage(AddCottageDTO cottage, string currentUserId)
     {
         var mapped = _mapper.Map<Cottage>(cottage);
+        mapped.OwnerId = currentUserId;
         await _context.Cottages.AddAsync(mapped);
         await _context.SaveChangesAsync();
         foreach (var item in cottage.Images)
@@ -103,12 +104,16 @@ public class CottageService : ICottageService
         return new Response<string>(System.Net.HttpStatusCode.OK, "Cottage added successfully");
     }
 
-    public async Task<Response<string>> UpdateCottage(AddCottageDTO cottage)
+    public async Task<Response<string>> UpdateCottage(AddCottageDTO cottage, string currentUserId, bool isPrivileged)
     {
         var find = await _context.Cottages.FirstOrDefaultAsync(x => x.Id == cottage.Id);
         if (find == null)
         {
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "Cottage not found");
+        }
+        if (!isPrivileged && find.OwnerId != currentUserId)
+        {
+            return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         _mapper.Map(cottage, find);
         _context.Cottages.Update(find);
@@ -140,12 +145,16 @@ public class CottageService : ICottageService
         return new Response<string>(System.Net.HttpStatusCode.OK, "Cottage was updated successfully");
     }
 
-    public async Task<Response<string>> DeleteCottage(int cottageId)
+    public async Task<Response<string>> DeleteCottage(int cottageId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.Cottages.FirstOrDefaultAsync(x => x.Id == cottageId);
         if (find == null)
         {
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "Cottage not found");
+        }
+        if (!isPrivileged && find.OwnerId != currentUserId)
+        {
+            return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         var images = await _context.Pictures
             .Where(p => p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)

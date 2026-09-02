@@ -8,7 +8,7 @@ public interface ICottageService
 {
     public Task<PagedResponse<List<GetCottageDTO>>> GetCottage(GetCottageFilter filter);
     public Task<Response<GetCottageDTO>> GetCottageById(int cottageId);
-    public Task<Response<string>> AddCottage(AddCottageDTO cottage);
-    public Task<Response<string>> UpdateCottage(AddCottageDTO cottage);
-    public Task<Response<string>> DeleteCottage(int cottageId);
+    public Task<Response<string>> AddCottage(AddCottageDTO cottage, string currentUserId);
+    public Task<Response<string>> UpdateCottage(AddCottageDTO cottage, string currentUserId, bool isPrivileged);
+    public Task<Response<string>> DeleteCottage(int cottageId, string currentUserId, bool isPrivileged);
 }

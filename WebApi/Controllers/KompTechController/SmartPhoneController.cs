@@ -48,7 +48,7 @@ public class SmartPhoneController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _smartPhoneService.AddSmartPhone(smartPhone);
+            var result = await _smartPhoneService.AddSmartPhone(smartPhone, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetSmartPhoneDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -61,7 +61,7 @@ public class SmartPhoneController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _smartPhoneService.UpdateSmartPhone(smartPhone);
+            var result = await _smartPhoneService.UpdateSmartPhone(smartPhone, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetSmartPhoneDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -74,7 +74,7 @@ public class SmartPhoneController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _smartPhoneService.DeleteSmartPhone(smartPhoneId);
+            var result = await _smartPhoneService.DeleteSmartPhone(smartPhoneId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetSmartPhoneDTO>(System.Net.HttpStatusCode.NotFound, ModelStateErrors());

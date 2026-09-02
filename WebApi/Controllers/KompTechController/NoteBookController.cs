@@ -47,7 +47,7 @@ public class NoteBookController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _noteBookService.AddNoteBook(noteBook);
+            var result = await _noteBookService.AddNoteBook(noteBook, CurrentUserId!);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetNoteBookDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -60,7 +60,7 @@ public class NoteBookController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _noteBookService.UpdateNoteBook(noteBook);
+            var result = await _noteBookService.UpdateNoteBook(noteBook, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetNoteBookDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -73,7 +73,7 @@ public class NoteBookController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _noteBookService.DeleteNoteBook(noteBookId);
+            var result = await _noteBookService.DeleteNoteBook(noteBookId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetNoteBookDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
