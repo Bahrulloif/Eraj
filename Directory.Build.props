@@ -1,0 +1,18 @@
+<Project>
+  <ItemGroup>
+    <!--
+      AutoMapper 12.0.1 (Domain/Infrastructure/WebApi) is flagged by NuGet audit for
+      GHSA-rvv3-g6hj-g44x / CVE-2026-32933: a DoS via unbounded recursion when mapping a
+      self-referential object graph ~25,000+ levels deep. Checked this codebase's AutoMapper
+      profiles (Infrastructure/AutoMapper/ServiceProfile.cs) and every DTO in Domain/DTOs:
+      none of the mapped DTOs mirror the entities' navigation-property cycles (e.g. CategoryDTO
+      holds CatalogId as an int FK, not a nested Catalog object) - so no configured mapping ever
+      walks a cyclic graph, and this advisory has no exploitable path here.
+      Deliberately staying on 12.0.1 rather than upgrading: the fix only landed in 15.1.1+, and
+      AutoMapper switched from MIT to a dual RPL-1.5/commercial license starting at 15.0.0 - no
+      free version exists that has the fix. Decided 2026-09-03; revisit if DTOs ever gain a
+      nested/cyclic shape, or if a free-licensed patched release appears.
+    -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-rvv3-g6hj-g44x" />
+  </ItemGroup>
+</Project>
