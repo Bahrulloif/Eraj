@@ -484,3 +484,11 @@ Domain/bin/*
 Domain/obj/*
 WebApi/bin/*
 WebApi/obj/*
+
+# Uploaded product images (written at runtime by FileService.CreateFile) - not source, and the
+# folder must still exist for uploads to work (FileStream doesn't create it), hence .gitkeep.
+WebApi/wwwroot/Images/*
+!WebApi/wwwroot/Images/.gitkeep
+
+# IDE/tool session log dumps that occasionally land in the repo root
+csdevkit-logs-*.zip
