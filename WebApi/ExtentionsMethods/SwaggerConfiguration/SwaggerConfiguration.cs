@@ -1,4 +1,4 @@
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace WebApi.ExtensionMethods.SwaggerConfiguration;
 
@@ -33,20 +33,10 @@ public static class SwaggerConfiguration
                               "Example: \"Bearer 12345abc-def\"",
             });
 
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
                 {
                     {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            },
-                            Scheme = "oauth2",
-                            Name = "Bearer",
-                            In = ParameterLocation.Header
-                        },
+                        new OpenApiSecuritySchemeReference("Bearer", document),
                         new List<string>()
                     }
                 }
