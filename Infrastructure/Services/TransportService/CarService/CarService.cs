@@ -5,6 +5,7 @@ using Domain.DTOs.PictureDTO;
 using Domain.DTOs.TransportDTOs.CarsDTOs;
 using Domain.Entities;
 using Domain.Entities.Transport;
+using Domain.Enum;
 using Domain.Filters.TransportFilters.CarsFilter;
 using Domain.Responses;
 using Infrastructure.Data;
@@ -74,7 +75,7 @@ public class CarService : ICarService
                                 ElectricDrive = c.ElectricDrive,
                                 ActiveSafety = c.ActiveSafety,
                                 Images = _context.Pictures
-                                    .Where(p => p.ProductId == c.Id && p.SubCategoryId == c.SubCategoryId)
+                                    .Where(p => p.ProductType == ProductType.Car && p.ProductId == c.Id && p.SubCategoryId == c.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                     .ToList()
                             }).Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -132,7 +133,7 @@ public class CarService : ICarService
                                 ElectricDrive = c.ElectricDrive,
                                 ActiveSafety = c.ActiveSafety,
                                 Images = _context.Pictures
-                                                        .Where(p => p.ProductId == c.Id && p.SubCategoryId == c.SubCategoryId)
+                                                        .Where(p => p.ProductType == ProductType.Car && p.ProductId == c.Id && p.SubCategoryId == c.SubCategoryId)
                                                         .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                                         .ToList()
 
@@ -160,6 +161,7 @@ public class CarService : ICarService
             var image = new Picture
             {
                 ImageName = imageName.Data!,
+                ProductType = ProductType.Car,
                 ProductId = mapped.Id,
                 SubCategoryId = mapped.SubCategoryId
             };
@@ -184,7 +186,7 @@ public class CarService : ICarService
             if (car.Images != null)
             {
                 var images = await _context.Pictures.
-                Where(x => x.ProductId == car.Id && x.SubCategoryId == car.SubCategoryId).
+                Where(x => x.ProductType == ProductType.Car && x.ProductId == car.Id && x.SubCategoryId == car.SubCategoryId).
                 ToListAsync();
                 foreach (var item in images)
                 {
@@ -198,6 +200,7 @@ public class CarService : ICarService
                     var image = new Picture
                     {
                         ImageName = imageName.Data!,
+                        ProductType = ProductType.Car,
                         ProductId = car.Id,
                         SubCategoryId = car.SubCategoryId
                     };
@@ -220,7 +223,7 @@ public class CarService : ICarService
                 return new Response<string>(HttpStatusCode.Forbidden, "You do not have access to this listing");
             }
             var images = await _context.Pictures.
-            Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).
+            Where(x => x.ProductType == ProductType.Car && x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).
             ToListAsync();
             foreach (var item in images)
             {

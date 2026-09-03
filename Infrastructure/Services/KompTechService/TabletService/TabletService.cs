@@ -3,6 +3,7 @@ using Domain.DTOs.KomTechDTOs.TabletDTOs;
 using Domain.DTOs.PictureDTO;
 using Domain.Entities;
 using Domain.Entities.KompTech;
+using Domain.Enum;
 using Domain.Filters.KompTechFilters.TabletFilter;
 using Domain.Responses;
 using Infrastructure.Data;
@@ -44,7 +45,7 @@ public class TabletService : ITabletService
                                 RAM = t.RAM,
                                 ROM = t.ROM,
                                 Images = _context.Pictures.
-                                    Where(p => p.ProductId == t.Id && p.SubCategoryId == t.SubCategoryId).
+                                    Where(p => p.ProductType == ProductType.Tablet && p.ProductId == t.Id && p.SubCategoryId == t.SubCategoryId).
                                     Select(x => new PictureDto { Id = x.Id, ImageName = x.ImageName }).
                                     ToList()
                             }).Skip((filter.PageNumber - 1) * filter.PageSize).
@@ -75,7 +76,7 @@ public class TabletService : ITabletService
                                 Price = t.Price,
                                 RAM = t.RAM,
                                 ROM = t.ROM,
-                                Images = _context.Pictures.Where(p => p.ProductId == t.Id && p.SubCategoryId == t.SubCategoryId).
+                                Images = _context.Pictures.Where(p => p.ProductType == ProductType.Tablet && p.ProductId == t.Id && p.SubCategoryId == t.SubCategoryId).
                              Select(x => new PictureDto { ImageName = x.ImageName, Id = x.Id }).ToList()
                             }).FirstOrDefaultAsync();
         if (mapped == null)
@@ -100,6 +101,7 @@ public class TabletService : ITabletService
             var image = new Picture
             {
                 ImageName = imageName.Data!,
+                ProductType = ProductType.Tablet,
                 ProductId = mapped.Id,
                 SubCategoryId = mapped.SubCategoryId
             };
@@ -125,7 +127,7 @@ public class TabletService : ITabletService
             if (tablet.Images != null)
             {
                 var images = await _context.Pictures.
-                Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).
+                Where(x => x.ProductType == ProductType.Tablet && x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).
                 ToListAsync();
                 foreach (var item in images)
                 {
@@ -139,6 +141,7 @@ public class TabletService : ITabletService
                     var image = new Picture
                     {
                         ImageName = imageName.Data!,
+                        ProductType = ProductType.Tablet,
                         ProductId = find.Id,
                         SubCategoryId = find.SubCategoryId
                     };
@@ -166,7 +169,7 @@ public class TabletService : ITabletService
             return new Response<string>(HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         var images = await _context.Pictures.
-        Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).
+        Where(x => x.ProductType == ProductType.Tablet && x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).
         ToListAsync();
 
         foreach (var item in images)

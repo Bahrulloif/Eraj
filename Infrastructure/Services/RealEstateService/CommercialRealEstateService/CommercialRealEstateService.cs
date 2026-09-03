@@ -3,6 +3,7 @@ using Domain.DTOs.PictureDTO;
 using Domain.DTOs.RealEstateDTOs.CommercialRealEstateDTOs;
 using Domain.Entities;
 using Domain.Entities.RealEstate;
+using Domain.Enum;
 using Domain.Filters.RealEstateFilters.CommercialRealEstateFilter;
 using Domain.Responses;
 using Infrastructure.Data;
@@ -37,7 +38,7 @@ public class CommercialRealEstateService : ICommercialRealEstateService
                                 BuildingType = c.BuildingType,
                                 Floor = c.Floor,
                                 Images = _context.Pictures
-                                    .Where(p => p.ProductId == c.Id && p.SubCategoryId == c.SubCategoryId)
+                                    .Where(p => p.ProductType == ProductType.CommercialRealEstate && p.ProductId == c.Id && p.SubCategoryId == c.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                     .ToList()
                             }).Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -58,7 +59,7 @@ public class CommercialRealEstateService : ICommercialRealEstateService
                                 BuildingType = c.BuildingType,
                                 Floor = c.Floor,
                                 Images = _context.Pictures
-                                    .Where(p => p.ProductId == c.Id && p.SubCategoryId == c.SubCategoryId)
+                                    .Where(p => p.ProductType == ProductType.CommercialRealEstate && p.ProductId == c.Id && p.SubCategoryId == c.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                     .ToList()
                             }).FirstOrDefaultAsync();
@@ -81,6 +82,7 @@ public class CommercialRealEstateService : ICommercialRealEstateService
             var image = new Picture
             {
                 ImageName = imageName.Data!,
+                ProductType = ProductType.CommercialRealEstate,
                 ProductId = mapped.Id,
                 SubCategoryId = mapped.SubCategoryId
             };
@@ -107,7 +109,7 @@ public class CommercialRealEstateService : ICommercialRealEstateService
         if (commercialRealEstate.Images != null)
         {
             var images = await _context.Pictures
-                .Where(p => p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)
+                .Where(p => p.ProductType == ProductType.CommercialRealEstate && p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)
                 .ToListAsync();
             foreach (var item in images)
             {
@@ -121,6 +123,7 @@ public class CommercialRealEstateService : ICommercialRealEstateService
                 var image = new Picture
                 {
                     ImageName = imageName.Data!,
+                    ProductType = ProductType.CommercialRealEstate,
                     ProductId = find.Id,
                     SubCategoryId = find.SubCategoryId
                 };
@@ -143,7 +146,7 @@ public class CommercialRealEstateService : ICommercialRealEstateService
             return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         var images = await _context.Pictures
-            .Where(p => p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)
+            .Where(p => p.ProductType == ProductType.CommercialRealEstate && p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)
             .ToListAsync();
         foreach (var item in images)
         {

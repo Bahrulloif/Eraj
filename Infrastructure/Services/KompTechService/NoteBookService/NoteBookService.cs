@@ -3,6 +3,7 @@ using Domain.DTOs.KomTechDTOs.NoteBookDTOs;
 using Domain.DTOs.PictureDTO;
 using Domain.Entities;
 using Domain.Entities.KompTech;
+using Domain.Enum;
 using Domain.Filters.KompTechFilters.NoteBookFilters;
 using Domain.Responses;
 using Infrastructure.Data;
@@ -44,7 +45,7 @@ public class NoteBookService : INoteBookService
                                 Price = n.Price,
                                 DiscountPrice = n.DiscountPrice,
                                 Images = _context.Pictures
-                                    .Where(p => p.ProductId == n.Id && p.SubCategoryId == n.SubCategoryId)
+                                    .Where(p => p.ProductType == ProductType.NoteBook && p.ProductId == n.Id && p.SubCategoryId == n.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                     .ToList()
                             }).Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -76,7 +77,7 @@ public class NoteBookService : INoteBookService
                                 Price = n.Price,
                                 DiscountPrice = n.DiscountPrice,
                                 Images = _context.Pictures
-                                    .Where(p => p.ProductId == n.Id && p.SubCategoryId == n.SubCategoryId)
+                                    .Where(p => p.ProductType == ProductType.NoteBook && p.ProductId == n.Id && p.SubCategoryId == n.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                     .ToList()
                             }).FirstOrDefaultAsync();
@@ -102,6 +103,7 @@ public class NoteBookService : INoteBookService
             var image = new Picture
             {
                 ImageName = imageName.Data!,
+                ProductType = ProductType.NoteBook,
                 ProductId = mapped.Id,
                 SubCategoryId = mapped.SubCategoryId
             };
@@ -128,7 +130,7 @@ public class NoteBookService : INoteBookService
             _context.NoteBooks.Update(mapped);
             if (noteBook.Images != null)
             {
-                var images = await _context.Pictures.Where(n => n.ProductId == noteBook.Id
+                var images = await _context.Pictures.Where(n => n.ProductType == ProductType.NoteBook && n.ProductId == noteBook.Id
                              && n.SubCategoryId == noteBook.SubCategoryId).
                              ToListAsync();
                 foreach (var item in images)
@@ -144,6 +146,7 @@ public class NoteBookService : INoteBookService
                     var image = new Picture
                     {
                         ImageName = imageName.Data!,
+                        ProductType = ProductType.NoteBook,
                         ProductId = mapped.Id,
                         SubCategoryId = mapped.SubCategoryId
                     };
@@ -166,7 +169,7 @@ public class NoteBookService : INoteBookService
         {
             return new Response<string>(HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
-        var images = await _context.Pictures.Where(p => p.ProductId == find.Id &&
+        var images = await _context.Pictures.Where(p => p.ProductType == ProductType.NoteBook && p.ProductId == find.Id &&
                             p.SubCategoryId == find.SubCategoryId).
                             ToListAsync();
         foreach (var item in images)

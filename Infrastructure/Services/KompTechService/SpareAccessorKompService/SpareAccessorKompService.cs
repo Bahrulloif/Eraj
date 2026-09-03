@@ -3,6 +3,7 @@ using Domain.DTOs.KomTechDTOs.SpareAccessorKompDTOs;
 using Domain.DTOs.PictureDTO;
 using Domain.Entities;
 using Domain.Entities.KompTech;
+using Domain.Enum;
 using Domain.Filters.KompTechFilters.SpareAccessorKompFilter;
 using Domain.Responses;
 using Infrastructure.Data;
@@ -42,7 +43,7 @@ public class SpareAccessorKompService : ISpareAccessorKompService
                                 DiscountPrice = a.DiscountPrice,
                                 Price = a.Price,
                                 Images = _context.Pictures
-                                .Where(x => x.ProductId == a.Id && x.SubCategoryId == a.SubCategoryId)
+                                .Where(x => x.ProductType == ProductType.SpareAccessorKomp && x.ProductId == a.Id && x.SubCategoryId == a.SubCategoryId)
                                 .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                 .ToList()
                             })
@@ -66,7 +67,7 @@ public class SpareAccessorKompService : ISpareAccessorKompService
                                 DiscountPrice = a.DiscountPrice,
                                 Price = a.Price,
                                 Images = _context.Pictures
-                                .Where(x => x.ProductId == a.Id && x.SubCategoryId == a.SubCategoryId)
+                                .Where(x => x.ProductType == ProductType.SpareAccessorKomp && x.ProductId == a.Id && x.SubCategoryId == a.SubCategoryId)
                                 .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                 .ToList()
                             }).FirstOrDefaultAsync();
@@ -92,7 +93,8 @@ public class SpareAccessorKompService : ISpareAccessorKompService
                 var image = new Picture
                 {
                     ImageName = imageName.Data!,
-                    ProductId = spareAccessorKomp.Id,
+                    ProductType = ProductType.SpareAccessorKomp,
+                    ProductId = mapped.Id,
                     SubCategoryId = spareAccessorKomp.SubCategoryId
                 };
                 await _context.Pictures.AddAsync(image);
@@ -117,7 +119,7 @@ public class SpareAccessorKompService : ISpareAccessorKompService
             if (spareAccessorKomp.Images != null)
             {
                 var images = await _context.Pictures
-                .Where(x => x.ProductId == spareAccessorKomp.Id && x.SubCategoryId == spareAccessorKomp.SubCategoryId)
+                .Where(x => x.ProductType == ProductType.SpareAccessorKomp && x.ProductId == spareAccessorKomp.Id && x.SubCategoryId == spareAccessorKomp.SubCategoryId)
                 .ToListAsync();
                 foreach (var item in images)
                 {
@@ -131,6 +133,7 @@ public class SpareAccessorKompService : ISpareAccessorKompService
                     var image = new Picture
                     {
                         ImageName = imageName.Data!,
+                        ProductType = ProductType.SpareAccessorKomp,
                         ProductId = spareAccessorKomp.Id,
                         SubCategoryId = spareAccessorKomp.SubCategoryId
                     };
@@ -154,7 +157,7 @@ public class SpareAccessorKompService : ISpareAccessorKompService
                 return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
             }
             var images = await _context.Pictures
-            .Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId)
+            .Where(x => x.ProductType == ProductType.SpareAccessorKomp && x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId)
             .ToListAsync();
             foreach (var item in images)
             {

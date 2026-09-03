@@ -3,6 +3,7 @@ using Domain.DTOs.PictureDTO;
 using Domain.DTOs.RealEstateDTOs.ApartmentDTOs;
 using Domain.Entities;
 using Domain.Entities.RealEstate;
+using Domain.Enum;
 using Domain.Filters.RealEstateFilters.ApartmentFilter;
 using Domain.Responses;
 using Infrastructure.Data;
@@ -49,7 +50,7 @@ public class ApartmentService : IApartmentService
                                 KitchenArea = a.KitchenArea,
                                 IsNewBuilding = a.IsNewBuilding,
                                 Images = _context.Pictures
-                                    .Where(p => p.ProductId == a.Id && p.SubCategoryId == a.SubCategoryId)
+                                    .Where(p => p.ProductType == ProductType.Apartment && p.ProductId == a.Id && p.SubCategoryId == a.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                     .ToList()
                             }).Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -78,7 +79,7 @@ public class ApartmentService : IApartmentService
                                 KitchenArea = a.KitchenArea,
                                 IsNewBuilding = a.IsNewBuilding,
                                 Images = _context.Pictures
-                                    .Where(p => p.ProductId == a.Id && p.SubCategoryId == a.SubCategoryId)
+                                    .Where(p => p.ProductType == ProductType.Apartment && p.ProductId == a.Id && p.SubCategoryId == a.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                     .ToList()
                             }).FirstOrDefaultAsync();
@@ -101,6 +102,7 @@ public class ApartmentService : IApartmentService
             var image = new Picture
             {
                 ImageName = imageName.Data!,
+                ProductType = ProductType.Apartment,
                 ProductId = mapped.Id,
                 SubCategoryId = mapped.SubCategoryId
             };
@@ -127,7 +129,7 @@ public class ApartmentService : IApartmentService
         if (apartment.Images != null)
         {
             var images = await _context.Pictures
-                .Where(p => p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)
+                .Where(p => p.ProductType == ProductType.Apartment && p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)
                 .ToListAsync();
             foreach (var item in images)
             {
@@ -141,6 +143,7 @@ public class ApartmentService : IApartmentService
                 var image = new Picture
                 {
                     ImageName = imageName.Data!,
+                    ProductType = ProductType.Apartment,
                     ProductId = find.Id,
                     SubCategoryId = find.SubCategoryId
                 };
@@ -163,7 +166,7 @@ public class ApartmentService : IApartmentService
             return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         var images = await _context.Pictures
-            .Where(p => p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)
+            .Where(p => p.ProductType == ProductType.Apartment && p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)
             .ToListAsync();
         foreach (var item in images)
         {

@@ -33,4 +33,10 @@ public class DataContext : IdentityDbContext<ApplicationUser>
     public DbSet<Apartment> Apartments { get; set; }
     public DbSet<CommercialRealEstate> CommercialRealEstates { get; set; }
     public DbSet<Cottage> Cottages { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+        builder.Entity<Picture>().HasIndex(p => new { p.ProductType, p.ProductId });
+    }
 }

@@ -3,6 +3,7 @@ using Domain.DTOs.PictureDTO;
 using Domain.DTOs.TransportDTOs.MotorbikeDTOs;
 using Domain.Entities;
 using Domain.Entities.Transport;
+using Domain.Enum;
 using Domain.Filters.TransportFilters.GetMotorbikeFilter;
 using Domain.Responses;
 using Infrastructure.Data;
@@ -54,7 +55,7 @@ public class MotorbikeService : IMotorbikeService
                                 Mileage = m.Mileage,
                                 Passengers = m.Passengers,
                                 Images = _context.Pictures
-                                          .Where(p => p.ProductId == m.Id && p.SubCategoryId == m.SubCategoryId)
+                                          .Where(p => p.ProductType == ProductType.Motorbike && p.ProductId == m.Id && p.SubCategoryId == m.SubCategoryId)
                                           .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                           .ToList()
                             }).Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -88,7 +89,7 @@ public class MotorbikeService : IMotorbikeService
                                     Mileage = m.Mileage,
                                     Passengers = m.Passengers,
                                     Images = _context.Pictures
-                                                              .Where(p => p.ProductId == m.Id && p.SubCategoryId == m.SubCategoryId)
+                                                              .Where(p => p.ProductType == ProductType.Motorbike && p.ProductId == m.Id && p.SubCategoryId == m.SubCategoryId)
                                                               .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                                               .ToList()
                                 }).FirstOrDefaultAsync();
@@ -111,6 +112,7 @@ public class MotorbikeService : IMotorbikeService
             var image = new Picture
             {
                 ImageName = imageName.Data!,
+                ProductType = ProductType.Motorbike,
                 ProductId = mapped.Id,
                 SubCategoryId = mapped.SubCategoryId
             };
@@ -137,7 +139,7 @@ public class MotorbikeService : IMotorbikeService
         if (motorbike.Images != null)
         {
             var images = await _context.Pictures.
-            Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).
+            Where(x => x.ProductType == ProductType.Motorbike && x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).
             ToListAsync();
 
             foreach (var item in images)
@@ -152,6 +154,7 @@ public class MotorbikeService : IMotorbikeService
                 var image = new Picture
                 {
                     ImageName = imageName.Data!,
+                    ProductType = ProductType.Motorbike,
                     ProductId = motorbike.Id,
                     SubCategoryId = motorbike.SubCategoryId
                 };
@@ -174,7 +177,7 @@ public class MotorbikeService : IMotorbikeService
             return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         var images = await _context.Pictures.
-        Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).
+        Where(x => x.ProductType == ProductType.Motorbike && x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).
         ToListAsync();
         foreach (var item in images)
         {

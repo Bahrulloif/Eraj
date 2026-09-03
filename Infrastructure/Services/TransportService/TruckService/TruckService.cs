@@ -3,6 +3,7 @@ using Domain.DTOs.PictureDTO;
 using Domain.DTOs.TransportDTOs.TruckDTOs;
 using Domain.Entities;
 using Domain.Entities.Transport;
+using Domain.Enum;
 using Domain.Filters.TransportFilter.TruckFilters;
 using Domain.Responses;
 using Infrastructure.Data;
@@ -53,7 +54,7 @@ public class TruckService : ITruckService
                                 PermittedMaximumWeight = t.PermittedMaximumWeight,
                                 Mileage = t.Mileage,
                                 Images = _context.Pictures.
-                                Where(x => x.ProductId == t.Id && x.SubCategoryId == t.SubCategoryId).
+                                Where(x => x.ProductType == ProductType.Truck && x.ProductId == t.Id && x.SubCategoryId == t.SubCategoryId).
                                 Select(c => new PictureDto { Id = c.Id, ImageName = c.ImageName }).
                                 ToList()
                             }).Skip((filter.PageNumber - 1) * filter.PageSize).
@@ -91,7 +92,7 @@ public class TruckService : ITruckService
                                 PermittedMaximumWeight = t.PermittedMaximumWeight,
                                 Mileage = t.Mileage,
                                 Images = _context.Pictures.
-                                Where(x => x.ProductId == t.Id && x.SubCategoryId == t.SubCategoryId).
+                                Where(x => x.ProductType == ProductType.Truck && x.ProductId == t.Id && x.SubCategoryId == t.SubCategoryId).
                                 Select(c => new PictureDto { Id = c.Id, ImageName = c.ImageName }).
                                 ToList()
                             }).FirstOrDefaultAsync();
@@ -114,6 +115,7 @@ public class TruckService : ITruckService
             var image = new Picture
             {
                 ImageName = imageName.Data!,
+                ProductType = ProductType.Truck,
                 ProductId = mapped.Id,
                 SubCategoryId = mapped.SubCategoryId
             };
@@ -140,7 +142,7 @@ public class TruckService : ITruckService
         if (truck.Images != null)
         {
             var images = await _context.Pictures.
-            Where(x => x.ProductId == truck.Id && x.SubCategoryId == truck.SubCategoryId).
+            Where(x => x.ProductType == ProductType.Truck && x.ProductId == truck.Id && x.SubCategoryId == truck.SubCategoryId).
             ToListAsync();
             foreach (var item in images)
             {
@@ -155,6 +157,7 @@ public class TruckService : ITruckService
                 var image = new Picture
                 {
                     ImageName = imageName.Data!,
+                    ProductType = ProductType.Truck,
                     ProductId = find.Id,
                     SubCategoryId = find.SubCategoryId
                 };
@@ -177,7 +180,7 @@ public class TruckService : ITruckService
             return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         var images = await _context.Pictures.
-        Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).
+        Where(x => x.ProductType == ProductType.Truck && x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).
         ToListAsync();
         foreach (var item in images)
         {

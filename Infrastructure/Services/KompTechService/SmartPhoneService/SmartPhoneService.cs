@@ -3,6 +3,7 @@ using Domain.DTOs.KomTechDTOs.SmartPhoneDTOs;
 using Domain.DTOs.PictureDTO;
 using Domain.Entities;
 using Domain.Entities.KompTech;
+using Domain.Enum;
 using Domain.Filters.KompTechFilters.SmartPhoneFilters;
 using Domain.Responses;
 using Infrastructure.Data;
@@ -44,7 +45,7 @@ public class SmartPhoneService : ISmartPhoneService
                                 RAM = s.RAM,
                                 ROM = s.ROM,
                                 Images = _context.Pictures.
-                                    Where(p => p.ProductId == s.Id && p.SubCategoryId == s.SubCategoryId).
+                                    Where(p => p.ProductType == ProductType.SmartPhone && p.ProductId == s.Id && p.SubCategoryId == s.SubCategoryId).
                                     Select(t => new PictureDto { Id = t.Id, ImageName = t.ImageName }).
                                     ToList()
                             }).
@@ -76,7 +77,7 @@ public class SmartPhoneService : ISmartPhoneService
                                 RAM = s.RAM,
                                 ROM = s.ROM,
                                 Images = _context.Pictures.
-                                Where(p => p.ProductId == s.Id && p.SubCategoryId == s.SubCategoryId).
+                                Where(p => p.ProductType == ProductType.SmartPhone && p.ProductId == s.Id && p.SubCategoryId == s.SubCategoryId).
                                 Select(x => new PictureDto { Id = x.Id, ImageName = x.ImageName }).
                                 ToList()
                             }).
@@ -103,6 +104,7 @@ public class SmartPhoneService : ISmartPhoneService
             var image = new Picture
             {
                 ImageName = imageName.Data!,
+                ProductType = ProductType.SmartPhone,
                 ProductId = mapped.Id,
                 SubCategoryId = mapped.SubCategoryId
             };
@@ -125,7 +127,7 @@ public class SmartPhoneService : ISmartPhoneService
             _context.SmartPhones.Update(mapped);
             if (smartPhone.Images != null)
             {
-                var images = await _context.Pictures.Where(p => p.ProductId == smartPhone.Id && p.SubCategoryId == smartPhone.SubCategoryId).ToListAsync();
+                var images = await _context.Pictures.Where(p => p.ProductType == ProductType.SmartPhone && p.ProductId == smartPhone.Id && p.SubCategoryId == smartPhone.SubCategoryId).ToListAsync();
                 foreach (var item in images)
                 {
                     _fileService.DeleteFile(item.ImageName);
@@ -140,6 +142,7 @@ public class SmartPhoneService : ISmartPhoneService
                     var image = new Picture
                     {
                         ImageName = imageName.Data!,
+                        ProductType = ProductType.SmartPhone,
                         ProductId = mapped.Id,
                         SubCategoryId = mapped.SubCategoryId
                     };
@@ -163,7 +166,7 @@ public class SmartPhoneService : ISmartPhoneService
         {
             return new Response<string>(HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
-        var images = await _context.Pictures.Where(s => s.ProductId == find.Id && s.SubCategoryId == find.SubCategoryId).ToListAsync();
+        var images = await _context.Pictures.Where(s => s.ProductType == ProductType.SmartPhone && s.ProductId == find.Id && s.SubCategoryId == find.SubCategoryId).ToListAsync();
         foreach (var item in images)
         {
             _fileService.DeleteFile(item.ImageName);

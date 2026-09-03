@@ -3,6 +3,7 @@ using Domain.DTOs.PictureDTO;
 using Domain.DTOs.RealEstateDTOs.CottageDTOs;
 using Domain.Entities;
 using Domain.Entities.RealEstate;
+using Domain.Enum;
 using Domain.Filters.RealEstateFilters.CottageFilter;
 using Domain.Responses;
 using Infrastructure.Data;
@@ -46,7 +47,7 @@ public class CottageService : ICottageService
                                 WallMaterial = c.WallMaterial,
                                 Parking = c.Parking,
                                 Images = _context.Pictures
-                                    .Where(p => p.ProductId == c.Id && p.SubCategoryId == c.SubCategoryId)
+                                    .Where(p => p.ProductType == ProductType.Cottage && p.ProductId == c.Id && p.SubCategoryId == c.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                     .ToList()
                             }).Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -72,7 +73,7 @@ public class CottageService : ICottageService
                                 WallMaterial = c.WallMaterial,
                                 Parking = c.Parking,
                                 Images = _context.Pictures
-                                    .Where(p => p.ProductId == c.Id && p.SubCategoryId == c.SubCategoryId)
+                                    .Where(p => p.ProductType == ProductType.Cottage && p.ProductId == c.Id && p.SubCategoryId == c.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                     .ToList()
                             }).FirstOrDefaultAsync();
@@ -95,6 +96,7 @@ public class CottageService : ICottageService
             var image = new Picture
             {
                 ImageName = imageName.Data!,
+                ProductType = ProductType.Cottage,
                 ProductId = mapped.Id,
                 SubCategoryId = mapped.SubCategoryId
             };
@@ -121,7 +123,7 @@ public class CottageService : ICottageService
         if (cottage.Images != null)
         {
             var images = await _context.Pictures
-                .Where(p => p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)
+                .Where(p => p.ProductType == ProductType.Cottage && p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)
                 .ToListAsync();
             foreach (var item in images)
             {
@@ -135,6 +137,7 @@ public class CottageService : ICottageService
                 var image = new Picture
                 {
                     ImageName = imageName.Data!,
+                    ProductType = ProductType.Cottage,
                     ProductId = find.Id,
                     SubCategoryId = find.SubCategoryId
                 };
@@ -157,7 +160,7 @@ public class CottageService : ICottageService
             return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
         }
         var images = await _context.Pictures
-            .Where(p => p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)
+            .Where(p => p.ProductType == ProductType.Cottage && p.ProductId == find.Id && p.SubCategoryId == find.SubCategoryId)
             .ToListAsync();
         foreach (var item in images)
         {

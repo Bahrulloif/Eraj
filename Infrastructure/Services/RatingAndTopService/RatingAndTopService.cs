@@ -2,6 +2,7 @@ using AutoMapper;
 using Domain.DTOs.PictureDTO;
 using Domain.DTOs.RatingAndTopDTO;
 using Domain.DTOs.RatingAndTopDTOs;
+using Domain.Enum;
 using Domain.Filters.RatingAndTopFilter;
 using Domain.Responses;
 using Infrastructure.Data;
@@ -42,6 +43,10 @@ public class RatingAndTopService : IRatingAndTopService
                                      SubCategoryId = result.Key.SubCategoryId,
                                      Model = result.Select(i => i.Model).First(),
                                      Price = result.Select(i => i.Price).First(),
+                                     // NOTE: Orders (unlike the 11 product tables) has no product-type discriminator,
+                                     // so this lookup can't filter by ProductType and keeps relying on
+                                     // (ProductId, SubCategoryId) alone - same collision risk Picture had before
+                                     // ProductType was added elsewhere. Would need ProductType added to Order too.
                                      Images = _context.Pictures.Where(i => i.ProductId == result.Key.ProductId && i.SubCategoryId == result.Key.SubCategoryId)
                                      .Select(z => new PictureDto { Id = z.Id, ImageName = z.ImageName }).ToList()
                                  }).Take(20).ToListAsync();
@@ -130,7 +135,7 @@ public class RatingAndTopService : IRatingAndTopService
             Model = z.Model,
             Price = z.Price,
             Images = _context.Pictures
-                .Where(x => x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
+                .Where(x => x.ProductType == ProductType.SmartPhone && x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
                 .Select(y => new PictureDto { Id = y.Id, ImageName = y.ImageName }).ToList()
         }).ToListAsync();
         hotdiscount.AddRange(smart);
@@ -147,7 +152,7 @@ public class RatingAndTopService : IRatingAndTopService
             Model = z.Model,
             Price = z.Price,
             Images = _context.Pictures
-                .Where(x => x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
+                .Where(x => x.ProductType == ProductType.NoteBook && x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
                 .Select(y => new PictureDto { Id = y.Id, ImageName = y.ImageName }).ToList()
         }).ToListAsync();
         hotdiscount.AddRange(noteBook);
@@ -163,7 +168,7 @@ public class RatingAndTopService : IRatingAndTopService
             Model = z.Model,
             Price = z.Price,
             Images = _context.Pictures
-          .Where(x => x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
+          .Where(x => x.ProductType == ProductType.Tablet && x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
           .Select(y => new PictureDto { Id = y.Id, ImageName = y.ImageName }).ToList()
         }).ToListAsync();
         hotdiscount.AddRange(tablet);
@@ -179,7 +184,7 @@ public class RatingAndTopService : IRatingAndTopService
             Model = z.Model,
             Price = z.Price,
             Images = _context.Pictures
-           .Where(x => x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
+           .Where(x => x.ProductType == ProductType.SpareAccessorKomp && x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
            .Select(y => new PictureDto { Id = y.Id, ImageName = y.ImageName })
            .ToList()
         }).ToListAsync();
@@ -196,7 +201,7 @@ public class RatingAndTopService : IRatingAndTopService
             Model = z.Model,
             Price = z.Price,
             Images = _context.Pictures
-            .Where(x => x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
+            .Where(x => x.ProductType == ProductType.Car && x.ProductId == z.Id && x.SubCategoryId == z.SubCategoryId)
             .Select(y => new PictureDto { Id = y.Id, ImageName = y.ImageName })
             .ToList()
         }).ToListAsync();

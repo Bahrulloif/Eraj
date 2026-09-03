@@ -3,6 +3,7 @@ using Domain.DTOs.PictureDTO;
 using Domain.DTOs.TransportDTOs.SpareAccessorTranspDTOs;
 using Domain.Entities;
 using Domain.Entities.Transport;
+using Domain.Enum;
 using Domain.Filters.TransportFilter.SpareAccessorTranspFilters;
 using Domain.Responses;
 using Infrastructure.Data;
@@ -40,7 +41,7 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
                                 Price = a.Price,
                                 DiscountPrice = a.DiscountPrice,
                                 Images = _context.Pictures
-                                    .Where(p => p.ProductId == a.Id && p.SubCategoryId == a.SubCategoryId)
+                                    .Where(p => p.ProductType == ProductType.SpareAccessorTransp && p.ProductId == a.Id && p.SubCategoryId == a.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                     .ToList()
                             }).Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -63,7 +64,7 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
                                 Price = a.Price,
                                 DiscountPrice = a.DiscountPrice,
                                 Images = _context.Pictures
-                                    .Where(p => p.ProductId == a.Id && p.SubCategoryId == a.SubCategoryId)
+                                    .Where(p => p.ProductType == ProductType.SpareAccessorTransp && p.ProductId == a.Id && p.SubCategoryId == a.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
                                     .ToList()
                             }).FirstOrDefaultAsync();
@@ -88,7 +89,8 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
                 var image = new Picture
                 {
                     ImageName = imageName.Data!,
-                    ProductId = spareAccessorTransp.Id,
+                    ProductType = ProductType.SpareAccessorTransp,
+                    ProductId = mapped.Id,
                     SubCategoryId = spareAccessorTransp.SubCategoryId
                 };
                 await _context.Pictures.AddAsync(image);
@@ -112,7 +114,7 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
             await _context.SaveChangesAsync();
             if (spareAccessorTransp.Images != null)
             {
-                var images = await _context.Pictures.Where(x => x.ProductId == spareAccessorTransp.Id && x.SubCategoryId == spareAccessorTransp.SubCategoryId).ToListAsync();
+                var images = await _context.Pictures.Where(x => x.ProductType == ProductType.SpareAccessorTransp && x.ProductId == spareAccessorTransp.Id && x.SubCategoryId == spareAccessorTransp.SubCategoryId).ToListAsync();
                 foreach (var item in images)
                 {
                     _fileService.DeleteFile(item.ImageName);
@@ -125,6 +127,7 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
                     var image = new Picture
                     {
                         ImageName = imageName.Data!,
+                        ProductType = ProductType.SpareAccessorTransp,
                         ProductId = spareAccessorTransp.Id,
                         SubCategoryId = spareAccessorTransp.SubCategoryId
                     };
@@ -147,7 +150,7 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
             {
                 return new Response<string>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this listing");
             }
-            var images = await _context.Pictures.Where(x => x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).ToListAsync();
+            var images = await _context.Pictures.Where(x => x.ProductType == ProductType.SpareAccessorTransp && x.ProductId == find.Id && x.SubCategoryId == find.SubCategoryId).ToListAsync();
             foreach (var item in images)
             {
                 _fileService.DeleteFile(item.ImageName);
