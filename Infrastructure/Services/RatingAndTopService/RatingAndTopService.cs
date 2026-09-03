@@ -24,56 +24,32 @@ public class RatingAndTopService : IRatingAndTopService
     }
     public async Task<PagedResponse<List<RatingAndTopDTO>>> PopularCategory(RatingAndTopFilter filter)
     {
-        List<RatingAndTopDTO> popularCategory = new List<RatingAndTopDTO>();
-        var popularList1 = await _context.Orders
-        .GroupBy(i => new { i.ProductId, i.SubCategoryId })
-        .OrderByDescending(y => y.Sum(t => t.Quantity))
-        .Select(x => new RatingAndTopDTO
-        {
-            ProductId = x.Select(z => z.ProductId).First(),
+        // Ranked by total quantity ordered, grouped by (ProductId, SubCategoryId) - one row
+        // per distinct product, not per order. Pagination has to operate on these groups,
+        // not on the raw Orders rows.
+        var groupedQuery = _context.Orders
+            .GroupBy(o => new { o.ProductId, o.SubCategoryId })
+            .OrderByDescending(g => g.Sum(o => o.Quantity));
 
-        }).ToListAsync();
-        var query = _context.Orders.AsQueryable();
-        var popularList = await (from data in query
-                                 group data by new { data.ProductId, data.SubCategoryId } into result
-                                 orderby result.Sum(i => i.Quantity) descending
-                                 select new RatingAndTopDTO
-                                 {
-                                     ProductId = result.Key.ProductId,
-                                     SubCategoryId = result.Key.SubCategoryId,
-                                     Model = result.Select(i => i.Model).First(),
-                                     Price = result.Select(i => i.Price).First(),
-                                     // NOTE: Orders (unlike the 11 product tables) has no product-type discriminator,
-                                     // so this lookup can't filter by ProductType and keeps relying on
-                                     // (ProductId, SubCategoryId) alone - same collision risk Picture had before
-                                     // ProductType was added elsewhere. Would need ProductType added to Order too.
-                                     Images = _context.Pictures.Where(i => i.ProductId == result.Key.ProductId && i.SubCategoryId == result.Key.SubCategoryId)
-                                     .Select(z => new PictureDto { Id = z.Id, ImageName = z.ImageName }).ToList()
-                                 }).Take(20).ToListAsync();
-        // foreach (var item in popularList)
-        // {
-        //     var a = new RatingAndTopDTO();
-        //     a.ProductId = item.ProductId;
-        //     a.SubCategoryId = item.SubCategoryId;
-        //     a.Model = (await from s in _context.SmartPhones
-        //                      join n in _context.NoteBooks on s.Id equals n.Id into table1
-        //                      from t1 in table1
-        //                      join t in _context.Tablets on t1.Id equals t.Id into table2
-        //                      from t2 in table2
-        //                      join sakomp in _context.SpareAccessorKomps on t2.Id equals sakomp.Id into table3
-        //                      from t3 in table3
-        //                      join c in _context.Cars on t3.Id equals c.Id into table4
-        //                      from t4 in table4
-        //                      join m in _context.Motorbikes on t4.Id equals m.Id into table5
-        //                      from t5 in table5
-        //                      join tr in _context.Trucks on t5.Id equals tr.Id into table6
-        //                      from t6 in table6
-        //                      join satran in _context.SpareAccessorTransps on t6.Id equals satran.Id into table7
-        //                      from t7 in table7
-        //                      where t7.Id == item.Id && t7.SubCategoryId == item.SubCategoryId
-        //                      select t7.Model).FirstOrDefaultAsync();
-        // }
-        var totalRecord = query.Count();
+        var totalRecord = await groupedQuery.CountAsync();
+
+        var popularList = await groupedQuery
+            .Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize)
+            .Select(result => new RatingAndTopDTO
+            {
+                ProductId = result.Key.ProductId,
+                SubCategoryId = result.Key.SubCategoryId,
+                Model = result.Select(i => i.Model).First(),
+                Price = result.Select(i => i.Price).First(),
+                // NOTE: Orders (unlike the 11 product tables) has no product-type discriminator,
+                // so this lookup can't filter by ProductType and keeps relying on
+                // (ProductId, SubCategoryId) alone - same collision risk Picture had before
+                // ProductType was added elsewhere. Would need ProductType added to Order too.
+                Images = _context.Pictures.Where(i => i.ProductId == result.Key.ProductId && i.SubCategoryId == result.Key.SubCategoryId)
+                    .Select(z => new PictureDto { Id = z.Id, ImageName = z.ImageName }).ToList()
+            }).ToListAsync();
+
         return new PagedResponse<List<RatingAndTopDTO>>(popularList, filter.PageNumber, filter.PageSize, totalRecord);
     }
 
