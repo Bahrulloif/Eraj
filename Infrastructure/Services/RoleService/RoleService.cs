@@ -50,7 +50,7 @@ public class RoleService : IRoleService
         if (user == null)
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "User not found");
         var role = await _roleManager.FindByIdAsync(roleDTO.RoleId);
-        if (role == null)
+        if (role?.Name == null)
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "Role not Found");
         await _userManager.AddToRoleAsync(user, role.Name);
 
@@ -63,7 +63,7 @@ public class RoleService : IRoleService
         if (user == null)
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "User not found");
         var role = await _roleManager.FindByIdAsync(roleDTO.RoleId);
-        if (role == null)
+        if (role?.Name == null)
             return new Response<string>(System.Net.HttpStatusCode.NotFound, "Role not Found");
         await _userManager.RemoveFromRoleAsync(user, role.Name);
         return new Response<string>("Role removed from user successfully");

@@ -24,7 +24,10 @@ public class DataContext : IdentityDbContext<ApplicationUser>
     //   public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     public DbSet<Picture> Pictures { get; set; }
 
-    public DbSet<Roles> Roles { get; set; }
+    // Shadows IdentityDbContext<ApplicationUser>.Roles (DbSet<IdentityRole>) on purpose: the app
+    // uses the derived Roles : IdentityRole everywhere (e.g. RoleManager<Roles>), and DbSet<T> is
+    // invariant so `override` isn't an option here even though the base property is virtual.
+    public new DbSet<Roles> Roles { get; set; }
     public DbSet<Car> Cars { get; set; }
     public DbSet<Motorbike> Motorbikes { get; set; }
     public DbSet<Truck> Trucks { get; set; }
