@@ -18,8 +18,18 @@ public class RatingAndTopController : BaseController
     {
         _ratingAndTopService = ratingAndTopService;
     }
-    //   public Task<PagedResponse<List<RatingAndTopDTO>>> PopularCategory(RatingAndTopFilter filter);
-    
+    [HttpGet("get/popularCategory"), AllowAnonymous]
+    public async Task<ActionResult> PopularCategory([FromQuery] RatingAndTopFilter filter)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _ratingAndTopService.PopularCategory(filter);
+            return StatusCode(result.StatusCode, result);
+        }
+        var response = new Response<RatingAndTopDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
+        return StatusCode(response.StatusCode, response);
+    }
+
     [HttpGet("get/hotdicount"), AllowAnonymous]
     public async Task<ActionResult> HotDiscount([FromQuery] RatingAndTopFilter filter)
     {

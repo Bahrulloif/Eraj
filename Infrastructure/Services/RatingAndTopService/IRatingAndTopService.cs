@@ -7,7 +7,7 @@ namespace Infrastructure.Services.RatingAndTopService;
 
 public interface IRatingAndTopService
 {
-    // public Task<PagedResponse<List<RatingAndTopDTO>>> PopularCategory(RatingAndTopFilter filter);
+    public Task<PagedResponse<List<RatingAndTopDTO>>> PopularCategory(RatingAndTopFilter filter);
     public Task<PagedResponse<List<RatingAndTopDTO>>> HotDiscount(RatingAndTopFilter filter);
     // public Task<PagedResponse<List<RatingAndTopDTO>>> RecommendedProduct(RatingAndTopFilter filter);
     // public Task<PagedResponse<List<RatingAndTopDTO>>> PopularProduct(RatingAndTopFilter filter);
