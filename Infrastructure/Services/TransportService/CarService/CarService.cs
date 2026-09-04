@@ -157,6 +157,13 @@ public class CarService : ICarService
         foreach (var item in car.Images)
         {
             var imageName = _fileService.CreateFile(item);
+            if (imageName.StatusCode != (int)HttpStatusCode.OK)
+            {
+                // Rejected (wrong type, corrupt, etc.) - skip it rather than insert a Picture
+                // with a null ImageName, which would crash the whole request with an unhandled
+                // DbUpdateException on the NOT NULL constraint.
+                continue;
+            }
             var image = new Picture
             {
                 ImageName = imageName.Data!,
@@ -196,6 +203,10 @@ public class CarService : ICarService
                 foreach (var item in car.Images)
                 {
                     var imageName = _fileService.CreateFile(item);
+                    if (imageName.StatusCode != (int)HttpStatusCode.OK)
+                    {
+                        continue;
+                    }
                     var image = new Picture
                     {
                         ImageName = imageName.Data!,

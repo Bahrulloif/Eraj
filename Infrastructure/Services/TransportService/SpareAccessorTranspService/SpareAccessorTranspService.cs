@@ -89,6 +89,13 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
             foreach (var item in spareAccessorTransp.Images)
             {
                 var imageName = _fileService.CreateFile(item);
+                if (imageName.StatusCode != (int)System.Net.HttpStatusCode.OK)
+                {
+                    // Rejected (wrong type, corrupt, etc.) - skip it rather than insert a
+                    // Picture with a null ImageName, which would crash the whole request with an
+                    // unhandled DbUpdateException on the NOT NULL constraint.
+                    continue;
+                }
                 var image = new Picture
                 {
                     ImageName = imageName.Data!,
@@ -127,6 +134,10 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
                 foreach (var item in spareAccessorTransp.Images)
                 {
                     var imageName = _fileService.CreateFile(item);
+                    if (imageName.StatusCode != (int)System.Net.HttpStatusCode.OK)
+                    {
+                        continue;
+                    }
                     var image = new Picture
                     {
                         ImageName = imageName.Data!,
