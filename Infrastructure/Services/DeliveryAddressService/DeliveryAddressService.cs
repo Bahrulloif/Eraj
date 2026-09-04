@@ -31,7 +31,9 @@ public class DeliveryAddressService : IDeliveryAddressService
             var mapped = _mapper.Map<List<GetDeliveryAddressDTO>>(find);
             return new Response<List<GetDeliveryAddressDTO>>(mapped);
         }
-        var result = await query.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToListAsync();
+        // Skip/Take needs a deterministic order to paginate correctly - without it SQL doesn't
+        // guarantee row order, so results can drift or duplicate across pages.
+        var result = await query.OrderBy(d => d.Id).Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToListAsync();
         var response = _mapper.Map<List<GetDeliveryAddressDTO>>(result);
         return new Response<List<GetDeliveryAddressDTO>>(response);
 

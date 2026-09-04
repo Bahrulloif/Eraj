@@ -31,6 +31,9 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
         {
             query = query.Where(x => x.Model.ToLower().Contains(filter.Model.ToLower()));
         }
+        // Skip/Take needs a deterministic order to paginate correctly - without it SQL doesn't
+        // guarantee row order, so results can drift or duplicate across pages.
+        query = query.OrderBy(x => x.Id);
         var mapped = await (from a in query
                             select new GetSpareAccessorTranspDTO
                             {

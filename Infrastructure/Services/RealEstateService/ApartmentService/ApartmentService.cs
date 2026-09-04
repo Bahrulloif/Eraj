@@ -32,6 +32,9 @@ public class ApartmentService : IApartmentService
         {
             query = query.Where(x => x.NumberOfRooms == filter.NumberOfRooms);
         }
+        // Skip/Take needs a deterministic order to paginate correctly - without it SQL doesn't
+        // guarantee row order, so results can drift or duplicate across pages.
+        query = query.OrderBy(x => x.Id);
         var mapped = await (from a in query
                             select new GetApartmentDTO
                             {

@@ -28,7 +28,9 @@ public class CatalogService : ICatalogService
 
         }
 
-        var catalogs = await _context.Catalogs.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToListAsync();
+        // Skip/Take needs a deterministic order to paginate correctly - without it SQL doesn't
+        // guarantee row order, so results can drift or duplicate across pages.
+        var catalogs = await _context.Catalogs.OrderBy(x => x.CatalogId).Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToListAsync();
         var mapper = _mapper.Map<List<GetCatalogDTO>>(catalogs);
         return new Response<List<GetCatalogDTO>>(mapper);
     }

@@ -31,6 +31,9 @@ public class SmartPhoneService : ISmartPhoneService
         {
             query = query.Where(s => s.Model.ToLower().Contains(filter.Name.ToLower()));
         }
+        // Skip/Take needs a deterministic order to paginate correctly - without it SQL doesn't
+        // guarantee row order, so results can drift or duplicate across pages.
+        query = query.OrderBy(x => x.Id);
         var mapped = await (from s in query
                             select new GetSmartPhoneDTO
                             {
