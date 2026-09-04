@@ -41,6 +41,20 @@ catch (System.Exception)
 }
 
 // Configure the HTTP request pipeline.
+
+// Defense-in-depth alongside FileService's magic-byte validation (see its IsAllowedImage):
+// that check already keeps served Content-Type genuinely matching file content, so this
+// isn't covering a live gap - but it's a one-line safety net against any future regression
+// in that validation (or any other static/served content) being turned into a MIME-sniffing
+// attack by a browser that ignores the declared Content-Type. Registered first, ahead of
+// Swagger/static files/everything else, so it applies to every response - a later position
+// left it missing on Swagger's own routes (short-circuited before reaching it) when first tried.
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    await next();
+});
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
