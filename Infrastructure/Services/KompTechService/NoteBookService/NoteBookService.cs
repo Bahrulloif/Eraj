@@ -137,6 +137,7 @@ public class NoteBookService : INoteBookService
             var mapped = find;
             _mapper.Map(noteBook, mapped);
             _context.NoteBooks.Update(mapped);
+            await _context.SaveChangesAsync();
             if (noteBook.Images != null)
             {
                 var images = await _context.Pictures.Where(n => n.ProductType == ProductType.NoteBook && n.ProductId == noteBook.Id
