@@ -41,9 +41,66 @@ public class RatingAndTopController : BaseController
         var response =new Response<RatingAndTopDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
         return StatusCode(response.StatusCode, response);
     }
-    // public Task<PagedResponse<List<RatingAndTopDTO>>> RecommendedProduct(RatingAndTopFilter filter);
-    // public Task<PagedResponse<List<RatingAndTopDTO>>> PopularProduct(RatingAndTopFilter filter);
-    // public Task<PagedResponse<List<RatingAndTopDTO>>> HitOfTheYear(RatingAndTopFilter filter);
-    // public Task<PagedResponse<List<RatingAndTopDTO>>> HitOfTheMonth(RatingAndTopFilter filter);
-    // public Task<PagedResponse<List<RatingAndTopDTO>>> HitOfTheDay(RatingAndTopFilter filter);
+    [HttpGet("get/popularProduct"), AllowAnonymous]
+    public async Task<ActionResult> PopularProduct([FromQuery] RatingAndTopFilter filter)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _ratingAndTopService.PopularProduct(filter);
+            return StatusCode(result.StatusCode, result);
+        }
+        var response = new Response<RatingAndTopDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
+        return StatusCode(response.StatusCode, response);
+    }
+
+    [HttpGet("get/hitOfTheDay"), AllowAnonymous]
+    public async Task<ActionResult> HitOfTheDay([FromQuery] RatingAndTopFilter filter)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _ratingAndTopService.HitOfTheDay(filter);
+            return StatusCode(result.StatusCode, result);
+        }
+        var response = new Response<RatingAndTopDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
+        return StatusCode(response.StatusCode, response);
+    }
+
+    [HttpGet("get/hitOfTheMonth"), AllowAnonymous]
+    public async Task<ActionResult> HitOfTheMonth([FromQuery] RatingAndTopFilter filter)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _ratingAndTopService.HitOfTheMonth(filter);
+            return StatusCode(result.StatusCode, result);
+        }
+        var response = new Response<RatingAndTopDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
+        return StatusCode(response.StatusCode, response);
+    }
+
+    [HttpGet("get/hitOfTheYear"), AllowAnonymous]
+    public async Task<ActionResult> HitOfTheYear([FromQuery] RatingAndTopFilter filter)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _ratingAndTopService.HitOfTheYear(filter);
+            return StatusCode(result.StatusCode, result);
+        }
+        var response = new Response<RatingAndTopDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
+        return StatusCode(response.StatusCode, response);
+    }
+
+    // Personalized - no [AllowAnonymous]: BaseController requires auth by default, and this
+    // reads the caller's own order history via CurrentUserId (the JWT "sid" claim), never a
+    // client-supplied id, so there's no way to request another user's recommendations.
+    [HttpGet("get/recommendedProduct")]
+    public async Task<ActionResult> RecommendedProduct([FromQuery] RatingAndTopFilter filter)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _ratingAndTopService.RecommendedProduct(CurrentUserId!, filter);
+            return StatusCode(result.StatusCode, result);
+        }
+        var response = new Response<RatingAndTopDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
+        return StatusCode(response.StatusCode, response);
+    }
 }
