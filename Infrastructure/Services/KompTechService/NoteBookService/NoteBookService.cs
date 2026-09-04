@@ -59,10 +59,6 @@ public class NoteBookService : INoteBookService
     {
         var query = _context.NoteBooks.AsQueryable();
         query = query.Where(n => n.Id == noteBookId);
-        if (query == null)
-        {
-            return new Response<GetNoteBookDTO>(HttpStatusCode.NotFound, "NoteBook not found");
-        }
         var mapped = await (from n in query
                             select new GetNoteBookDTO
                             {

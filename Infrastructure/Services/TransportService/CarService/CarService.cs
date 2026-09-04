@@ -88,10 +88,6 @@ public class CarService : ICarService
     {
         var query = _context.Cars.AsQueryable();
         query = query.Where(c => c.Id == CarId);
-        if (query == null)
-        {
-            return new Response<GetCarDTO>(System.Net.HttpStatusCode.NotFound, "Car not found");
-        }
         var mapped = await (from c in query
                             select new GetCarDTO
                             {

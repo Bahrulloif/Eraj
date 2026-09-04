@@ -67,10 +67,6 @@ public class TruckService : ITruckService
     {
         var query = _context.Trucks.AsQueryable();
         query = query.Where(x => x.Id == truckId);
-        if (query == null)
-        {
-            return new Response<GetTruckDTO>(System.Net.HttpStatusCode.NotFound, "Truck not found");
-        }
         var mapped = await (from t in query
                             select new GetTruckDTO
                             {

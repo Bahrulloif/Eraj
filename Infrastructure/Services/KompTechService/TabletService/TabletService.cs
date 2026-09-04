@@ -58,11 +58,6 @@ public class TabletService : ITabletService
     {
         var query = _context.Tablets.AsQueryable();
         query = query.Where(t => t.Id == tabletId);
-        if (query == null)
-        {
-            return new Response<GetTabletDTO>(HttpStatusCode.NotFound, "Tablet not found");
-        }
-
         var mapped = await (from t in query
                             select new GetTabletDTO
                             {

@@ -58,11 +58,6 @@ public class SmartPhoneService : ISmartPhoneService
     {
         var query = _context.SmartPhones.AsQueryable();
         query = query.Where(s => s.Id == smartPhoneId);
-        // var find = await _context.SmartPhones.FirstOrDefaultAsync();
-        if (query == null)
-        {
-            return new Response<GetSmartPhoneDTO>(HttpStatusCode.NotFound, "SmartPhone not found");
-        }
         var mapped = await (from s in query
                             select new GetSmartPhoneDTO
                             {
