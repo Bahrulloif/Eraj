@@ -13,7 +13,7 @@ namespace Domain.Filters.MainFilter;
 // ASP.NET Core's normal model validation after binding, which every controller in this codebase
 // already checks via `if (ModelState.IsValid)` - so this closes it everywhere without touching
 // any of the ~20 controllers or services that use these filters.
-public class PaginationFilter
+public class PaginationFilter : IValidatableObject
 {
     [Range(1, int.MaxValue, ErrorMessage = "PageNumber must be at least 1.")]
     public int PageNumber { get; set; }
@@ -31,5 +31,22 @@ public class PaginationFilter
     {
         PageNumber = pageNumber < 1 ? 1 : pageNumber;
         PageSize = pageSize < 10 ? 10 : pageSize;
+    }
+
+    // [Range] above only bounds each field on its own - a PageNumber that's individually "valid"
+    // (e.g. int.MaxValue, which does satisfy PageNumber >= 1) can still overflow the plain `int`
+    // multiplication `(PageNumber - 1) * PageSize` that every Get method uses for Skip, wrapping
+    // to a negative number and reproducing the exact same unhandled-500-with-stack-trace crash
+    // the [Range] attributes were added to close - confirmed live with
+    // pageNumber=2147483647&pageSize=200. Checked here in 64-bit arithmetic, which can't overflow
+    // for any int32 inputs, so this catches every case the per-field bounds miss.
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if ((long)(PageNumber - 1) * PageSize > int.MaxValue)
+        {
+            yield return new ValidationResult(
+                "PageNumber is too large for the given PageSize.",
+                new[] { nameof(PageNumber) });
+        }
     }
 }
