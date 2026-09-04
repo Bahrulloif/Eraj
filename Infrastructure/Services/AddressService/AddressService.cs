@@ -17,27 +17,45 @@ public class AddressService : IAddressService
         _context = context;
         _mapper = mapper;
     }
-    public async Task<Response<List<GetAddressDTO>>> GetAddress(AddressFilter filter)
+    // Address stores real PII (country/city/street), and ownership isn't just OwnerId - see
+    // OwnsAddress below. A non-privileged caller only ever sees addresses they own directly or
+    // via their own Profile/DeliveryAddress link, never the whole table.
+    public async Task<Response<List<GetAddressDTO>>> GetAddress(AddressFilter filter, string currentUserId, bool isPrivileged)
     {
+        var query = _context.Addresses.AsQueryable();
+        if (!isPrivileged)
+        {
+            query = query.Where(a =>
+                a.OwnerId == currentUserId ||
+                _context.Profiles.Any(p => p.ApplicationUserId == currentUserId && p.AddressId == a.Id) ||
+                _context.DeliveryAddresses.Any(d => d.ApplicationUserId == currentUserId && d.AddressId == a.Id));
+        }
         if (filter.Country != null)
         {
-            var find = await _context.Addresses.Where(a => a.Country == filter.Country).AsNoTracking().ToListAsync();
+            var find = await query.Where(a => a.Country == filter.Country).AsNoTracking().ToListAsync();
             var mapped = _mapper.Map<List<GetAddressDTO>>(find);
             return new Response<List<GetAddressDTO>>(mapped);
         }
-        var result = await _context.Addresses.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).AsNoTracking().ToListAsync();
+        // Skip/Take needs a deterministic order to paginate correctly - without it SQL doesn't
+        // guarantee row order, so results can drift or duplicate across pages.
+        var result = await query.OrderBy(a => a.Id)
+            .Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).AsNoTracking().ToListAsync();
         var response = _mapper.Map<List<GetAddressDTO>>(result);
         return new Response<List<GetAddressDTO>>(response);
     }
-    public async Task<Response<GetAddressDTO>> GetAddressById(int addressId)
+    public async Task<Response<GetAddressDTO>> GetAddressById(int addressId, string currentUserId, bool isPrivileged)
     {
         var find = await _context.Addresses.AsNoTracking().FirstOrDefaultAsync(a => a.Id == addressId);
-        if (find != null)
+        if (find == null)
         {
-            var mapped = _mapper.Map<GetAddressDTO>(find);
-            return new Response<GetAddressDTO>(mapped);
+            return new Response<GetAddressDTO>(System.Net.HttpStatusCode.NotFound, "Address Not Found");
         }
-        return new Response<GetAddressDTO>(System.Net.HttpStatusCode.NotFound, "Address Not Found");
+        if (!isPrivileged && !await OwnsAddress(find, currentUserId))
+        {
+            return new Response<GetAddressDTO>(System.Net.HttpStatusCode.Forbidden, "You do not have access to this address");
+        }
+        var mapped = _mapper.Map<GetAddressDTO>(find);
+        return new Response<GetAddressDTO>(mapped);
     }
     public async Task<Response<GetAddressDTO>> AddAddress(AddAddressDTO address, string currentUserId)
     {

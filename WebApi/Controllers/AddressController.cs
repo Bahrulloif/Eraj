@@ -2,7 +2,6 @@ using Domain.DTOs.AddressDTO;
 using Domain.Filters.AddressFilter;
 using Domain.Responses;
 using Infrastructure.Services.AddressService;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
@@ -17,12 +16,11 @@ public class AddressController : BaseController
         _addressService = addressService;
     }
     [HttpGet("get/address")]
-    [AllowAnonymous]
     public async Task<IActionResult> GetAddress([FromQuery]AddressFilter filter)
     {
         if (ModelState.IsValid)
         {
-            var result = await _addressService.GetAddress(filter);
+            var result = await _addressService.GetAddress(filter, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<List<GetAddressDTO>>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
@@ -33,7 +31,7 @@ public class AddressController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await _addressService.GetAddressById(addressId);
+            var result = await _addressService.GetAddressById(addressId, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
         var response = new Response<GetAddressDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
