@@ -59,7 +59,7 @@ public class DeliveryAddressController : BaseController
     var response = new Response<GetDeliveryAddressDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
     return StatusCode(response.StatusCode, response);
   }
-  [HttpDelete("delete/deliveryaAddress")]
+  [HttpDelete("delete/deliveryAddress")]
   public async Task<IActionResult> DeleteDeliveryAddress(int deliveryAddressId)
   {
     if (ModelState.IsValid)
