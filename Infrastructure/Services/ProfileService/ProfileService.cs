@@ -56,6 +56,10 @@ public class ProfileService : IProfileService
         {
             return new Response<GetProfileDTO>(System.Net.HttpStatusCode.Conflict, "Profile already exists, use update instead");
         }
+        if (profile.AddressId != null && !await _context.Addresses.AnyAsync(a => a.Id == profile.AddressId))
+        {
+            return new Response<GetProfileDTO>(System.Net.HttpStatusCode.NotFound, "Address not found");
+        }
         var mapped = _mapper.Map<ProfileUser>(profile);
         mapped.ApplicationUserId = currentUserId;
         await _context.Profiles.AddAsync(mapped);
@@ -72,6 +76,13 @@ public class ProfileService : IProfileService
         var find = await _context.Profiles.FirstOrDefaultAsync(p => p.ApplicationUserId == profile.Id);
         if (find != null)
         {
+            // A bogus/nonexistent AddressId used to reach SaveChangesAsync unchecked and crash
+            // with an unhandled DbUpdateException (FK_Profiles_Addresses_AddressId) - reproduced
+            // live. Reject it cleanly instead.
+            if (profile.AddressId != null && !await _context.Addresses.AnyAsync(a => a.Id == profile.AddressId))
+            {
+                return new Response<GetProfileDTO>(System.Net.HttpStatusCode.NotFound, "Address not found");
+            }
             _mapper.Map(profile, find);
             _context.Profiles.Update(find);
             await _context.SaveChangesAsync();
