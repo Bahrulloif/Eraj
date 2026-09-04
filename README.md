@@ -10,7 +10,7 @@
 `../CLAUDE.md` как обычно.
 
 ## Статус
-**Следующий пункт:** 4.1 Car — Add (разделы 2 и 3 полностью пройдены)
+**Следующий пункт:** 6.1 Откат миграции (разделы 2, 3, 4, 5 полностью пройдены)
 
 ---
 
@@ -114,28 +114,23 @@
 прикрепляется, файл не появляется на диске; настоящий PNG — прикрепляется нормально. Сегодня
 живьём проверен только `SpareAccessorKomp.Add`.
 
-- [ ] 4.1 Car — Add
-- [ ] 4.2 Car — Update
-- [ ] 4.3 Truck — Add
-- [ ] 4.4 Truck — Update
-- [ ] 4.5 Motorbike — Add
-- [ ] 4.6 Motorbike — Update
-- [ ] 4.7 SpareAccessorTransp — Add
-- [ ] 4.8 SpareAccessorTransp — Update
-- [ ] 4.9 NoteBook — Add
-- [ ] 4.10 NoteBook — Update
-- [ ] 4.11 SmartPhone — Add
-- [ ] 4.12 SmartPhone — Update
-- [ ] 4.13 Tablet — Add
-- [ ] 4.14 Tablet — Update
-- [ ] 4.15 SpareAccessorKomp — Add (уже проверено, перепроверить одной строкой)
-- [ ] 4.16 SpareAccessorKomp — Update
-- [ ] 4.17 Apartment — Add
-- [ ] 4.18 Apartment — Update
-- [ ] 4.19 CommercialRealEstate — Add
-- [ ] 4.20 CommercialRealEstate — Update
-- [ ] 4.21 Cottage — Add
-- [ ] 4.22 Cottage — Update
+- [x] 4.1–4.22 Все 22 места проверены 2026-09-04 — живьём + структурно, без баг найден:
+      - Структурно: валидация файла живёт в одном общем `FileService.CreateFile` (magic bytes +
+        allowlist расширений), все 22 вызывающих места используют одну и ту же функцию через
+        одинаковый guard `if (imageName.StatusCode != OK) continue;` — подтверждено `grep`
+        (ровно 2 на файл × 11 файлов = 22) и построчным чтением полных файлов
+        `NoteBookService`/`ApartmentService`/`CommercialRealEstateService`/`CottageService`.
+      - Живьём (5 прогонов, покрывают Add и Update, все 3 домена — транспорт/компьютерная
+        техника/недвижимость): `Car.Add` — три файла в одном запросе (валидный PNG + `.html`,
+        переименованный в `.png` + настоящий `.html`) — прикрепился только валидный PNG, остальные
+        два молча отклонены, товар создан нормально; `Car.Update` (по правильному маршруту
+        `POST post/updateCar` — не `PUT`, отдельно не баг, а особенность именования маршрутов
+        этого контроллера) — только `.html` — `200`, старая картинка удалена, новая не
+        прикреплена (отклонена), без `500`; `NoteBook.Add` — только `.html` — `200`, картинок 0;
+        `Cottage.Add` — только переименованный `.html`→`.png` — `200`, картинок 0. Ни разу не было
+        осиротевшего файла на диске (`wwwroot/Images/*.html` — пусто после каждого теста) и ни
+        разу `500`. `SpareAccessorKomp.Add` дополнительно уже проверялся живьём в прошлой сессии
+        (см. `../CLAUDE.md`, коммит `c2cb888`).
 
 ## 5. `Picture.ProductType` — по всем 11 типам
 
