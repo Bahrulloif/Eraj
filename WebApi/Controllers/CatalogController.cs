@@ -18,8 +18,11 @@ public class CatalogController : BaseController
         _catalogService = catalogService;
     }
 
-    [HttpGet("get/catalogs")]
-    [Authorize(Roles = "SuperAdmin, Admin")]
+    // Public read, matching Category/SubCategory/products beneath it in the same hierarchy -
+    // Catalog is the top of Catalog -> Category -> SubCategory -> products, and every other
+    // level is already public; there's no reason browsing the top level alone needs an account,
+    // let alone SuperAdmin/Admin (mutations below still require it, unchanged).
+    [HttpGet("get/catalogs"), AllowAnonymous]
     public async Task<IActionResult> GetCatalog([FromQuery] GetCatalogFilter filter)
     {
         if (ModelState.IsValid)
@@ -31,7 +34,7 @@ public class CatalogController : BaseController
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpGet("get/catalogById")]
+    [HttpGet("get/catalogById"), AllowAnonymous]
     public async Task<IActionResult> GetCatalogById(int catalogId)
     {
         if (ModelState.IsValid)
