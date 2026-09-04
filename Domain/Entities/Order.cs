@@ -7,6 +7,7 @@ public class Order
     public int Id { get; set; }
     public string ApplicationUserId { get; set; } = null!;
     public ApplicationUser ApplicationUser { get; set; } = null!;
+    public ProductType ProductType { get; set; }
     public int ProductId { get; set; }
     public int SubCategoryId { get; set; }
     public string Model { get; set; } = null!;
