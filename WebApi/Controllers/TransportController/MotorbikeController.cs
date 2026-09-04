@@ -24,7 +24,7 @@ public class MotorbikeController : BaseController
             var result = await _motorbikeService.GetMotorbike(filter);
             return StatusCode(result.StatusCode, result);
         }
-        var response = new Response<GetMotorbikeDTO>(System.Net.HttpStatusCode.BadGateway, ModelStateErrors());
+        var response = new Response<GetMotorbikeDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
         return StatusCode(response.StatusCode, response);
     }
     [HttpGet("get/getMotorbikeById"), AllowAnonymous]
@@ -61,7 +61,7 @@ public class MotorbikeController : BaseController
             var result = await _motorbikeService.UpdateMotorbike(motorbike, CurrentUserId!, IsPrivilegedUser);
             return StatusCode(result.StatusCode, result);
         }
-        var response = new Response<GetMotorbikeDTO>(System.Net.HttpStatusCode.BadGateway, ModelStateErrors());
+        var response = new Response<GetMotorbikeDTO>(System.Net.HttpStatusCode.BadRequest, ModelStateErrors());
         return StatusCode(response.StatusCode, response);
     }
 
