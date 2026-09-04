@@ -8,6 +8,7 @@ using Domain.Filters.RealEstateFilters.CottageFilter;
 using Domain.Responses;
 using Infrastructure.Data;
 using Infrastructure.Services.FileService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services.RealEstateService.CottageService;
@@ -93,7 +94,9 @@ public class CottageService : ICottageService
         mapped.OwnerId = currentUserId;
         await _context.Cottages.AddAsync(mapped);
         await _context.SaveChangesAsync();
-        foreach (var item in cottage.Images)
+        // Images is optional now (see AddCottageDTO) - AddCottage/UpdateCottage share this DTO,
+        // and requiring at least one photo on every update was never intended.
+        foreach (var item in cottage.Images ?? Enumerable.Empty<IFormFile>())
         {
             var imageName = _fileService.CreateFile(item);
             if (imageName.StatusCode != (int)System.Net.HttpStatusCode.OK)

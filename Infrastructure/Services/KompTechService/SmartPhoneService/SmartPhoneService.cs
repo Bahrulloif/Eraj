@@ -8,6 +8,7 @@ using Domain.Filters.KompTechFilters.SmartPhoneFilters;
 using Domain.Responses;
 using Infrastructure.Data;
 using Infrastructure.Services.FileService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
@@ -96,7 +97,9 @@ public class SmartPhoneService : ISmartPhoneService
         mapped.OwnerId = currentUserId;
         await _context.SmartPhones.AddAsync(mapped);
         await _context.SaveChangesAsync();
-        foreach (var item in smartPhone.Images)
+        // Images is optional now (see AddSmartPhoneDTO) - AddSmartPhone/UpdateSmartPhone share
+        // this DTO, and requiring at least one photo on every update was never intended.
+        foreach (var item in smartPhone.Images ?? Enumerable.Empty<IFormFile>())
         {
             var imageName = _fileService.CreateFile(item);
             if (imageName.StatusCode != (int)HttpStatusCode.OK)

@@ -8,6 +8,7 @@ using Domain.Filters.TransportFilter.TruckFilters;
 using Domain.Responses;
 using Infrastructure.Data;
 using Infrastructure.Services.FileService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 
@@ -108,7 +109,9 @@ public class TruckService : ITruckService
         mapped.OwnerId = currentUserId;
         await _context.Trucks.AddRangeAsync(mapped);
         await _context.SaveChangesAsync();
-        foreach (var item in truck.Images)
+        // Images is optional now (see AddTruckDTO) - AddTruck/UpdateTruck share this DTO, and
+        // requiring at least one photo on every update was never intended.
+        foreach (var item in truck.Images ?? Enumerable.Empty<IFormFile>())
         {
             var imageName = _fileService.CreateFile(item);
             if (imageName.StatusCode != (int)System.Net.HttpStatusCode.OK)

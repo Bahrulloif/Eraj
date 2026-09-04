@@ -8,6 +8,7 @@ using Domain.Filters.KompTechFilters.TabletFilter;
 using Domain.Responses;
 using Infrastructure.Data;
 using Infrastructure.Services.FileService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
@@ -93,7 +94,9 @@ public class TabletService : ITabletService
         mapped.OwnerId = currentUserId;
         await _context.Tablets.AddAsync(mapped);
         await _context.SaveChangesAsync();
-        foreach (var item in tablet.Images)
+        // Images is optional now (see AddTabletDTO) - AddTablet/UpdateTablet share this DTO, and
+        // requiring at least one photo on every update was never intended.
+        foreach (var item in tablet.Images ?? Enumerable.Empty<IFormFile>())
         {
             var imageName = _fileService.CreateFile(item);
             if (imageName.StatusCode != (int)HttpStatusCode.OK)

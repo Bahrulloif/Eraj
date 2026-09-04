@@ -9,6 +9,7 @@ using Domain.Responses;
 using Infrastructure.Data;
 using Infrastructure.Services.FileService;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services.TransportService.MotorbikeService;
@@ -109,7 +110,9 @@ public class MotorbikeService : IMotorbikeService
         mapped.OwnerId = currentUserId;
         await _context.Motorbikes.AddAsync(mapped);
         await _context.SaveChangesAsync();
-        foreach (var item in motorbike.Images)
+        // Images is optional now (see AddMotorbikeDTO) - AddMotorbike/UpdateMotorbike share this
+        // DTO, and requiring at least one photo on every update was never intended.
+        foreach (var item in motorbike.Images ?? Enumerable.Empty<IFormFile>())
         {
             var imageName = _fileService.CreateFile(item);
             if (imageName.StatusCode != (int)System.Net.HttpStatusCode.OK)

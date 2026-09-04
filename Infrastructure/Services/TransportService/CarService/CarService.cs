@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Net;
 using AutoMapper;
 using Domain.DTOs.PictureDTO;
@@ -10,6 +9,7 @@ using Domain.Filters.TransportFilters.CarsFilter;
 using Domain.Responses;
 using Infrastructure.Data;
 using Infrastructure.Services.FileService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services.TransportService.CarService;
@@ -154,7 +154,11 @@ public class CarService : ICarService
         mapped.OwnerId = currentUserId;
         await _context.Cars.AddAsync(mapped);
         await _context.SaveChangesAsync();
-        foreach (var item in car.Images)
+        // Images is optional now (see AddCarDTO) - AddCar/UpdateCar share this DTO, and
+        // requiring at least one photo on every update (just to change the price, say) was
+        // never intended - UpdateCar's `if (car.Images != null)` below was dead code until
+        // this became nullable.
+        foreach (var item in car.Images ?? Enumerable.Empty<IFormFile>())
         {
             var imageName = _fileService.CreateFile(item);
             if (imageName.StatusCode != (int)HttpStatusCode.OK)

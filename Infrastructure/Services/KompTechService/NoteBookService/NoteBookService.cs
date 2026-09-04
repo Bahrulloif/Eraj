@@ -8,6 +8,7 @@ using Domain.Filters.KompTechFilters.NoteBookFilters;
 using Domain.Responses;
 using Infrastructure.Data;
 using Infrastructure.Services.FileService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
@@ -96,7 +97,9 @@ public class NoteBookService : INoteBookService
         mapped.OwnerId = currentUserId;
         await _context.NoteBooks.AddAsync(mapped);
         await _context.SaveChangesAsync();
-        foreach (var item in noteBook.Images)
+        // Images is optional now (see AddNoteBookDTO) - AddNoteBook/UpdateNoteBook share this
+        // DTO, and requiring at least one photo on every update was never intended.
+        foreach (var item in noteBook.Images ?? Enumerable.Empty<IFormFile>())
         {
             var imageName = _fileService.CreateFile(item);
             if (imageName.StatusCode != (int)HttpStatusCode.OK)

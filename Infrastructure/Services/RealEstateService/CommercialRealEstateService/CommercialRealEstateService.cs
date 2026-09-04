@@ -8,6 +8,7 @@ using Domain.Filters.RealEstateFilters.CommercialRealEstateFilter;
 using Domain.Responses;
 using Infrastructure.Data;
 using Infrastructure.Services.FileService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services.RealEstateService.CommercialRealEstateService;
@@ -79,7 +80,9 @@ public class CommercialRealEstateService : ICommercialRealEstateService
         mapped.OwnerId = currentUserId;
         await _context.CommercialRealEstates.AddAsync(mapped);
         await _context.SaveChangesAsync();
-        foreach (var item in commercialRealEstate.Images)
+        // Images is optional now (see AddCommercialRealEstateDTO) - Add/Update share this DTO,
+        // and requiring at least one photo on every update was never intended.
+        foreach (var item in commercialRealEstate.Images ?? Enumerable.Empty<IFormFile>())
         {
             var imageName = _fileService.CreateFile(item);
             if (imageName.StatusCode != (int)System.Net.HttpStatusCode.OK)

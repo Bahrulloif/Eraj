@@ -4,5 +4,5 @@ namespace Domain.DTOs.TransportDTOs.SpareAccessorTranspDTOs;
 
 public class AddSpareAccessorTranspDTO : SpareAccessorTranspDTO
 {
-    public List<IFormFile> Images { get; set; } = null!;
+    public List<IFormFile>? Images { get; set; }
 }

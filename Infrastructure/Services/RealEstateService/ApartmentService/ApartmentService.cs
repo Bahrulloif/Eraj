@@ -8,6 +8,7 @@ using Domain.Filters.RealEstateFilters.ApartmentFilter;
 using Domain.Responses;
 using Infrastructure.Data;
 using Infrastructure.Services.FileService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services.RealEstateService.ApartmentService;
@@ -99,7 +100,9 @@ public class ApartmentService : IApartmentService
         mapped.OwnerId = currentUserId;
         await _context.Apartments.AddAsync(mapped);
         await _context.SaveChangesAsync();
-        foreach (var item in apartment.Images)
+        // Images is optional now (see AddApartmentDTO) - AddApartment/UpdateApartment share this
+        // DTO, and requiring at least one photo on every update was never intended.
+        foreach (var item in apartment.Images ?? Enumerable.Empty<IFormFile>())
         {
             var imageName = _fileService.CreateFile(item);
             if (imageName.StatusCode != (int)System.Net.HttpStatusCode.OK)
