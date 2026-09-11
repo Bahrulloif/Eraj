@@ -35,6 +35,14 @@ public class MotorbikeService : IMotorbikeService
         {
             query = query.Where(x => x.Model.ToLower().Contains(filter.Model.ToLower()));
         }
+        if (filter.SubCategoryId != null)
+        {
+            query = query.Where(x => x.SubCategoryId == filter.SubCategoryId);
+        }
+        if (filter.OwnerId != null)
+        {
+            query = query.Where(x => x.OwnerId == filter.OwnerId);
+        }
         // Skip/Take needs a deterministic order to paginate correctly - without it SQL doesn't
         // guarantee row order, so results can drift or duplicate across pages.
         query = query.OrderBy(x => x.Id);
@@ -58,6 +66,7 @@ public class MotorbikeService : IMotorbikeService
                                 GearBox = m.GearBox,
                                 Mileage = m.Mileage,
                                 Passengers = m.Passengers,
+                                OwnerId = m.OwnerId,
                                 Images = _context.Pictures
                                           .Where(p => p.ProductType == ProductType.Motorbike && p.ProductId == m.Id && p.SubCategoryId == m.SubCategoryId)
                                           .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
@@ -92,6 +101,7 @@ public class MotorbikeService : IMotorbikeService
                                     GearBox = m.GearBox,
                                     Mileage = m.Mileage,
                                     Passengers = m.Passengers,
+                                    OwnerId = m.OwnerId,
                                     Images = _context.Pictures
                                                               .Where(p => p.ProductType == ProductType.Motorbike && p.ProductId == m.Id && p.SubCategoryId == m.SubCategoryId)
                                                               .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })

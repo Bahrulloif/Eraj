@@ -32,6 +32,14 @@ public class SmartPhoneService : ISmartPhoneService
         {
             query = query.Where(s => s.Model.ToLower().Contains(filter.Name.ToLower()));
         }
+        if (filter.SubCategoryId != null)
+        {
+            query = query.Where(x => x.SubCategoryId == filter.SubCategoryId);
+        }
+        if (filter.OwnerId != null)
+        {
+            query = query.Where(x => x.OwnerId == filter.OwnerId);
+        }
         // Skip/Take needs a deterministic order to paginate correctly - without it SQL doesn't
         // guarantee row order, so results can drift or duplicate across pages.
         query = query.OrderBy(x => x.Id);
@@ -48,6 +56,7 @@ public class SmartPhoneService : ISmartPhoneService
                                 Price = s.Price,
                                 RAM = s.RAM,
                                 ROM = s.ROM,
+                                OwnerId = s.OwnerId,
                                 Images = _context.Pictures.
                                     Where(p => p.ProductType == ProductType.SmartPhone && p.ProductId == s.Id && p.SubCategoryId == s.SubCategoryId).
                                     Select(t => new PictureDto { Id = t.Id, ImageName = t.ImageName }).
@@ -75,6 +84,7 @@ public class SmartPhoneService : ISmartPhoneService
                                 Price = s.Price,
                                 RAM = s.RAM,
                                 ROM = s.ROM,
+                                OwnerId = s.OwnerId,
                                 Images = _context.Pictures.
                                 Where(p => p.ProductType == ProductType.SmartPhone && p.ProductId == s.Id && p.SubCategoryId == s.SubCategoryId).
                                 Select(x => new PictureDto { Id = x.Id, ImageName = x.ImageName }).

@@ -32,6 +32,14 @@ public class TabletService : ITabletService
         {
             query = query.Where(t => t.Model.ToLower().Contains(filter.Name.ToLower()));
         }
+        if (filter.SubCategoryId != null)
+        {
+            query = query.Where(x => x.SubCategoryId == filter.SubCategoryId);
+        }
+        if (filter.OwnerId != null)
+        {
+            query = query.Where(x => x.OwnerId == filter.OwnerId);
+        }
         // Skip/Take needs a deterministic order to paginate correctly - without it SQL doesn't
         // guarantee row order, so results can drift or duplicate across pages.
         query = query.OrderBy(x => x.Id);
@@ -48,6 +56,7 @@ public class TabletService : ITabletService
                                 Price = t.Price,
                                 RAM = t.RAM,
                                 ROM = t.ROM,
+                                OwnerId = t.OwnerId,
                                 Images = _context.Pictures.
                                     Where(p => p.ProductType == ProductType.Tablet && p.ProductId == t.Id && p.SubCategoryId == t.SubCategoryId).
                                     Select(x => new PictureDto { Id = x.Id, ImageName = x.ImageName }).
@@ -75,6 +84,7 @@ public class TabletService : ITabletService
                                 Price = t.Price,
                                 RAM = t.RAM,
                                 ROM = t.ROM,
+                                OwnerId = t.OwnerId,
                                 Images = _context.Pictures.Where(p => p.ProductType == ProductType.Tablet && p.ProductId == t.Id && p.SubCategoryId == t.SubCategoryId).
                              Select(x => new PictureDto { ImageName = x.ImageName, Id = x.Id }).ToList()
                             }).FirstOrDefaultAsync();

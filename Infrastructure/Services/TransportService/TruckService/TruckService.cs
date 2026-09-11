@@ -34,6 +34,14 @@ public class TruckService : ITruckService
         {
             query = query.Where(x => x.Model.ToLower().Contains(filter.Model.ToLower()));
         }
+        if (filter.SubCategoryId != null)
+        {
+            query = query.Where(x => x.SubCategoryId == filter.SubCategoryId);
+        }
+        if (filter.OwnerId != null)
+        {
+            query = query.Where(x => x.OwnerId == filter.OwnerId);
+        }
         // Skip/Take needs a deterministic order to paginate correctly - without it SQL doesn't
         // guarantee row order, so results can drift or duplicate across pages.
         query = query.OrderBy(x => x.Id);
@@ -57,6 +65,7 @@ public class TruckService : ITruckService
                                 LoadCapacity = t.LoadCapacity,
                                 PermittedMaximumWeight = t.PermittedMaximumWeight,
                                 Mileage = t.Mileage,
+                                OwnerId = t.OwnerId,
                                 Images = _context.Pictures.
                                 Where(x => x.ProductType == ProductType.Truck && x.ProductId == t.Id && x.SubCategoryId == t.SubCategoryId).
                                 Select(c => new PictureDto { Id = c.Id, ImageName = c.ImageName }).
@@ -91,6 +100,7 @@ public class TruckService : ITruckService
                                 LoadCapacity = t.LoadCapacity,
                                 PermittedMaximumWeight = t.PermittedMaximumWeight,
                                 Mileage = t.Mileage,
+                                OwnerId = t.OwnerId,
                                 Images = _context.Pictures.
                                 Where(x => x.ProductType == ProductType.Truck && x.ProductId == t.Id && x.SubCategoryId == t.SubCategoryId).
                                 Select(c => new PictureDto { Id = c.Id, ImageName = c.ImageName }).

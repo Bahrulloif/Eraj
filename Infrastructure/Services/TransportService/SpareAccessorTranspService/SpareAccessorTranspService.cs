@@ -31,6 +31,14 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
         {
             query = query.Where(x => x.Model.ToLower().Contains(filter.Model.ToLower()));
         }
+        if (filter.SubCategoryId != null)
+        {
+            query = query.Where(x => x.SubCategoryId == filter.SubCategoryId);
+        }
+        if (filter.OwnerId != null)
+        {
+            query = query.Where(x => x.OwnerId == filter.OwnerId);
+        }
         // Skip/Take needs a deterministic order to paginate correctly - without it SQL doesn't
         // guarantee row order, so results can drift or duplicate across pages.
         query = query.OrderBy(x => x.Id);
@@ -43,6 +51,7 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
                                 Description = a.Description,
                                 Price = a.Price,
                                 DiscountPrice = a.DiscountPrice,
+                                OwnerId = a.OwnerId,
                                 Images = _context.Pictures
                                     .Where(p => p.ProductType == ProductType.SpareAccessorTransp && p.ProductId == a.Id && p.SubCategoryId == a.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
@@ -66,6 +75,7 @@ public class SpareAccessorTranspService : ISpareAccessorTranspService
                                 Description = a.Description,
                                 Price = a.Price,
                                 DiscountPrice = a.DiscountPrice,
+                                OwnerId = a.OwnerId,
                                 Images = _context.Pictures
                                     .Where(p => p.ProductType == ProductType.SpareAccessorTransp && p.ProductId == a.Id && p.SubCategoryId == a.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })

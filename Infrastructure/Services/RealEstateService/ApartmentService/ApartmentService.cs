@@ -33,6 +33,14 @@ public class ApartmentService : IApartmentService
         {
             query = query.Where(x => x.NumberOfRooms == filter.NumberOfRooms);
         }
+        if (filter.SubCategoryId != null)
+        {
+            query = query.Where(x => x.SubCategoryId == filter.SubCategoryId);
+        }
+        if (filter.OwnerId != null)
+        {
+            query = query.Where(x => x.OwnerId == filter.OwnerId);
+        }
         // Skip/Take needs a deterministic order to paginate correctly - without it SQL doesn't
         // guarantee row order, so results can drift or duplicate across pages.
         query = query.OrderBy(x => x.Id);
@@ -53,6 +61,7 @@ public class ApartmentService : IApartmentService
                                 Parking = a.Parking,
                                 KitchenArea = a.KitchenArea,
                                 IsNewBuilding = a.IsNewBuilding,
+                                OwnerId = a.OwnerId,
                                 Images = _context.Pictures
                                     .Where(p => p.ProductType == ProductType.Apartment && p.ProductId == a.Id && p.SubCategoryId == a.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
@@ -82,6 +91,7 @@ public class ApartmentService : IApartmentService
                                 Parking = a.Parking,
                                 KitchenArea = a.KitchenArea,
                                 IsNewBuilding = a.IsNewBuilding,
+                                OwnerId = a.OwnerId,
                                 Images = _context.Pictures
                                     .Where(p => p.ProductType == ProductType.Apartment && p.ProductId == a.Id && p.SubCategoryId == a.SubCategoryId)
                                     .Select(s => new PictureDto { Id = s.Id, ImageName = s.ImageName })
