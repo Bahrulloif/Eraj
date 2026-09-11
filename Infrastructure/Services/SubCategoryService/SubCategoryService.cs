@@ -20,13 +20,20 @@ public class SubCategoryService : ISubCategoryService
     }
     public async Task<Response<List<GetSubCategoryDTO>>> GetSubCategory(GetSubCategoryFilter filter)
     {
+        var query = _context.SubCategories.AsQueryable();
         if (filter.Name != null)
         {
-            var find = await _context.SubCategories.Where(s => s.SubCategoryName.ToLower().Contains(filter.Name.ToLower())).ToListAsync();
-            var result = _mapper.Map<List<GetSubCategoryDTO>>(find);
-            return new Response<List<GetSubCategoryDTO>>(result);
+            query = query.Where(s => s.SubCategoryName.ToLower().Contains(filter.Name.ToLower()));
         }
-        var subCategories = await _context.SubCategories.ToListAsync();
+        if (filter.CategoryId != null)
+        {
+            query = query.Where(s => s.CategoryId == filter.CategoryId);
+        }
+        if (filter.ProductType != null)
+        {
+            query = query.Where(s => s.ProductType == filter.ProductType);
+        }
+        var subCategories = await query.ToListAsync();
         var mapped = _mapper.Map<List<GetSubCategoryDTO>>(subCategories);
         return new Response<List<GetSubCategoryDTO>>(mapped);
     }

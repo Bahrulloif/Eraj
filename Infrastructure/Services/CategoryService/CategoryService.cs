@@ -19,13 +19,16 @@ public class CategoryService : ICategoryService
     }
     public async Task<Response<List<GetCategoryDTO>>> GetCategory(GetCategoryFilter filter)
     {
+        var query = _context.Categories.AsQueryable();
         if (filter.Name != null)
         {
-            var find = await _context.Categories.Where(c => c.CategoryName.ToLower().Contains(filter.Name.ToLower())).ToListAsync();
-            var result = _mapper.Map<List<GetCategoryDTO>>(find);
-            return new Response<List<GetCategoryDTO>>(result);
+            query = query.Where(c => c.CategoryName.ToLower().Contains(filter.Name.ToLower()));
         }
-        var categories = await _context.Categories.ToListAsync();
+        if (filter.CatalogId != null)
+        {
+            query = query.Where(c => c.CatalogId == filter.CatalogId);
+        }
+        var categories = await query.ToListAsync();
         var mapped = _mapper.Map<List<GetCategoryDTO>>(categories);
         return new Response<List<GetCategoryDTO>>(mapped);
     }
