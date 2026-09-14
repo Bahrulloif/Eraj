@@ -17,13 +17,18 @@ public class CartService : ICartService
         _context = context;
         _mapper = mapper;
     }
+    // Unlike Address/Order/Profile (which have a real "privileged sees everyone's" use case - an
+    // admin panel that manages other users' records), Cart is purely personal and has no such
+    // screen anywhere in the app. Bypassing the owner filter here for isPrivileged meant a
+    // SuperAdmin/Admin's own "Корзина" page silently showed every user's cart rows mixed into
+    // their own - found live (frontend/speca.md's Фаза 1-3 real-browser report, 2026-09-11):
+    // opening it as SuperAdmin showed 2 stray rows that actually belonged to a test account.
+    // Always scope the list to the caller now, privileged or not. GetCartById/UpdateCart/
+    // DeleteCart below keep their isPrivileged bypass - those require already knowing a specific
+    // cart row's id (support/debug lookup of one record), not a blanket dump of every cart.
     public async Task<Response<List<GetCartDTO>>> GetCart(CartFilter filter, string currentUserId, bool isPrivileged)
     {
-        var query = _context.Carts.AsQueryable();
-        if (!isPrivileged)
-        {
-            query = query.Where(c => c.ApplicationUserId == currentUserId);
-        }
+        var query = _context.Carts.Where(c => c.ApplicationUserId == currentUserId);
         if (filter.Id != 0)
         {
             query = query.Where(c => c.Id == filter.Id);
