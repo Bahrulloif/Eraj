@@ -1,0 +1,13 @@
+.home-hero {
+  text-align: center;
+  padding-block: var(--space-6);
+}
+
+.home-hero h1 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-2);
+}
+
+.home-hero p {
+  color: var(--color-text-muted);
+}
